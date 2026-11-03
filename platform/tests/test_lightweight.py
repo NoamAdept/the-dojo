@@ -113,7 +113,7 @@ def test_five_learners_at_once(tmp_path):
 
 
 def test_a_second_copy_on_a_taken_port_says_so(tmp_path):
-    """An older Signal Dojo still on the port: run.sh stops with a plain message instead of a
+    """An older copy of The Dojo still on the port: run.sh stops with a plain message instead of a
     traceback, before it opens the browser on the old copy."""
     import subprocess
 

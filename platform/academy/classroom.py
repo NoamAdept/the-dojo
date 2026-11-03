@@ -419,24 +419,24 @@ class ProgressSync:
 
 
 def workspace_shortcut(name: str, ws: Path) -> str | None:
-    """~/signal-dojo/<name> -> users/<name>/challenge, so a learner at this machine (a laptop, WSL)
-    can `cd ~/signal-dojo/<name>` instead of typing the long folder under .academy-data.
+    """~/dojo/<name> -> users/<name>/challenge, so a learner at this machine (a laptop, WSL)
+    can `cd ~/dojo/<name>` instead of typing the long folder under .academy-data.
 
     Best effort: never replaces a real file or folder, and returns None when it cannot make the link.
     """
     if os.environ.get("ACADEMY_WORKSPACE_LINKS", "1").strip().lower() in {"0", "false", "no", "off"}:
         return None
     try:
-        link = Path.home() / "signal-dojo" / name
+        link = Path.home() / "dojo" / name
         if link.is_symlink():
             if Path(os.readlink(link)) == ws:
-                return f"~/signal-dojo/{name}"
+                return f"~/dojo/{name}"
             link.unlink()
         elif link.exists():
             return None
         link.parent.mkdir(parents=True, exist_ok=True)
         link.symlink_to(ws, target_is_directory=True)
-        return f"~/signal-dojo/{name}"
+        return f"~/dojo/{name}"
     except (OSError, RuntimeError):
         return None
 

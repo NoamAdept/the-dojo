@@ -58,7 +58,7 @@ def _palette(challenge_id: str) -> tuple[str, str, str, str]:
 
 
 def challenge_thumb_svg(challenge_id: str) -> str:
-    """Tiny unique ‘photo’ — geometric signal art, unique per challenge id."""
+    """Tiny unique ‘photo’ — geometric art, unique per challenge id."""
     digest = hashlib.sha256(challenge_id.encode()).digest()
     a, b, c, ink = _palette(challenge_id)
     gid = digest[:4].hex()

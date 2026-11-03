@@ -182,7 +182,7 @@ def stamp(result: dict | None) -> str:
     return f'<span class="stamp">Verified: answer run in a fresh copy, {what}</span>'
 
 
-def render(belt_list, docs, results, meta, title="Signal Dojo<br>answers guide") -> str:
+def render(belt_list, docs, results, meta, title="The Dojo<br>answers guide") -> str:
     css = (CSS.replace("{G400}", _font("Geist-400.woff2")).replace("{G600}", _font("Geist-600.woff2"))
               .replace("{G700}", _font("Geist-700.woff2")).replace("{M400}", _font("GeistMono-400.woff2")))
     ids = [c["id"] for b in belt_list for m in b["mods"] for c in m["challenges"]]
@@ -196,7 +196,7 @@ def render(belt_list, docs, results, meta, title="Signal Dojo<br>answers guide")
                  f'Re-run with <code>scripts/verify_answers.py</code>.</div>')
     else:
         proof = '<div class="proof warn">Built without a verification report.</div>'
-    parts = [f"<!doctype html><html><head><meta charset='utf-8'><title>Signal Dojo answers</title>"
+    parts = [f"<!doctype html><html><head><meta charset='utf-8'><title>The Dojo answers</title>"
              f"<style>{css}</style></head><body>",
              f'<section class="cover"><div class="kicker">Instructor copy · keep away from learners</div>'
              f"<h1>{title}</h1>"
@@ -241,7 +241,7 @@ const { chromium } = require('playwright');
   const b = await chromium.launch(opts);
   const p = await b.newPage();
   await p.goto('file://' + src, { waitUntil: 'load' });
-  const label = process.env.GUIDE_LABEL || 'Signal Dojo answers guide';
+  const label = process.env.GUIDE_LABEL || 'The Dojo answers guide';
   await p.pdf({ path: out, format: 'A4', printBackground: true, displayHeaderFooter: true,
     headerTemplate: '<span></span>',
     footerTemplate: '<div style="font-size:7pt;color:#6b727d;width:100%;text-align:center;font-family:sans-serif">' +
@@ -275,7 +275,7 @@ def to_pdf(html_path: Path, pdf_path: Path, label: str = "") -> None:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--report", type=Path, help="JSON from scripts/verify_answers.py --json")
-    ap.add_argument("--out", type=Path, default=ROOT / "dist" / "signal-dojo-answers.html")
+    ap.add_argument("--out", type=Path, default=ROOT / "dist" / "the-dojo-answers.html")
     ap.add_argument("--pdf", action="store_true", help="also write a PDF next to the HTML")
     ap.add_argument("--per-belt", type=Path, metavar="DIR",
                     help="also write one guide per belt into DIR (HTML, and PDF with --pdf)")
@@ -324,7 +324,7 @@ def main() -> int:
             out.write_text(render([b], docs, results, meta, title=title))
             print(f"wrote {out}")
             if args.pdf:
-                to_pdf(out, out.with_suffix(".pdf"), label=f"Signal Dojo {b['belt_label']} answers")
+                to_pdf(out, out.with_suffix(".pdf"), label=f"The Dojo {b['belt_label']} answers")
                 print(f"wrote {out.with_suffix('.pdf')}")
     for p in problems:
         print("WARN", p)

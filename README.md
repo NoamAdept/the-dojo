@@ -1,28 +1,28 @@
-# Signal Dojo
+# The Dojo
 
 An offline lab that teaches programming from zero: **4 belts, 110 challenges, Linux → C++ → Python**. It runs on a Raspberry Pi, any Linux or macOS machine, or Windows through WSL (anything with `python3`).
 
 ## Run it
 
 ```bash
-tar -xzf pi-sdr-academy.tar.gz && cd pi-sdr-academy
+tar -xzf the-dojo.tar.gz && cd the-dojo
 ./run.sh            # open the URL it prints; each learner creates an account, progress autosaves
 ```
 
 Press **Read lesson** to learn the idea, **Start** to get the files, solve, run `./check`, then press **Done**.
-Each learner's files are in their own folder, `~/signal-dojo/<username>` (a link to
+Each learner's files are in their own folder, `~/dojo/<username>` (a link to
 `.academy-data/classroom/users/<username>/challenge`); on the machine running `./run.sh` a terminal opens there.
 
 **Windows laptops and desktops:** run it inside WSL (Ubuntu 24.04), still from the one tarball and with no
 internet on the laptop. See [docs/WSL.md](docs/WSL.md): a prepared image installs with one PowerShell command.
 
-One-page guide for learners and admins: [docs/signal-dojo-guide.pdf](docs/signal-dojo-guide.pdf) (rebuild with `./scripts/build_guide.sh`).
+One-page guide for learners and admins: [docs/the-dojo-guide.pdf](docs/the-dojo-guide.pdf) (rebuild with `./scripts/build_guide.sh`).
 
 ### Save your work
 
 **Save to a file** (in the lab, under Progress) downloads one `.zip` with your progress and every script you
-wrote. **Restore** on any copy of Signal Dojo, even on another machine, brings it back; it only adds, so
-nothing already solved is lost. From a terminal: `./academy save` (writes `~/signal-dojo/signal-dojo-save-DATE.zip`)
+wrote. **Restore** on any copy of The Dojo, even on another machine, brings it back; it only adds, so
+nothing already solved is lost. From a terminal: `./academy save` (writes `~/dojo/the-dojo-save-DATE.zip`)
 and `./academy restore FILE`.
 
 Start empties the challenge folder, so the files you wrote or changed are kept first (in `.academy-data/work/`)
@@ -63,7 +63,7 @@ ACADEMY_ADMIN=1 ./run.sh
 Every belt is unlocked. Open `http://127.0.0.1:8080/`, enter the lab, and use the **Admin mode** box to jump to
 any challenge by id or title, then press **Start**. `http://127.0.0.1:8080/admin` lists every challenge with a
 filter, and a link like `http://127.0.0.1:8080/#challenge/pyq-generics` opens one directly. From a
-terminal, `ACADEMY_ADMIN=1 ./academy start pyq-generics` stages it in `~/signal-dojo/challenge` (the
+terminal, `ACADEMY_ADMIN=1 ./academy start pyq-generics` stages it in `~/dojo/challenge` (the
 no-login folder; `ACADEMY_USER=<username>` in front uses that learner's folder instead).
 Admin mode is ignored by the classroom server (`./academy serve`), so learners never get it.
 
@@ -89,7 +89,7 @@ Every challenge has a worked answer, and a script proves each one still passes i
 
 ```bash
 python3 scripts/verify_answers.py --json dist/verify.json      # fresh copy of each challenge, answer applied, ./check run
-python3 scripts/build_answers_guide.py --report dist/verify.json --pdf   # dist/signal-dojo-answers.pdf
+python3 scripts/build_answers_guide.py --report dist/verify.json --pdf   # dist/the-dojo-answers.pdf
 ```
 
 The answers live in each challenge's `solution/` folder (plus `solve.sh` for the commands a learner types), and the

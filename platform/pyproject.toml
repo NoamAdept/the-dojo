@@ -3,13 +3,13 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pi-sdr-academy"
+name = "the-dojo"
 version = "0.1.0"
-description = "Offline Raspberry Pi laboratory for systems, DSP, and SDR"
-readme = { text = "Offline dojo engine and CLI for Signal Dojo.", content-type = "text/plain" }
+description = "Offline lab that teaches the terminal, C++ and Python from zero"
+readme = { text = "Offline dojo engine and CLI for The Dojo.", content-type = "text/plain" }
 license = { text = "MIT" }
 requires-python = ">=3.11"
-keywords = ["sdr", "dsp", "raspberry-pi", "education", "ctf", "offline"]
+keywords = ["linux", "cpp", "python", "raspberry-pi", "education", "ctf", "offline"]
 dependencies = [
   "PyYAML>=6.0",
 ]

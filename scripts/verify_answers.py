@@ -8,8 +8,7 @@ folder, then run `./check` and require `CHECK_OK`.
 The answer is applied in two steps:
   1. every file in `solution/` (except `solve.sh`) is copied over the workspace;
   2. `solution/solve.sh`, if present, runs inside the workspace (commands a learner
-     types: mkdir, chmod, running a program, ...). Older IQ/BPSK challenges instead
-     ship `reference_solution.py`, which is run the same way.
+     types: mkdir, chmod, running a program, ...).
 
 Challenges without a `./check` are flag hunts: `solve.sh` must print the flag it found
 on its last line, and the engine must accept it.
@@ -125,7 +124,7 @@ def main() -> int:
         # challenge/ folder that every Start empties and refills, and a HOME that is not it.
         from academy.classroom import Classroom
 
-        os.environ.setdefault("ACADEMY_WORKSPACE_LINKS", "0")  # no ~/signal-dojo/learner link to a temp folder
+        os.environ.setdefault("ACADEMY_WORKSPACE_LINKS", "0")  # no ~/dojo/learner link to a temp folder
 
         ctx = Classroom(engine, tmp / "pack" / ".academy-data" / "classroom").ctx("learner")
         engine, data_dir, flag_path = ctx.engine, ctx.engine.data_dir, ctx.flag
@@ -178,8 +177,6 @@ def main() -> int:
                     res["missing"] = missing.group(0)[:200]
                 apply_solution(solution, ws)
                 step = ["bash", str(solve)] if solve.exists() else None
-                if step is None and (solution / "reference_solution.py").exists():
-                    step = ["python3", "reference_solution.py"]  # older IQ/BPSK challenges
                 if step:
                     code, out = run(step, ws, env)
                     if code != 0:

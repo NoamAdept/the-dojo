@@ -33,7 +33,7 @@ def test_wsl_opens_windows_terminal_through_a_script(tmp_path, monkeypatch):
             break
         time.sleep(0.1)
     argv = log.read_text().splitlines()
-    assert argv[:5] == ["-w", "0", "new-tab", "--title", "Signal Dojo"]
+    assert argv[:5] == ["-w", "0", "new-tab", "--title", "The Dojo"]
     assert argv[5:9] == ["wsl.exe", "-d", "Ubuntu-24.04", "-e"]
     # The folder (with its ; and space) only ever lives in the script, never on the Windows command line.
     assert argv[9] == "bash" and argv[10].endswith(".sh") and len(argv) == 11

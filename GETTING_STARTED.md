@@ -3,8 +3,8 @@
 You need **python3**. Nothing else. No pip. No internet.
 
 ```bash
-tar -xzf pi-sdr-academy.tar.gz
-cd pi-sdr-academy
+tar -xzf the-dojo.tar.gz
+cd the-dojo
 ./run.sh
 ```
 
@@ -14,7 +14,7 @@ Open the URL it prints. Other computers on the same network can open the network
 1. **Create account**: pick a username and a password. Next time, **Log in** with them.
    Your progress saves by itself to a folder that is only yours (`.academy-data/classroom/users/<username>/`).
 2. Read the intro, then **Enter the lab**
-3. **Start** → files land in your own folder, `~/signal-dojo/<username>` (a link to
+3. **Start** → files land in your own folder, `~/dojo/<username>` (a link to
    `.academy-data/classroom/users/<username>/challenge`); on the server itself a terminal opens there
 4. Read the README, solve it
 5. **Done**

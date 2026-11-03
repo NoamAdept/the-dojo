@@ -175,7 +175,7 @@ def cmd_welcome(_args: argparse.Namespace | None = None) -> int:
     catalog = load_dojos(eng.curriculum_root)
 
     print(_c(C.bold, "╔══════════════════════════════════════════╗"))
-    print(_c(C.bold, "║        Signal Dojo  ·  ONLINE            ║"))
+    print(_c(C.bold, "║        The Dojo  ·  ONLINE            ║"))
     print(_c(C.bold, "╚══════════════════════════════════════════╝"))
     print(f"{_tag('*')} airgap online · earn your belts")
     print(f"{_tag('=')} score {_c(C.green, str(summary['solved']))}/{summary['total']} solved")
@@ -771,7 +771,7 @@ def cmd_admin(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="academy",
-        description="ACADEMY :: offline pwn / sdr root shell. Run plain 'academy'.",
+        description="THE DOJO :: offline terminal, C++ and Python lab. Run plain 'academy'.",
     )
     parser.add_argument("--version", action="version", version=f"academy {__version__}")
     sub = parser.add_subparsers(dest="command")
@@ -833,7 +833,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_cd.set_defaults(func=cmd_cd)
 
     p_save = sub.add_parser("save", help="Save your progress and challenge files to one .zip")
-    p_save.add_argument("file", nargs="?", help="where to write it (default: ~/signal-dojo/signal-dojo-save-DATE.zip)")
+    p_save.add_argument("file", nargs="?", help="where to write it (default: ~/dojo/the-dojo-save-DATE.zip)")
     p_save.set_defaults(func=cmd_save)
 
     p_restore = sub.add_parser("restore", help="Bring back progress and files from a save .zip")

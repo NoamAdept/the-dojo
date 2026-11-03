@@ -3,9 +3,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="pi-sdr-academy",
+    name="the-dojo",
     version="0.1.0",
-    description="Offline Raspberry Pi SDR / Systems / Cybersecurity Academy",
+    description="Offline lab that teaches the terminal, C++ and Python from zero",
     packages=find_packages(),
     python_requires=">=3.11",
     install_requires=[

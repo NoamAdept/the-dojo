@@ -244,17 +244,17 @@ def test_http_requires_login(base, tmp_path):
 
 
 def test_learner_gets_a_short_link_to_their_folder(base, tmp_path, monkeypatch):
-    """~/signal-dojo/<name> points at users/<name>/challenge, so a learner on a laptop (WSL) finds it."""
+    """~/dojo/<name> points at users/<name>/challenge, so a learner on a laptop (WSL) finds it."""
     from academy.classroom import Classroom
 
     home = tmp_path / "home"
     monkeypatch.setenv("HOME", str(home))
     monkeypatch.setenv("ACADEMY_WORKSPACE_LINKS", "1")
-    (home / "signal-dojo" / "bob").mkdir(parents=True)  # a real folder is never replaced
+    (home / "dojo" / "bob").mkdir(parents=True)  # a real folder is never replaced
     room = Classroom(base, tmp_path / "room", signup=True)
     alice, bob = room.ctx("alice"), room.ctx("bob")
-    assert alice.engine.workspace_link == "~/signal-dojo/alice"
-    assert (home / "signal-dojo" / "alice").resolve() == alice.workspace.resolve()
-    assert bob.engine.workspace_link is None and not (home / "signal-dojo" / "bob").is_symlink()
+    assert alice.engine.workspace_link == "~/dojo/alice"
+    assert (home / "dojo" / "alice").resolve() == alice.workspace.resolve()
+    assert bob.engine.workspace_link is None and not (home / "dojo" / "bob").is_symlink()
     alice.engine.start_challenge(EASY)
-    assert (home / "signal-dojo" / "alice" / "README.md").is_file()
+    assert (home / "dojo" / "alice" / "README.md").is_file()

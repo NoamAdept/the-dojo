@@ -3,7 +3,7 @@
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
 
-# Windows laptops run Signal Dojo inside WSL (Ubuntu). See docs/WSL.md.
+# Windows laptops run The Dojo inside WSL (Ubuntu). See docs/WSL.md.
 WSL=0
 if [ -n "${WSL_DISTRO_NAME:-}" ] || grep -qi microsoft /proc/sys/kernel/osrelease 2>/dev/null; then
   WSL=1
@@ -12,11 +12,11 @@ if [ "$WSL" = 1 ]; then
   case "$ROOT" in
     /mnt/[a-zA-Z]/*)
       if [ "${ACADEMY_ALLOW_WINDOWS_DRIVE:-0}" != 1 ]; then
-        echo "Signal Dojo is in a Windows folder ($ROOT)." >&2
+        echo "The Dojo is in a Windows folder ($ROOT)." >&2
         echo "Windows folders lose Linux permissions, so many challenges break there." >&2
         echo "Unpack it in your Linux home folder instead, then run it from there:" >&2
-        echo "  cd ~ && tar -xzf /mnt/c/Users/YOU/Downloads/pi-sdr-academy.tar.gz" >&2
-        echo "  cd ~/pi-sdr-academy && ./run.sh" >&2
+        echo "  cd ~ && tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz" >&2
+        echo "  cd ~/the-dojo && ./run.sh" >&2
         echo "(ACADEMY_ALLOW_WINDOWS_DRIVE=1 ./run.sh starts it here anyway.)" >&2
         exit 1
       fi
@@ -35,7 +35,7 @@ fi
 
 export ACADEMY_CURRICULUM="${ACADEMY_CURRICULUM:-$ROOT/curriculum}"
 export ACADEMY_DATA="${ACADEMY_DATA:-$ROOT/.academy-data}"
-export ACADEMY_WORKSPACE="${ACADEMY_WORKSPACE:-$HOME/signal-dojo/challenge}"
+export ACADEMY_WORKSPACE="${ACADEMY_WORKSPACE:-$HOME/dojo/challenge}"
 export ACADEMY_FLAG_PATH="${ACADEMY_FLAG_PATH:-$ROOT/.academy-data/flag.txt}"
 
 # The course teaches vim. Anything that opens an editor (git commit, crontab -e,
@@ -45,7 +45,7 @@ command -v vim >/dev/null 2>&1 && _editor=vim
 export EDITOR="$_editor" VISUAL="$_editor" GIT_EDITOR="$_editor" SUDO_EDITOR="$_editor"
 
 if ! command -v python3 >/dev/null 2>&1; then
-  echo "Signal Dojo needs python3 on PATH." >&2
+  echo "The Dojo needs python3 on PATH." >&2
   echo "No pip install required — only the python3 interpreter." >&2
   exit 1
 fi
@@ -59,8 +59,8 @@ fi
 
 mkdir -p "$ACADEMY_DATA"
 # Only the no-login console uses $ACADEMY_WORKSPACE. With logins every learner gets
-# .academy-data/classroom/users/<name>/challenge (linked as ~/signal-dojo/<name>), and an
-# empty ~/signal-dojo/challenge would only look like a challenge with its files missing.
+# .academy-data/classroom/users/<name>/challenge (linked as ~/dojo/<name>), and an
+# empty ~/dojo/challenge would only look like a challenge with its files missing.
 case "${SINGLE_USER:-0}" in 1|true|yes) mkdir -p "$ACADEMY_WORKSPACE" ;; esac
 chmod 700 "$ACADEMY_DATA" 2>/dev/null || true  # accounts and progress: this OS account only
 # Everyone on the lab network can reach it by default; each learner logs in to their own account.
@@ -74,7 +74,7 @@ else
 fi
 PORT="${PORT:-8080}"
 
-# Another Signal Dojo (often an older copy) already on this port: say so and stop, rather than
+# Another copy of The Dojo (often an older one) already on this port: say so and stop, rather than
 # opening the browser on that one and then failing with a traceback.
 python3 -c 'import sys; from academy.api import check_port; check_port(sys.argv[1], int(sys.argv[2]))' "$HOST" "$PORT"
 
@@ -84,7 +84,7 @@ if [ "$HOST" = "0.0.0.0" ]; then
 fi
 
 echo ""
-echo "  Signal Dojo  (offline / closed network)"
+echo "  The Dojo  (offline / closed network)"
 if [ -n "$LAN_IP" ]; then
   echo "  Open  http://$LAN_IP:$PORT/   (any computer on this network)"
   echo "        http://127.0.0.1:$PORT/   (this computer)"
@@ -115,5 +115,5 @@ esac
 echo "  Each learner: Create account (username + password) once, then Log in."
 echo "  Progress saves by itself to that learner's own folder:"
 echo "    $ACADEMY_DATA/classroom/users/<username>/"
-echo "  The challenge files are in  ~/signal-dojo/<username>  (a link to that folder's challenge/)."
+echo "  The challenge files are in  ~/dojo/<username>  (a link to that folder's challenge/)."
 exec python3 -m academy.cli serve --host "$HOST" --port "$PORT"

@@ -111,15 +111,15 @@ def _zip(entries: dict[str, bytes | str]) -> bytes:
     return buf.getvalue()
 
 
-MANIFEST = json.dumps({"format": "signal-dojo-save", "version": 1})
+MANIFEST = json.dumps({"format": "the-dojo-save", "version": 1})
 
 
 @pytest.mark.parametrize("payload", [
     b"not a zip",
     _zip({"progress.json": "{}"}),  # no manifest
-    _zip({"signal-dojo-save.json": MANIFEST, "work/../../evil.sh": "x"}),
-    _zip({"signal-dojo-save.json": MANIFEST, f"work/{A}/../../evil.sh": "x"}),
-    _zip({"signal-dojo-save.json": MANIFEST, "progress.json": "[1, 2]"}),
+    _zip({"the-dojo-save.json": MANIFEST, "work/../../evil.sh": "x"}),
+    _zip({"the-dojo-save.json": MANIFEST, f"work/{A}/../../evil.sh": "x"}),
+    _zip({"the-dojo-save.json": MANIFEST, "progress.json": "[1, 2]"}),
 ])
 def test_bad_save_files_are_refused(engine, tmp_path, payload):
     from academy.backup import SaveFileError
@@ -128,6 +128,15 @@ def test_bad_save_files_are_refused(engine, tmp_path, payload):
         engine.restore_from(payload)
     assert not (tmp_path / "one" / "evil.sh").exists()
     assert not engine.progress_repo.path.exists()
+
+
+def test_save_from_before_the_rename_still_restores(engine):
+    """Save files made while the app was called Signal Dojo keep working."""
+    old = json.dumps({"format": "signal-dojo-save", "version": 1, "name": "ada"})
+    payload = _zip({"signal-dojo-save.json": old, f"work/{A}/notes.txt": "kept\n"})
+    summary = engine.restore_from(payload)
+    assert summary["ok"] and summary["name"] == "ada"
+    assert (engine.data_dir / "work" / A / "notes.txt").read_text() == "kept\n"
 
 
 def test_cli_save_and_restore(tmp_path, monkeypatch, capsys):

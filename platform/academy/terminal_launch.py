@@ -83,7 +83,7 @@ def _open_wsl(shell_cmd: str) -> str | None:
     """
     import tempfile
 
-    fd, script = tempfile.mkstemp(prefix="signal-dojo-term-", suffix=".sh")
+    fd, script = tempfile.mkstemp(prefix="the-dojo-term-", suffix=".sh")
     with os.fdopen(fd, "w", encoding="utf-8") as fh:
         fh.write('rm -f "$0"\n' + shell_cmd + "\n")
     os.chmod(script, 0o700)
@@ -94,10 +94,10 @@ def _open_wsl(shell_cmd: str) -> str | None:
     attempts = []
     wt = _windows_exe("wt.exe", "")
     if wt:
-        attempts.append(("windows-terminal", [wt, "-w", "0", "new-tab", "--title", "Signal Dojo", *inner]))
+        attempts.append(("windows-terminal", [wt, "-w", "0", "new-tab", "--title", "The Dojo", *inner]))
     cmd = _windows_exe("cmd.exe", "/mnt/c/Windows/System32/cmd.exe")
     if cmd:
-        attempts.append(("wsl-console", [cmd, "/c", "start", "Signal Dojo", *inner]))
+        attempts.append(("wsl-console", [cmd, "/c", "start", "The Dojo", *inner]))
     for via, argv in attempts:
         try:
             subprocess.Popen(  # noqa: S603

@@ -1,19 +1,19 @@
 #!/bin/sh
-# Prepare Ubuntu on WSL for Signal Dojo. Run it inside the Ubuntu window, as your normal user,
+# Prepare Ubuntu on WSL for The Dojo. Run it inside the Ubuntu window, as your normal user,
 # on a machine with internet (once, when you build the image you hand out; see docs/WSL.md):
 #
-#   tar -xzf /mnt/c/Users/YOU/Downloads/pi-sdr-academy.tar.gz -C ~
-#   sh ~/pi-sdr-academy/wsl/setup-ubuntu.sh
+#   tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz -C ~
+#   sh ~/the-dojo/wsl/setup-ubuntu.sh
 #
 # It installs the lab packages, makes vim the editor, turns on systemd (Yellow belt services),
 # makes you the default user (so an exported/imported copy does not log in as root), and adds
-# a `signal-dojo` command that starts the academy. Safe to run again.
+# a `dojo` command that starts the academy. Safe to run again.
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 
 case "$ROOT" in
   /mnt/[a-zA-Z]/*)
-    echo "Unpack Signal Dojo in your Linux home first (cd ~ && tar -xzf .../pi-sdr-academy.tar.gz)." >&2
+    echo "Unpack The Dojo in your Linux home first (cd ~ && tar -xzf .../the-dojo.tar.gz)." >&2
     exit 1 ;;
 esac
 if [ "$(id -u)" = 0 ]; then
@@ -50,13 +50,13 @@ with path.open("w") as fh:
 print("wrote /etc/wsl.conf:", dict(cfg["boot"]), dict(cfg["user"]))
 PY
 
-# `signal-dojo` starts the academy from anywhere.
+# `dojo` starts the academy from anywhere.
 mkdir -p "$HOME/.local/bin"
-cat > "$HOME/.local/bin/signal-dojo" <<SH
+cat > "$HOME/.local/bin/dojo" <<SH
 #!/bin/sh
 exec "$ROOT/run.sh" "\$@"
 SH
-chmod 755 "$HOME/.local/bin/signal-dojo"
+chmod 755 "$HOME/.local/bin/dojo"
 
 missing=""
 for tool in python3 g++ gdb cmake tmux vim man tree netstat nc ss; do
@@ -68,4 +68,4 @@ if [ -n "$missing" ]; then
 fi
 echo ""
 echo "Ready. Close this window, run  wsl --shutdown  in PowerShell (so systemd starts),"
-echo "open Ubuntu again and type:  signal-dojo"
+echo "open Ubuntu again and type:  dojo"

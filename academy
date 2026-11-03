@@ -14,11 +14,11 @@ fi
 
 export ACADEMY_CURRICULUM="${ACADEMY_CURRICULUM:-$ROOT/curriculum}"
 export ACADEMY_DATA="${ACADEMY_DATA:-$ROOT/.academy-data}"
-export ACADEMY_WORKSPACE="${ACADEMY_WORKSPACE:-$HOME/signal-dojo/challenge}"
+export ACADEMY_WORKSPACE="${ACADEMY_WORKSPACE:-$HOME/dojo/challenge}"
 export ACADEMY_FLAG_PATH="${ACADEMY_FLAG_PATH:-$ROOT/.academy-data/flag.txt}"
 
 if ! command -v python3 >/dev/null 2>&1; then
-  echo "Signal Dojo needs python3 on PATH (no pip needed)." >&2
+  echo "The Dojo needs python3 on PATH (no pip needed)." >&2
   exit 1
 fi
 exec python3 -m academy.cli "$@"

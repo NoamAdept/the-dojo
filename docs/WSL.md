@@ -1,13 +1,13 @@
-# Signal Dojo on Windows (WSL)
+# The Dojo on Windows (WSL)
 
-On Windows laptops and desktops, Signal Dojo runs inside **WSL** (Windows Subsystem for Linux) with
+On Windows laptops and desktops, The Dojo runs inside **WSL** (Windows Subsystem for Linux) with
 **Ubuntu 24.04**. Each learner runs their own copy on their own machine and uses it in their Windows browser.
 Nothing needs the internet on the learner's machine.
 
 | Piece | Where it runs |
 |-------|---------------|
 | `./run.sh`, the challenge folder, `./check`, vim, g++, gdb, Python | Ubuntu (WSL) |
-| The Signal Dojo page | Any Windows browser at `http://localhost:8080/` |
+| The Dojo page | Any Windows browser at `http://localhost:8080/` |
 | The terminal **Start** opens | Windows Terminal (or a console window), already inside Ubuntu |
 
 ## Fastest path: the prepared image (air-gapped)
@@ -21,33 +21,33 @@ Learner machines then only need that one file. No `apt`, no pip, no internet.
 2. In the Ubuntu window:
 
    ```bash
-   tar -xzf /mnt/c/Users/YOU/Downloads/pi-sdr-academy.tar.gz -C ~
-   sh ~/pi-sdr-academy/wsl/build-image.sh
+   tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz -C ~
+   sh ~/the-dojo/wsl/build-image.sh
    ```
 
    It installs the lab packages (vim, tmux, man pages, g++, gdb, cmake, net tools), makes vim the editor,
-   turns on systemd, makes `learner` the default user and adds the `signal-dojo` command. It fails loudly if
+   turns on systemd, makes `learner` the default user and adds the `dojo` command. It fails loudly if
    any tool is missing.
-3. Optional: `cd ~/pi-sdr-academy && ACADEMY_ADMIN=1 ./run.sh` once to set the admin password, so every copy
+3. Optional: `cd ~/the-dojo && ACADEMY_ADMIN=1 ./run.sh` once to set the admin password, so every copy
    shares it. Stop it with Ctrl-C.
 4. In PowerShell:
 
    ```powershell
    wsl --shutdown
-   wsl --export Ubuntu-24.04 signal-dojo-wsl.tar
+   wsl --export Ubuntu-24.04 the-dojo-wsl.tar
    ```
 
-5. Copy `signal-dojo-wsl.tar` and `pi-sdr-academy/wsl/install-signal-dojo.ps1` to a USB stick or a share.
+5. Copy `the-dojo-wsl.tar` and `the-dojo/wsl/install-the-dojo.ps1` to a USB stick or a share.
 
 ### Install it on each laptop (no internet)
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\install-signal-dojo.ps1
+powershell -ExecutionPolicy Bypass -File .\install-the-dojo.ps1
 ```
 
-This imports the image as the WSL distro **SignalDojo** and puts a **Signal Dojo** shortcut on the desktop.
+This imports the image as the WSL distro **TheDojo** and puts a **The Dojo** shortcut on the desktop.
 Double-click it: the academy starts and the browser opens at `http://localhost:8080/`.
-By hand: `wsl -d SignalDojo`, then `signal-dojo`.
+By hand: `wsl -d TheDojo`, then `dojo`.
 
 ### Install WSL without internet
 
@@ -71,10 +71,10 @@ When the laptops can reach an apt mirror (or the internet) once:
 
 ```bash
 # in Ubuntu (WSL), as your normal user
-cd ~ && tar -xzf /mnt/c/Users/YOU/Downloads/pi-sdr-academy.tar.gz
-sh ~/pi-sdr-academy/wsl/setup-ubuntu.sh
+cd ~ && tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz
+sh ~/the-dojo/wsl/setup-ubuntu.sh
 # then in PowerShell: wsl --shutdown   (so systemd starts), open Ubuntu again
-signal-dojo
+dojo
 ```
 
 ## Rules that keep every challenge working
@@ -82,16 +82,16 @@ signal-dojo
 - **Unpack inside Ubuntu, in your Linux home (`~`), with `tar`.** Not in `C:\` / `/mnt/c/...`, and not with
   Windows Explorer or 7-Zip. Windows folders drop Linux permissions and the executable bit, so `./check`,
   `./run` and the permission challenges break there. `./run.sh` refuses to start from `/mnt/c/...` and says so.
-- **Your challenge files are in `~/signal-dojo/<your username>`.** That is a link to
-  `~/pi-sdr-academy/.academy-data/classroom/users/<username>/challenge`, the folder **Start** fills.
-  Open it with `cd ~/signal-dojo/<username>`. The page shows the same path after **Start**.
+- **Your challenge files are in `~/dojo/<your username>`.** That is a link to
+  `~/the-dojo/.academy-data/classroom/users/<username>/challenge`, the folder **Start** fills.
+  Open it with `cd ~/dojo/<username>`. The page shows the same path after **Start**.
 - **Stay in the challenge folder itself when you press Start.** Start empties the folder and fills it again.
   A terminal sitting inside one of its subfolders (for example `framer/`) is left in a folder that no longer
-  exists and `ls` shows nothing: run `cd ~/signal-dojo/<username>` again.
-- From Windows, the files are at `\\wsl$\SignalDojo\home\learner\signal-dojo\` in Explorer (read them,
+  exists and `ls` shows nothing: run `cd ~/dojo/<username>` again.
+- From Windows, the files are at `\\wsl$\TheDojo\home\learner\dojo\` in Explorer (read them,
   but edit in vim inside Ubuntu: Windows editors can add CRLF line endings that break shell scripts).
 
-## How Signal Dojo behaves on WSL
+## How The Dojo behaves on WSL
 
 `./run.sh` notices WSL by itself:
 
@@ -108,7 +108,7 @@ signal-dojo
 ## Checking a machine
 
 ```bash
-cd ~/pi-sdr-academy
+cd ~/the-dojo
 python3 scripts/verify_answers.py --classroom   # only in a checkout with solution/ folders (instructor copy)
 ```
 
@@ -119,8 +119,8 @@ and `./check` expect it, then proves each answer passes. On Ubuntu 24.04 with th
 
 | You see | Fix |
 |---------|-----|
-| `Signal Dojo is in a Windows folder` | Unpack in `~` (see above). |
+| `The Dojo is in a Windows folder` | Unpack in `~` (see above). |
 | `/bin/sh^M: bad interpreter` | The tarball was unpacked on the Windows side. Unpack it again inside Ubuntu with `tar`. |
 | The page does not open at `localhost:8080` | Is `./run.sh` still running in the Ubuntu window? Try `http://127.0.0.1:8080/`. |
-| No terminal opens on Start | Open Ubuntu yourself and `cd ~/signal-dojo/<username>`. |
+| No terminal opens on Start | Open Ubuntu yourself and `cd ~/dojo/<username>`. |
 | `systemctl` says systemd is not running | `wsl --shutdown` in PowerShell, then open Ubuntu again (the setup turns systemd on). |
