@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRICULUM = Path(os.environ.get("ACADEMY_CURRICULUM", ROOT / "curriculum"))
-sys.path.insert(0, str(ROOT / "platform"))
+sys.path[:0] = [str(ROOT / "platform"), str(ROOT / "vendor")]  # vendored PyYAML: no pip needed
 
 REQUIRED = {
     "id",
