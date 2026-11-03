@@ -54,34 +54,19 @@ if [ -f "$ROOT/.academy-data/disabled.json" ]; then
 fi
 
 cat > "$OUT/START_HERE.txt" <<'EOF'
-CLOSED NETWORK — START HERE
-===========================
+THE DOJO - START HERE
 
-Needs on the target machine: python3 only.
-Does NOT need: pip, internet, venv, sudo, Docker.
+You only need python3. No internet.
 
-1) tar -xzf the-dojo.tar.gz
-2) cd the-dojo
-3) ./run.sh
-4) Open the URL it prints (usually http://127.0.0.1:8080/)
+  tar -xzf the-dojo.tar.gz
+  cd the-dojo
+  ./run.sh
 
-Then: Create account, Log in, Start → solve → Done.
-Your files are in ~/dojo/<username> (a terminal opens there on this machine).
+Open the address it prints. Press Create account, then Log in.
+Your files are in ~/dojo/<your name>.
 
-That's the whole install.
-
-WINDOWS LAPTOPS / DESKTOPS
-  Run it inside WSL (Ubuntu 24.04). Unpack it with tar inside Ubuntu, in your Linux
-  home folder (cd ~), never in C:\ or with Windows Explorer. Read docs/WSL.md: the
-  admin builds one image (wsl/build-image.sh) and each laptop installs it offline
-  with wsl/install-the-dojo.ps1. The page is then http://localhost:8080/.
-
-CLASSROOM (one server, many browsers)
-  ./academy serve --host <this machine's LAN IP>
-  Learners open http://<that IP>:8080/, pick a username + password, and solve
-  in their folder on the server (the page shows its path). See docs/CLASSROOM.md for the shared
-  git progress repo. All learners share this machine's OS account: use a
-  dedicated Pi / VM / container.
+Windows: use WSL. Read docs/WSL.md.
+One server for a whole class: read docs/CLASSROOM.md.
 EOF
 
 cp "$OUT/START_HERE.txt" "$OUT/README.txt"

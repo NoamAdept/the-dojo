@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CURRICULUM = Path(os.environ.get("ACADEMY_CURRICULUM", ROOT / "curriculum"))
 ANSWERS = ROOT / "docs" / "answers"
 FONTS = ROOT / "platform" / "academy" / "static" / "fonts"
-sys.path.insert(0, str(ROOT / "platform"))
+sys.path[:0] = [str(ROOT / "platform"), str(ROOT / "vendor")]  # vendored PyYAML: no pip needed
 
 from academy.models import load_yaml  # noqa: E402
 

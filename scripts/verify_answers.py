@@ -41,7 +41,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CURRICULUM = Path(os.environ.get("ACADEMY_CURRICULUM", ROOT / "curriculum"))
-sys.path.insert(0, str(ROOT / "platform"))
+sys.path[:0] = [str(ROOT / "platform"), str(ROOT / "vendor")]  # vendored PyYAML: no pip needed
 
 TIMEOUT = int(os.environ.get("VERIFY_TIMEOUT", "300"))
 TASKS_RE = re.compile(r"(\d+)/(\d+) tasks? pass")
