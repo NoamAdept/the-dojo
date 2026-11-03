@@ -1,0 +1,55 @@
+id: pyz-functions
+module: py-zero
+title: 'Functions: def and return'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- def
+- parameters
+- return
+- indentation
+- return_vs_print
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Define functions with def. Pass them parameters. Give back results with return. Learn why indentation is important in Python.
+
+  Read `README.md`. Complete the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_functions}
+  validation: session
+hints:
+- level: 1
+  text: Each body is one line. Indent it 4 spaces under the `def` line, for example `    return n * 2`.
+    Delete the `raise NotImplementedError` line.
+- level: 2
+  text: If ./check says a function "gave back None", the function reached the end without a `return`. In task 5,
+    change `print(...)` to `return ...`.
+- level: 3
+  text: If Python says `IndentationError`, the lines in a body do not start at the same column. Use 4 spaces for every
+    body line. Do not mix in tabs.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`def name(params):` plus an indented body defines a function. Indentation does the job of braces.
+  `return` sends a value back and ends the call. `print` only shows the value. A function without
+  return gives None. Functions can call each other. This is how you build bigger programs from small
+  pieces that you can test.'
+extension:
+  title: Go further
+  description: Add a function `hypot(a, b)`. It returns the square root of `a*a + b*b`. Use `** 0.5`.
+    Test it at the prompt with `hypot(3, 4)`.
+optional_hardware: []

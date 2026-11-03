@@ -1,0 +1,59 @@
+id: pyq-oop
+module: python-qualification
+title: Classes and Objects
+difficulty: medium
+estimated_time: 45-75 minutes
+prerequisites: []
+objectives:
+- classes
+- class_attributes
+- operator_overloading
+- properties
+- inheritance
+- encapsulation
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Build classes that use:
+
+  - class attributes
+  - operator overloading
+  - properties that check their values
+  - polymorphism
+
+  At the end, you build a small library system that hides its inner data (encapsulation).
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_oop}
+  validation: session
+hints:
+- level: 1
+  text: 'A class attribute belongs to the class. Update it with `Item.count += 1`, not `self.count += 1`.'
+- level: 2
+  text: Write `@property def age(self)` and also `@age.setter`. Store the real value in `self._age`.
+- level: 3
+  text: 'Python changes the names of attributes that start with 2 underscores (name mangling). `self.__books`
+    becomes `self._Library__books`. So `lib.books` cannot see it.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A class keeps data (state) and actions (behaviour) together. Dunder methods (`__sub__`,
+  `__eq__`, `__len__`, `__str__`) let your objects work with normal Python syntax. A property can check
+  a value each time you assign it. Polymorphism means the caller only needs a shared method, such as
+  `area()`.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

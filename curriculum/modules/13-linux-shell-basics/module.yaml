@@ -1,0 +1,20 @@
+id: linux-shell-basics
+slug: linux-shell-basics
+title: Linux Shell Basics
+order: 1
+description: 'Learn to work in the Linux shell. You will run commands with arguments. You will move around
+  the filesystem with absolute and relative paths. You will read, create, move and find files. You will
+  read documentation and use globs. You will redirect data and pipe it between programs. You will use
+  shell variables. You will change text with tr, head, cut and sort. Each skill is a short bash script,
+  and ./check runs it for you.'
+prerequisites:
+- zero-terminal
+challenges:
+- lls-hello
+- lls-paths
+- lls-commands
+- lls-man
+- lls-globbing
+- lls-variables
+- lls-data
+- lls-piping

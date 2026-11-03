@@ -1,0 +1,62 @@
+id: pyz-files
+module: py-zero
+title: Reading and Writing Files
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- open_with
+- read_lines
+- skip_comments
+- write_file
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Work with text files. You will:
+
+  - open text files with open and with
+  - read them one line at a time
+  - skip blank lines and comment lines
+  - write your own files
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- notes.txt
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_files}
+  validation: session
+hints:
+- level: 1
+  text: Every task starts with `with open(path) as f:`. It does its work in the indented block under that line.
+    So `read_all` is only `return f.read()`.
+- level: 2
+  text: '`count_lines` uses the accumulator pattern (a variable that you add to in a loop). Start with `count = 0`.
+    Then write `for line in f: count += 1`. Return count after the loop. `read_lines` is the same loop. But it
+    strips each line, and it appends the line only when `line and not line.startswith("#")`.'
+- level: 3
+  text: 'To write, use `with open(path, "w") as f:`. Then use `f.write(line + "\n")` inside a loop. `shout_file`
+    can be one line: `write_lines(dst, [line.upper() for line in read_lines(src)])`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`with open(...)` opens a file and always closes it. When you loop over a file, you get lines
+  that still have the newline at the end. So strip them. An empty string is falsy (it counts as False). This
+  makes it easy to skip blank lines. Mode "w" creates a file, or empties (truncates) a file that already
+  exists. `write` adds no newline. You can join small functions like read_lines and write_lines to make bigger
+  ones.'
+extension:
+  title: Go further
+  description: Add `append_line(path, line)`. It adds one line to the end of a file and does not erase the
+    file. Use mode `"a"` (append) instead of `"w"`.
+optional_hardware: []

@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+project(GuiOption CXX)
+option(BUILD_GUI "Build the GUI" ON)
+add_executable(core_app main.cpp)
+if(BUILD_GUI)
+  add_subdirectory(gui)
+endif()

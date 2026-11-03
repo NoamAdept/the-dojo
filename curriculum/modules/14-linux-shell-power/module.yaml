@@ -1,0 +1,18 @@
+id: linux-shell-power
+slug: linux-shell-power
+title: Linux Shell Power Tools
+order: 2
+description: 'Go beyond single commands: manage processes and jobs, read user and group identity, control
+  file permissions, chain commands into real scripts, keep work alive in tmux, and master how PATH finds
+  your programs. Adapted from pwn.college Linux Luminarium.'
+prerequisites:
+- linux-shell-basics
+challenges:
+- llp-processes
+- llp-users
+- llp-chaining
+- llp-loops
+- llp-permissions
+- llp-path
+- llp-terminal-multiplexing
+- llp-services

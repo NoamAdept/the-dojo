@@ -1,0 +1,82 @@
+id: gdb-inspect-memory
+module: debugging-gdb
+title: Inspect Bytes in Memory
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites:
+- gdb-follow-stack
+objectives:
+- gdb
+- memory-examination
+- hexadecimal
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Set a breakpoint at `inspect_packet`.
+
+  Look at 8 bytes of memory, starting at the address in the `packet` pointer.
+
+  Write them to `answer.txt`.
+
+  Use lowercase hexadecimal, with 2 digits for each byte.
+
+  Put a space between the bytes. Do not write `0x`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-inspect-memory
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{memory_views_reveal_bytes}
+  validation: session
+hints:
+- level: 1
+  text: 'At the breakpoint, type `x/8bx packet`. This shows 8 units as hexadecimal bytes.
+
+    '
+- level: 2
+  text: 'GDB may print an address at the start of a line. Copy only the byte values.
+
+    '
+- level: 3
+  text: 'Write each byte with 2 digits, for example `0a`. Use lowercase letters.
+
+    '
+solution: 'Build, enter GDB, break on `inspect_packet`, and run. Use
+
+  `x/8bx packet`. Copy the eight displayed byte values in order, remove each
+
+  `0x`, and save the normalized line.
+
+  '
+explanation: 'The GDB command `x` shows raw memory (the bytes exactly as they are stored).
+
+  In `/8bx`, the 3 parts are the count, the unit and the format.
+
+  They mean: show 8 values, 1 byte for each value, in hexadecimal.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

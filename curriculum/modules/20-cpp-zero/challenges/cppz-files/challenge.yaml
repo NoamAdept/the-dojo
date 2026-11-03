@@ -1,0 +1,66 @@
+id: cppz-files
+module: cpp-zero
+title: Reading and Writing Text Files
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- ifstream
+- getline
+- stoi
+- ofstream
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Work with text files. In this challenge you will:
+
+  - read a text file line by line with `std::ifstream` and `std::getline`
+  - turn text into numbers with `std::stoi`
+  - write files with `std::ofstream`
+  - read a small `key=value` settings file
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_files}
+  validation: session
+hints:
+- level: 1
+  text: 'Every function starts in the same way: `std::ifstream in(path); if (!in) return ...;`. Then comes
+    `std::string line; while (std::getline(in, line)) { ... }`.'
+- level: 2
+  text: 'You can call your own functions. sumNumbers and findSetting are much shorter if they loop over
+    `readLines(path)`.'
+- level: 3
+  text: 'findSetting: for each line, find `pos = line.find(''='')`. Then compare `line.substr(0, pos)
+    == key`. This compares the whole key, not only its start. If they are equal, return `line.substr(pos
+    + 1)`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'File streams make files work like `std::cin` and `std::cout`. `getline` reads lines. `<<`
+  writes. The file closes itself when the stream goes out of scope (when the code block that made it
+  ends). This is the RAII idea. You will see it again in the C++ Qualification.'
+extension:
+  title: Go further
+  description: 'Write `bool setSetting(path, key, value)`. It changes one `key=value` line in the file.
+    Do it in 3 steps: read all lines, change one line, and write all lines back.'
+optional_hardware: []

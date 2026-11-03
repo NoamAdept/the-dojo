@@ -1,0 +1,78 @@
+id: lls-man
+module: linux-shell-basics
+title: Digesting Documentation
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- command_options
+- option_arguments
+- man_pages
+- searching_docs
+- help_flag
+- shell_builtins
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn how a program wants you to call it:
+  - options and their arguments,
+  - man pages (manuals) and how to search them,
+  - --help output,
+  - the help builtin for commands built into the shell.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- check
+- check.py
+- dojo/challenge/challenge
+- dojo/challenge/helpful
+- dojo/flag
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- dojo/usr/local/man/man1/bb19.1
+- dojo/usr/local/man/man1/kd4m.1
+- dojo/usr/local/man/man1/lm7a.1
+- dojo/usr/local/man/man1/p0rt.1
+- dojo/usr/local/man/man1/qq5e.1
+- dojo/usr/local/man/man1/tr0n.1
+- dojo/usr/local/man/man1/vxx2.1
+- dojo/usr/local/man/man1/zq81.1
+- dojo/usr/share/man/man1/challenge-full.1
+- dojo/usr/share/man/man1/challenge.1
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+- grep
+- man (optional)
+flags:
+  value: flag{lls_man}
+  validation: session
+hints:
+- level: 1
+  text: 'Tasks 1 to 4 and 6 need only 1 line each: the program path, then the right option(s). First, find the options by trying them in your terminal.'
+- level: 2
+  text: 'In man, type `/success` and press Enter. Then press `n` to go to the next match. Outside man, `grep -n success FILE` does the same on the page file.'
+- level: 3
+  text: 'Task 5: `grep -l WORD FILES` prints only the names of the files that match. `grep -r` searches a whole folder.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Program usage is documented in 3 places. The first is man pages. You can search them with / inside man, with `man -k` across all pages, or with grep over the files. The second is the `--help` output. The third, for shell builtins, is `help`. Options can take their own arguments, like `--printfile PATH`.'
+extension:
+  title: Go further
+  description: 'Run `type ls cd echo help` and explain each answer. Why is `echo` both a builtin and a program in /usr/bin?'
+optional_hardware: []

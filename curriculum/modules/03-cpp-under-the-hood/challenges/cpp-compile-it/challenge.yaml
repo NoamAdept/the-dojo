@@ -1,0 +1,57 @@
+id: cpp-compile-it
+module: cpp-under-the-hood
+title: Compile and Repair a C++ Program
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- strict_warning_flags
+- compiler_errors
+- warnings_as_errors
+- operator_precedence
+- fixed_precision_output
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  `meter.cpp` should print the average of 3 readings. But it has compile errors, a warning, and 2 bugs. Build it with strict warnings turned into errors. Fix the problems from the top down. Get the operator order right. Print the result with exactly 1 digit after the point.
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- meter.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_compile_it}
+  validation: session
+hints:
+- level: 1
+  text: Compile. Read only the FIRST error. Fix it, then compile again. For "expected ';'", look at
+    the end of the line above the one g++ names. For "'third' was not declared", give the variable a type
+    the first time it appears.
+- level: 2
+  text: 'The unused `count` is a hint. The average is the sum divided by the count. Put the sum in brackets.
+    Then it is added up before the division: `(a + b + c) / count`.'
+- level: 3
+  text: 'In `print_average`, send `std::fixed << std::setprecision(1)` to `std::cout`. Do this before
+    `value`: `std::cout << "average=" << std::fixed << std::setprecision(1) << value << std::endl;`'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A compiler message names a file, a line and a column. It says what the compiler could not
+  understand. When you fix the first message, the rest often go away. The -Werror flag turns warnings into
+  errors. This catches suspicious code, like an unused variable, before the code runs. Operator precedence
+  decides what is calculated first. So an average needs brackets. std::fixed with std::setprecision controls
+  how many digits a double prints with.
+extension:
+  title: Go further
+  description: Change `main` so it reads 3 numbers with `std::cin >> first >> second >> third;`. Then print
+    their average. What does your program print for `1 2 2`?
+optional_hardware: []

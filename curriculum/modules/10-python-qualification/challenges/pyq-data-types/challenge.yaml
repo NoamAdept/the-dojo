@@ -1,0 +1,49 @@
+id: pyq-data-types
+module: python-qualification
+title: Data Types and Dynamic Typing
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- slicing
+- f_strings
+- type_checks
+- type_hints
+- dunder_conversions
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice slicing, f-strings, safe number checks and type hints. You also build a small number type with `__int__` and `__str__`.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_data_types}
+  validation: session
+hints:
+- level: 1
+  text: '`s[start:stop]` stops just before `stop`. Count the letters in "Python" to find the start index.'
+- level: 2
+  text: '`isinstance(True, int)` is True. So in safe_div, check for bool and reject it yourself.'
+- level: 3
+  text: '`int("0xA", 16)` reads a hex (base 16) string. `hex(10)` gives `"0xa"`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Python is dynamically typed, but also strongly typed. A value has a type. A name does not. Type
+  hints are extra information (metadata) for tools such as mypy. `typing.get_type_hints` lets you
+  read them while the program runs.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

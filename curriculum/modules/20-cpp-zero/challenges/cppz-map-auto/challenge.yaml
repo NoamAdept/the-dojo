@@ -1,0 +1,65 @@
+id: cppz-map-auto
+module: cpp-zero
+title: Lookups with std::map and auto
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- std_map
+- map_count_at
+- auto
+- loop_over_map
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Store key-to-value pairs in a `std::map`. In this challenge you will:
+
+  - count words
+  - look up keys safely in a const map
+  - loop over pairs with `auto`
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_map_auto}
+  validation: session
+hints:
+- level: 1
+  text: 'countWords: `for (const auto& w : words) counts[w]++;` does all the work. A missing key starts
+    at 0.'
+- level: 2
+  text: 'lookup: `m[key]` does not compile on a const map. Use `if (m.count(key) == 0) return -1;`. Then
+    write `return m.at(key);`.'
+- level: 3
+  text: 'mostCommon: loop over `countWords(words)`. Keep the best word and its count. Replace it only
+    when a count is strictly bigger (`>`). Then, in a tie, the word that is first in alphabetical order
+    wins.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`std::map` keeps unique keys in sorted order. It finds them fast. `[ ]` adds missing keys.
+  This is very useful for counting. `count` and `at` only look, and they change nothing. With `auto`,
+  the compiler writes long types for you, such as map pairs.'
+extension:
+  title: Go further
+  description: Write `std::map<char, int> letterCounts(const std::string& text)`. Use it to find the
+    most common letter in a sentence.
+optional_hardware: []

@@ -1,0 +1,10 @@
+root:x:0:0:root:/root:/bin/bash
+sync:x:4:65534:sync:/bin:/bin/sync
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+sysadm:x:0:0::/root:/bin/bash
+sdrd:x:134:134:sdrd service:/var/lib/sdrd:/bin/bash
+barbara:x:1000:1000:Barbara:/home/barbara:/bin/bash
+edsger:x:1004:1004:Edsger:/home/edsger:/bin/sh
+postgres:x:100:100:postgres service:/var/lib/postgres:/usr/sbin/nologin
+margaret:x:1002:1002:Margaret:/home/margaret:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin

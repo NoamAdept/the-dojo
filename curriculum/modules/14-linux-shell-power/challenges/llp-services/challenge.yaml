@@ -1,0 +1,67 @@
+id: llp-services
+module: linux-shell-power
+title: Services, Ports and Logs
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites:
+- llp-processes
+- llp-loops
+objectives:
+- daemon_concept
+- localhost_ports
+- background_server
+- curl
+- listening_ports
+- read_logs
+- config_restart
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn what a service is. You will:
+  - start a small web server in the background on localhost,
+  - talk to it with curl,
+  - find which port answers,
+  - read a service log,
+  - change a config value and restart the service.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- check
+- check.py
+expected_tools:
+- bash
+- python3
+- curl
+- ss
+- kill
+- tail
+- grep
+- sed
+flags:
+  value: flag{llp_services}
+  validation: session
+hints:
+- level: 1
+  text: 'Try task 1 by hand in a terminal. Start the server with `&`. Run `curl -s http://127.0.0.1:PORT/`, and then look at `ss -ltn`. Then stop the server with `kill "$(cat server.pid)"`.'
+- level: 2
+  text: 'Read numbers from files with `"$(cat port.txt)"`. A script that starts a server must end that line with `&`. It must also send the output away with `> server.log 2>&1`. If not, the script never finishes.'
+- level: 3
+  text: 'For task 3, loop over `$(cat ports.txt)`. Test each port with `if curl -s -o /dev/null "http://127.0.0.1:$p/"; then echo "$p"; fi`. For task 4, use `grep`, then `tail -n 1`, then keep the part after the last `:` (`awk -F: ''{print $NF}''`). For task 5, run `sed -i "s/^port=.*/port=NEW/" beacon.conf`, then `./ctl.sh restart`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A service is a background process that runs for a long time. It listens on an address and a port. You run it with & and a log file, so your shell is free. A PID file lets you stop the right process. curl and ss tell you if it really answers. The log tells you what it did. A service reads its config only when it starts. So a config change always needs a restart.'
+extension:
+  title: Go further
+  description: 'Write a script `health.sh PORT`. It prints `up` or `down` for a port, and exits with 0 or 1. Then use it in a loop that waits until a newly started server is up.'
+optional_hardware: []

@@ -1,0 +1,66 @@
+id: cppq-const-volatile
+module: cpp-qualification
+title: Const and Volatile Qualifiers
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- const_pointers
+- const_references
+- mutable
+- constexpr
+- volatile
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - read const declarations
+  - accept temporary values through const references
+  - cache (save) results inside const methods with `mutable`
+  - set array sizes with `constexpr`
+  - loop on a `volatile` register until another thread writes to it
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_const_volatile}
+  validation: session
+hints:
+- level: 1
+  text: 'Read declarations from right to left. `int* const p` means "p is a const pointer to int".'
+- level: 2
+  text: '`mutable` members can change inside a `const` member function. A cache needs exactly this.'
+- level: 3
+  text: Without `volatile`, the optimizer may read `*reg` only once. Then the loop never ends. Try it.
+    Remove `volatile` and compile with -O2.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`const` shows that something is read-only, and the compiler makes sure of it. `mutable`
+  allows caching that users of the class cannot see. `constexpr` moves work to compile time. `volatile`
+  tells the compiler that something outside the program can change a value (hardware registers). For
+  threads, use std::atomic.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

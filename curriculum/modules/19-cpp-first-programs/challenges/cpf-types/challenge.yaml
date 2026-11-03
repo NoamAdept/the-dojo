@@ -1,0 +1,56 @@
+id: cpf-types
+module: cpp-first-programs
+title: Decimals, Letters and Yes/No
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- double
+- char
+- bool
+- setprecision
+- integer_division
+- static_cast
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn 3 more types: double for numbers with decimals, char for single letters, and bool for yes/no. Print decimals in a clear way. Do not lose decimals when you divide integers.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- types.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_types}
+  validation: session
+hints:
+- level: 1
+  text: For task 1, first put `std::cout << std::fixed << std::setprecision(2);` on its own line. Then
+    print `"total="` and `price * count`.
+- level: 2
+  text: For task 3, write `char next = grade + 1;`. Then print `next`. For task 4, write `bool many =
+    count > 3;`. Then print `many`.
+- level: 3
+  text: For task 5, write `static_cast<double>(sum) / parts`. Put the cast on sum or on parts. Do not
+    put it on the result of the division.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`double` holds numbers with decimals. `std::fixed << std::setprecision(2)` makes std::cout
+  show 2 decimals. `char` holds one character. A character is really a small number. So when you store
+  `grade + 1` in a char, you get the next letter. `bool` holds true or false. When you divide 2 ints,
+  C++ removes the decimals. To keep them, cast one of the ints to double first.'
+extension:
+  title: Go further
+  description: Print `code=66` by printing `static_cast<int>(grade)`. Which number is the letter `a`?
+    Which number is the digit character `'0'`?
+optional_hardware: []

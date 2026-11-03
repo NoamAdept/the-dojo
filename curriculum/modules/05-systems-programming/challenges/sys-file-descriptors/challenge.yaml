@@ -1,0 +1,88 @@
+id: sys-file-descriptors
+module: systems-programming
+title: Copy with File Descriptors
+difficulty: easy
+estimated_time: 35-55 minutes
+prerequisites: []
+objectives:
+- operating_system_apis
+- error_handling
+- resource_lifetimes
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'A file descriptor is a small whole number. A process uses it to refer
+  to an open file.
+
+
+  Your task: Complete copy.cpp. Use the low-level POSIX calls open, read, write and
+  close. These are low-level C++ calls that talk to Linux directly. Do not use
+  std::ifstream.
+
+
+  Start with `./run`. Read `README.md`. Edit the starter files. Use `./check`
+  whenever you want feedback. Everything runs in this one workspace. You do not
+  need hardware, a network download, or a remote Git repository.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: sys-file-descriptors
+  notes: Software-only, offline, and suitable for Raspberry Pi and macOS where applicable.
+files:
+- README.md
+- check
+- copy.cpp
+- run
+expected_tools:
+- g++
+- python3
+- ./run
+- ./check
+flags:
+  value: flag{sys_file_descriptors}
+  validation: session
+hints:
+- level: 1
+  text: 'Run `./run` first and read its output. Then look at the starter file and
+    the README.
+
+    '
+- level: 2
+  text: 'Fix one result at a time. Choose a result you can see in the output. Run
+    `./check` again after each change.
+
+    '
+- level: 3
+  text: 'Use a loop. `read` into a `char buf[4096]`. Then `write` exactly the number
+    of bytes that read returned. Stop when read returns 0. Check every call for -1
+    (an error).
+
+    '
+- level: 4
+  text: 'Open the source with `O_RDONLY`. Open the destination with
+    `O_WRONLY | O_CREAT | O_TRUNC, 0644`. If anything fails, call `std::perror`
+    and then return 1.
+
+    '
+solution: 'Open input with O_RDONLY and output with O_WRONLY|O_CREAT|O_TRUNC; loop
+  on read/write, check errors, and close both descriptors.
+
+
+  After making the change, run `./run` and then `./check`.
+
+  '
+explanation: 'The program copies every byte. It also handles errors from system calls.
+  The checker does 3 tests. It copies a large binary file. It writes over a longer
+  file. It tries a source file that does not exist. The checker tests what the program
+  does, not how you wrote it. So any other correct solution is also accepted.
+
+  '
+extension:
+  title: Change one parameter
+  description: 'After you get the flag, change one input value. Guess the result
+    first. Then update your code so it is still correct. Do not hard-code the answer
+    (do not write the expected result straight into the code).
+
+    '

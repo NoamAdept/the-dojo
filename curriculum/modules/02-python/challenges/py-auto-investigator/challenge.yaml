@@ -1,0 +1,85 @@
+id: py-auto-investigator
+module: python
+title: Automate a Signal Investigation
+difficulty: medium
+estimated_time: 55-80 minutes
+prerequisites:
+- py-protocol-parser
+objectives:
+- csv
+- data-analysis
+- json
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Complete `investigate.py`. It analyses observations from a CSV file.
+
+  Ignore rows where the status is not `LOCKED`. Group the other rows by station.
+
+  Report only stations seen at least three times. For each one, give the count and
+
+  the average SNR, rounded to one decimal place.
+
+  Write JSON sorted by station, so the output is always the same (deterministic).
+
+  The checker uses a different dataset. So calculate every result from the input.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: py-auto-investigator
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- observations.csv
+- investigate.py
+- run
+- check
+- check.py
+expected_tools:
+- python3
+flags:
+  value: flag{automation_makes_evidence_repeatable}
+  validation: session
+hints:
+- level: 1
+  text: 'Use `csv.DictReader`. Use a dictionary where each station name points to a list of SNR values.
+
+    '
+- level: 2
+  text: 'Check the status before you add a value.
+
+    '
+- level: 3
+  text: '`json.dump(..., sort_keys=True, indent=2)` gives output that is always the same and easy to read.
+
+    '
+solution: 'Read each row, append `float(row[''snr''])` for LOCKED records, then
+
+  build a result only for lists of length three or more. Each value is
+
+  `{''count'': len(values), ''average_snr'': round(sum(values)/len(values), 1)}`.
+
+  Dump with sorted keys.
+
+  '
+explanation: 'Automation means you can repeat an investigation. The same clear rules
+
+  for filtering, grouping and limits apply to every dataset. Structured
+
+  JSON also makes the result easy for another program or a person to read and use.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Make your solution handle the new case.
+
+    Do not change the output format.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

@@ -1,0 +1,5 @@
+#!/bin/sh
+# Instructor stand-in. Learners create this file themselves with:
+#   g++ -std=c++17 -Wall -Wextra hello.cpp -o hello
+echo 'Hello, C++!'
+echo 'I can compile C++.'

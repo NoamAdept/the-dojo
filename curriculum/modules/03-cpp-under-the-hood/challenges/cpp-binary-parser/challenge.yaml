@@ -1,0 +1,64 @@
+id: cpp-binary-parser
+module: cpp-under-the-hood
+title: Parse Length-Prefixed Records
+difficulty: medium
+estimated_time: 25-35 minutes
+prerequisites:
+- cpp-function-pointers
+objectives:
+- binary_parsing
+- pointer_arithmetic
+- bounds_checks
+- callbacks
+- void_pointer_context
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  A buffer holds type/length/payload records, one after another. In this challenge you will:
+  - walk along the buffer with an offset
+  - call a visitor callback for every complete record
+  - refuse truncated (cut short) input, without reading 1 byte past the end
+  - write your own visitor that counts records through a void* context
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- records.cpp
+- records.hpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_binary_parser}
+  validation: session
+hints:
+- level: 1
+  text: Start with `std::size_t offset = 0;` and a `while (offset < size)` loop. Inside the loop, read
+    `data[offset]` (type) and `data[offset + 1]` (length). Call `visit(type, data + offset + 2, length,
+    context)`. Then move `offset` forward by `2 + length`. After the loop, `return true;`.
+- level: 2
+  text: 'Task 2 adds 2 checks inside the loop. Before you read the header: `if (size - offset < 2) return
+    false;`. After you read the length and move past the header, and before you call `visit`: `if (length
+    > size - offset) return false;`.'
+- level: 3
+  text: 'Task 3: copy the `count_one` visitor from LESSON.md. Put it above `count_records`. Then write
+    `int n = 0;` and call `parse_records(data, size, count_one, &n)`. If it returned false, return `-1`.
+    Otherwise return `n`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A length field is a promise made by the input. It is not a guarantee. The most important
+  rule of safe binary parsing is this: walk with an offset, and check how many bytes are left before every
+  read. A callback with a void* context lets one parser do many jobs. It can print, count, or do anything
+  else the caller gives it.'
+extension:
+  title: Go further
+  description: Add a `max_type` visitor. It remembers the largest type byte it has seen. Keep this value
+    in a struct that you pass as context. Use the visitor to print the biggest record type in a buffer.
+optional_hardware: []

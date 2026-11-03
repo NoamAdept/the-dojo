@@ -1,0 +1,2 @@
+#!/bin/bash
+printf "acad\nemy{pra\nctice\n_nl}\n"

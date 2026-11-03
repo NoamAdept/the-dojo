@@ -1,0 +1,68 @@
+id: llp-users
+module: linux-shell-power
+title: Users and Groups
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- whoami_id
+- groups
+- passwd_format
+- field_parsing
+- uid_ranges
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Find out who you are to the system with whoami, id and groups. Then read a file in the
+  /etc/passwd format. Use it to list shells, human accounts and hidden accounts with root
+  power.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- check
+- check.py
+- passwd.txt
+expected_tools:
+- bash
+- whoami
+- id
+- groups
+- awk
+- cut
+- sort
+flags:
+  value: flag{llp_users}
+  validation: session
+hints:
+- level: 1
+  text: 'Tasks 1 to 3 are 1 command each. Look at `whoami`, `id -u`, `id -g` and `id -Gn`. `tr " "
+    "\n"` turns spaces into new lines.'
+- level: 2
+  text: 'Use `awk -F:` so that the fields are split at the colons. `$1` is the name, `$3` is the
+    UID and `$7` is the shell. Compare text with `==` and numbers with `>=`.'
+- level: 3
+  text: 'For task 5, print `$1, $3` from awk. Pipe the result to `sort -k2,2n`. This sorts by the
+    second column, as numbers.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The kernel only knows numbers: each process has 1 UID and a list of GIDs. `/etc/passwd`
+  connects names to those numbers. It also stores the home directory and the shell. Passwords
+  are in `/etc/shadow`. Root power comes from UID 0. So an extra account with UID 0 is a full
+  root account with another name. This is why security checks (audits) look for it.'
+extension:
+  title: Go further
+  description: 'Print every login shell that is used in `passwd.txt`. For each one, show how many accounts
+    use it. Use `cut`, `sort` and `uniq -c`.'
+optional_hardware: []

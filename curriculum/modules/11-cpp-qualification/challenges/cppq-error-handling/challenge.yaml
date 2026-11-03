@@ -1,0 +1,65 @@
+id: cppq-error-handling
+module: cpp-qualification
+title: Error Handling and Safety
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- exceptions
+- nodiscard
+- optional
+- custom_exceptions
+- result_type
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - catch `std::out_of_range`
+  - use `[[nodiscard]]` and `std::optional`
+  - define your own exception
+  - build a `Result<T, E>` type on top of `std::variant`, to report errors without exceptions
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.py
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_error_handling}
+  validation: session
+hints:
+- level: 1
+  text: '`v.at(i)` checks the bounds and throws `std::out_of_range`. `v[i]` does not check at all.'
+- level: 2
+  text: Override `const char* what() const noexcept`. Keep the message in a `std::string` member. Then
+    the pointer stays valid.
+- level: 3
+  text: Use `std::in_place_index<0>` and `<1>` to build the variant. Then it works even when T and E are
+    the same type.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Exceptions are good for errors that are rare and that the local code cannot fix. Embedded
+  and real-time code often does not use them. It uses return values instead. `optional` means "a value
+  or nothing". A `Result<T, E>` also says why something failed. (C++23 adds `std::expected` for this.)
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

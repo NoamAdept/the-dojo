@@ -1,0 +1,62 @@
+id: zt-files-folders
+module: zero-terminal
+title: Files and Folders
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- pwd
+- ls
+- cd
+- mkdir
+- paths
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn where you are (pwd) and what is around you (ls). Learn how to move (cd) and how to make folders (mkdir). Learn what a path is. Then find a key that is hidden in a maze of folders.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- maze/east/dead-end.txt
+- maze/north/door-1/dead-end.txt
+- maze/north/door-2/dead-end.txt
+- maze/north/door-3/blue/key-dxjakp
+- maze/north/door-3/red/dead-end.txt
+- maze/south/dead-end.txt
+- maze/west/dead-end.txt
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{zt_files_folders}
+  validation: session
+hints:
+- level: 1
+  text: 'Run `pwd` and `ls` often. They show where you are and what is around you. The prompt also shows
+    the current folder. If you get lost, `cd ..` goes up 1 folder.'
+- level: 2
+  text: 'For task 3, type 3 commands, one after another: `cd radio/notes`, then `pwd > here.txt`, then
+    `cd ../..`. For the maze: type `cd maze`, then `ls`. Then `cd` into a folder and type `ls` again. Some
+    folders only have `dead-end.txt`. That is a dead end. Type `cd ..` and try the next folder.'
+- level: 3
+  text: When you see the `key-...` file, write down its exact name. Go back to the challenge folder. From
+    3 folders deep inside maze, use `cd ../../../..`. Then run `echo key-xxxxxx > key.txt`, but use the
+    real name.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell always has a current folder. Relative paths start there. Absolute paths start at
+  the root `/`. `cd` changes the current folder. `..` is the parent folder (the folder above). `ls` lists
+  a folder. `pwd` prints where you are. `mkdir` makes new folders.'
+extension:
+  title: Go further
+  description: Make the folders `radio/music/rock` and `radio/music/jazz`. Use as few commands as you
+    can. (Run `mkdir --help` to find out what `mkdir -p` does.)
+optional_hardware: []

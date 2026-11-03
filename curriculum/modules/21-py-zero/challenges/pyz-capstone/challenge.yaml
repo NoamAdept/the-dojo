@@ -1,0 +1,62 @@
+id: pyz-capstone
+module: py-zero
+title: 'Capstone: a Command-line Program'
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites: []
+objectives:
+- raise_valueerror
+- combine_functions
+- sorted
+- sys_argv
+- main_guard
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Put everything together. You will:
+
+  - reject bad input with raise ValueError
+  - combine your functions into a report
+  - run it as python3 report.py FILE, with sys.argv and the __main__ check
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- readings.txt
+- report.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_capstone}
+  validation: session
+hints:
+- level: 1
+  text: '`parse_reading`: first write `if "," not in line:`, then `raise ValueError("no comma")`. After that,
+    write `parts = line.split(",", 1)` and return `[parts[0], int(parts[1])]`.'
+- level: 2
+  text: In `best_snr`, start with `best = {}`. For each line, get `parts = parse_reading(line)`. Store
+    `parts[1]` under the key `parts[0]` in 2 cases. Case 1 is when that station is not in the dict yet.
+    Case 2 is when the new SNR is bigger than the stored one.
+- level: 3
+  text: '`report_lines` is a loop (or a list comprehension) over `sorted(best)`. `main` calls your functions
+    one after the other. It ends with `write_lines("report.txt", ...)`. The last 2 lines of the file are `if __name__ ==
+    "__main__":` and `main(sys.argv[1])`. Indent the second line under the first.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`raise ValueError` rejects badly formed input with a clear error. It does not give a wrong answer.
+  `sys.argv` holds the command-line arguments. The `if __name__ == "__main__":` guard lets one file be 2 things.
+  It is a module that you can import and test. It is also a program that you can run. Small tested functions,
+  called one after the other in `main`: this is exactly the shape of the challenges in the next Python module.'
+extension:
+  title: Go further
+  description: Sometimes the user gives no file name (`len(sys.argv) < 2`). Then the program crashes with an
+    IndexError. Change it so that it prints a friendly usage message and exits with `sys.exit(1)`.
+optional_hardware: []

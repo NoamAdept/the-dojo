@@ -1,0 +1,57 @@
+id: pyz-hello
+module: py-zero
+title: Hello, Python
+difficulty: easy
+estimated_time: 15-25 minutes
+prerequisites: []
+objectives:
+- run_python3
+- interactive_prompt
+- print
+- arithmetic
+- read_errors
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Start the python3 interactive prompt. Write and run your first .py files. Print text and numbers. Do arithmetic. Fix a script by reading its error message.
+
+  Read `README.md`. Complete the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- broken.py
+- check
+- check.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_hello}
+  validation: session
+hints:
+- level: 1
+  text: Create a file with `vim hello.py`. Press `i` and type one line. Press `Esc`, then type `:wq` and press Enter to save and quit.
+    Then run `python3 hello.py` to see what it prints.
+- level: 2
+  text: 'In broken.py the first error is a missing `)` at the end of line 2. Fix that and run it
+    again. The next error says `NameError: name ''Done'' is not defined`. This means the word Done needs
+    quotes around it to be text.'
+- level: 3
+  text: 'Task 3 is exactly: `print("Rate", 2048000, "Hz")`. Do not add your own spaces inside the quotes.
+    print adds them.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Python is interpreted. `python3 file.py` runs the file from top to bottom. There is no compile step.
+  The `>>>` prompt runs one line at a time. `print` takes any number of values. It puts a space between them
+  and ends with a newline. `/` is true division (the result is always a float). `//` is floor division (it drops the remainder). `%`
+  is the remainder and `**` is the power. An error gives the line and the problem. The last line of the error message is the
+  most useful.'
+extension:
+  title: Go further
+  description: Start `python3`. Try `print("a", "b", sep="-")` and `print("no newline", end="")`. What
+    do `sep` and `end` change?
+optional_hardware: []

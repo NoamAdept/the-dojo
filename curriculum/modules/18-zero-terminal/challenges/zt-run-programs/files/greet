@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "Hello! Your code is $(( 6 * 7 ))-beacon"

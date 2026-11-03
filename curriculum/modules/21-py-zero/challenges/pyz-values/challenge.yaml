@@ -1,0 +1,54 @@
+id: pyz-values
+module: py-zero
+title: Variables, Types and f-strings
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- variables
+- int_float_str_bool
+- none
+- type_conversion
+- f_strings
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Store values in variables. Learn the four basic types (int, float, str, bool) and None. Convert between types. Build text with f-strings.
+
+  Read `README.md`. Complete the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_values}
+  validation: session
+hints:
+- level: 1
+  text: Text needs quotes (`"Pi Radio"`). Numbers do not (`16`, `20.5`). `True` has a capital T and
+    no quotes.
+- level: 2
+  text: Task 5 is `as_int = int(text_number)`. Task 6 starts with `f"` and uses `{station}` and `{channels}`
+    inside the quotes.
+- level: 3
+  text: 'For task 7: `pi_text = f"{pi:.2f}"`. You can test any line first at the `>>>` prompt to see the result.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A Python variable is only a name joined to a value. The value has the type. So the same
+  name can later point to a different value. int, float, str and bool cover most everyday data. None means
+  "no value". int(), float() and str() convert values. f-strings put expressions inside text. They accept format
+  specs (rules for how to show a number) like `.2f` after a colon.
+extension:
+  title: Go further
+  description: At the `>>>` prompt, try `"ab" * 3`, `0.1 + 0.2`, and `int("12abc")`. Which results do you not expect?
+    What does the error say?
+optional_hardware: []

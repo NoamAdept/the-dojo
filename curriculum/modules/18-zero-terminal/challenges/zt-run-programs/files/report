@@ -1,0 +1,5 @@
+#!/bin/bash
+# Reads data/settings.txt and prints a one-line report.
+cd "$(dirname "$0")"
+value=$(cat data/settings.txt) || exit 1
+echo "report ready, settings: $value"

@@ -1,0 +1,80 @@
+id: gdb-segfault
+module: debugging-gdb
+title: Locate and Fix a Segmentation Fault
+difficulty: medium
+estimated_time: 45-70 minutes
+prerequisites:
+- gdb-inspect-memory
+objectives:
+- gdb
+- segmentation-faults
+- backtrace
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'The program crashes while it looks for the largest sample.
+
+  Use the GDB backtrace and the local variables to find the bad memory access.
+
+  Then fix `target.cpp`.
+
+  The fixed program must build with no warnings and print `largest=12`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-segfault
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{the_crash_frame_points_home}
+  validation: session
+hints:
+- level: 1
+  text: 'Run `./run` and read the AddressSanitizer report. Then, in GDB, type `break __asan_report_load4`, `run`, and `bt`.
+
+    '
+- level: 2
+  text: 'Your code is in frame 1. Use `frame 1`, `info locals`, and `print values.size()`.
+
+    '
+- level: 3
+  text: 'A loop over a vector must only run while `i < values.size()`. Also think about an empty vector.
+
+    '
+solution: 'Change the loop bound from `i <= values.size()` to `i < values.size()`.
+
+  Handle an empty vector before reading `values[0]` (the supplied main has nonempty input,
+
+  but the checker tests the function safely through the program''s normal build).
+
+  '
+explanation: 'A segmentation fault means the program tried to use memory it is not allowed to use.
+
+  The top stack frame shows which operation was running.
+
+  The local variables show the index that was out of range and caused the crash.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

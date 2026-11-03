@@ -1,0 +1,63 @@
+id: cpp-pointer-basics
+module: cpp-under-the-hood
+title: 'Pointers: Addresses You Can Follow'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites:
+- cpp-compile-it
+objectives:
+- addresses
+- raw_pointers
+- dereference
+- pointer_parameters
+- arrays_and_pointers
+- nullptr
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn about raw pointers. You will:
+  - take an address with &
+  - follow an address with *
+  - change the caller's variables through pointer parameters
+  - walk along a block of ints when you get a pointer and a count
+  - return nullptr for "not found"
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- pointers.cpp
+- pointers.hpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_pointer_basics}
+  validation: session
+hints:
+- level: 1
+  text: 'Inside the function, `x` is the address. `*x` is the int it points at. Task 1 is one line:
+    `*x = *x + 1;`.'
+- level: 2
+  text: 'Task 2: save `*a` in a temporary int. Copy `*b` into `*a`. Then copy the temporary int into `*b`.
+    Task 3: start a total at 0. Add `values[i]` for each `i` from 0 up to `count`, but not `count` itself.'
+- level: 3
+  text: 'Task 4: use the same loop as task 3. When `values[i] == wanted`, `return &values[i];`. After the
+    loop, `return nullptr;`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A pointer holds the address of another value. & takes an address. * follows an address.
+  So a function that gets pointers can change the caller's variables. A pointer to the first item plus
+  a count describes a row of values in memory. Only the count keeps the loop inside that row. nullptr is
+  the pointer that points at nothing. It is a useful "not found" answer.
+extension:
+  title: Go further
+  description: Write `int* largest(int* values, std::size_t count)`. It returns a pointer to the biggest
+    item, or nullptr when count is 0. Then use it to set the biggest item of a vector to 0.
+optional_hardware: []

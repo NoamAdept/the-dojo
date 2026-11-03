@@ -1,0 +1,56 @@
+id: pyq-generics
+module: python-qualification
+title: Generics and Type Hinting
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- typevar
+- generic_classes
+- protocols
+- literal_types
+- typeddict
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you use type hints and generics. You will write:
+
+  - functions with TypeVar
+  - Protocols for structural typing (the methods matter, not the class)
+  - Literal values that you check at runtime
+  - a TypedDict
+  - generic classes: Stack, Observable and a plugin manager
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_generics}
+  validation: session
+hints:
+- level: 1
+  text: '`class Stack(Generic[T])` lets you write `Stack[int]()`. When the code runs, it is a normal class.'
+- level: 2
+  text: 'A Protocol checks the shape of an object (its methods), not its parent class. Any object with a matching
+    `click` method fits. `@runtime_checkable` lets `isinstance` test for it.'
+- level: 3
+  text: '`typing.get_args(Status)` returns a tuple. The tuple holds the allowed Literal values.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Type hints show what you mean the code to do. They also let tools find bugs before the code runs.
+  TypeVar and Generic say "the same type goes in and the same type comes out". Protocols give you duck typing
+  with types. Literal describes exact values. TypedDict describes the keys and value types of a dict.
+extension:
+  title: Go further
+  description: Write 1 more test of your own in check.py. Then make it pass.
+optional_hardware: []

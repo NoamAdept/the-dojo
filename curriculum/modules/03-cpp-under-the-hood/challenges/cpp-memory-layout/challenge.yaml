@@ -1,0 +1,65 @@
+id: cpp-memory-layout
+module: cpp-under-the-hood
+title: Decode a Header from Raw Bytes
+difficulty: medium
+estimated_time: 20-30 minutes
+prerequisites:
+- cpp-structs-hex
+objectives:
+- byte_buffers
+- memory_layout
+- little_endian
+- bounds_checks
+- struct_padding
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  A device sends a 6-byte header. It has:
+  - 2 ASCII tag letters
+  - a 16-bit little-endian sequence number
+  - a flags byte
+  - a length byte
+
+  Decode it from a raw byte buffer, field by field. Refuse short or missing input before you read anything. Learn why you should not just cast the bytes to a struct.
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- layout.cpp
+- layout.hpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_memory_layout}
+  validation: session
+hints:
+- level: 1
+  text: 'Task 1 is a single `if` at the top: `if (data == nullptr || out == nullptr || size < 6) { return
+    false; }`.'
+- level: 2
+  text: 'Task 2: `out` is a pointer to a struct, so use `->`. Write `out->tag[0] = static_cast<char>(data[0]);`.
+    Do the same for `tag[1]`. Then write `out->flags = data[4];` and `out->length = data[5];`. At the end,
+    `return true;`.'
+- level: 3
+  text: 'Task 3: low byte first means `data[2]` stays where it is. `data[3]` is shifted left by 8: `out->sequence
+    = static_cast<uint16_t>(data[2] | (data[3] << 8));`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Memory is a row of bytes. A message is just a buffer of bytes. A value that uses several
+  bytes needs a fixed byte order. When you decode field by field, your code does not depend on the compiler's
+  struct padding. It also does not depend on the computer's own byte order. You check the pointers and
+  the size first. So your code refuses a short or missing buffer. It does not read past the end.
+extension:
+  title: Go further
+  description: In a `try.cpp`, print `sizeof(header)` and `sizeof(odd)` for `struct odd { uint8_t a; uint32_t
+    b; };`. Then change the order of the fields of `odd` so it gets smaller. Which order wastes the fewest
+    bytes?
+optional_hardware: []

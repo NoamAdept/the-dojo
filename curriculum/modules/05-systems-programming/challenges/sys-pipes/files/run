@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+g++ -std=c++17 -Wall -Wextra -Werror pipe_demo.cpp -o pipe_demo
+./pipe_demo

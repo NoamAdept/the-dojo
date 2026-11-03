@@ -1,0 +1,67 @@
+id: cppq-low-level-data
+module: cpp-qualification
+title: Low-Level Data Manipulation
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- bit_packing
+- bit_toggling
+- packed_structs
+- reinterpret_cast
+- variant_visit
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - pack RGB color values into an int
+  - toggle (flip) bits with a template that works for any integer type
+  - define packed protocol headers (structs with no padding)
+  - read a raw packet through a struct
+  - print sensor variants with `std::visit`
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_low_level_data}
+  validation: session
+hints:
+- level: 1
+  text: Shift each byte to its place (`r << 16`, `g << 8`). Then join them with `|`.
+- level: 2
+  text: '`#pragma pack(push, 1)` (or `__attribute__((packed))`) removes padding. Then the struct has the
+    same byte layout as the data on the wire (the network).'
+- level: 3
+  text: '`n & (n - 1)` clears the lowest bit that is 1. So the result is 0 only when exactly 1 bit was
+    set.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Hardware registers, file formats and packets have exact byte layouts. Masks and shifts
+  are portable (they work the same on every computer). You can also place a packed struct over the bytes
+  with `reinterpret_cast`. This is fast. But it depends on the endianness and alignment of the host computer.
+  So add a note where your code depends on it.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

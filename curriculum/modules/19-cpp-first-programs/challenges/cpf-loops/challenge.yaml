@@ -1,0 +1,54 @@
+id: cpf-loops
+module: cpp-first-programs
+title: 'Repeating: while and for'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- while_loop
+- for_loop
+- accumulator
+- void_functions
+- counting
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Repeat work with while loops and for loops. Add up numbers, multiply them, and count digits. Print a row of characters from a void function.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_loops}
+  validation: session
+hints:
+- level: 1
+  text: Every task here uses the accumulator pattern. Create a variable before the loop. Change it inside
+    the loop. Return it after the loop.
+- level: 2
+  text: 'For count_digits, start a counter at 1. Then loop `while (n >= 10)`: divide n by 10, and add
+    1 to the counter. This way, 0 gives 1 digit.'
+- level: 3
+  text: For print_stars, loop n times. Each time, print one `*` with `std::cout << '*';`. After the loop,
+    print the new line with `std::cout << '\n';`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A while loop repeats while its condition is true. A for loop is for counting. It puts the
+  start, the condition and the update in one line. An accumulator starts at 0 for sums and at 1 for products.
+  A void function does a job, but it does not return a value.
+extension:
+  title: Go further
+  description: Write `void print_triangle(int n)`. It calls print_stars for 1, 2, ..., n stars. So `print_triangle(3)`
+    draws a small triangle.
+optional_hardware: []

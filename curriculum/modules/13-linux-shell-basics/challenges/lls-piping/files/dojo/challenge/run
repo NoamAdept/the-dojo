@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "instructions: I print the secret on stdout and these words on stderr" >&2
+echo "academy{practice_pipe}"

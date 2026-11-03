@@ -1,0 +1,17 @@
+id: orientation
+slug: orientation
+title: Raspberry Pi / Debian Orientation
+order: 3
+description: 'Learn to use the terminal on Debian. Learn about the filesystem, permissions,
+  and processes. Learn to investigate a system with basic tools.
+
+  '
+prerequisites:
+- linux-shell-power
+challenges:
+- orient-find-flag
+- orient-permissions
+- orient-process-hunt
+- orient-environment
+- orient-broken-service
+- orient-system-investigation

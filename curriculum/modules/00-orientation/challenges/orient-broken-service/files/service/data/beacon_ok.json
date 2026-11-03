@@ -1,0 +1,5 @@
+{
+  "status": "ok",
+  "service": "beacon",
+  "message": "health payload — flag is injected by the running service only"
+}

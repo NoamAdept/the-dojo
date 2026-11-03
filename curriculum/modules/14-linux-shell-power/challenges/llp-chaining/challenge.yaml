@@ -1,0 +1,66 @@
+id: llp-chaining
+module: linux-shell-power
+title: Chaining Commands and Scripts
+difficulty: easy
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- semicolon
+- and_or
+- script_args
+- if_else
+- elif
+- shebang_exec
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Chain commands with ;, && and ||. Then write real bash scripts. Your scripts take arguments
+  and make decisions with if/elif/else. They run on their own because they have a shebang and
+  the execute bit.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- check
+- check.py
+expected_tools:
+- bash
+- chmod
+- test
+flags:
+  value: flag{llp_chaining}
+  validation: session
+hints:
+- level: 1
+  text: 'Tasks 1 to 3 are 1 line each. The only difference is the operator (the sign) between the 2
+    commands: `;`, `&&` or `||`.'
+- level: 2
+  text: 'Inside a script, `$1` and `$2` are the arguments. `$#` counts them. `[ -f "$1" ]` is true
+    only for regular files. `exit 1` sets the exit code.'
+- level: 3
+  text: 'For task 7, write the file with a heredoc (`cat > hello <<''EOF''` ... `EOF`). A heredoc
+    writes the lines that follow into the file. The quotes around EOF keep `$1` as it is
+    inside the file. Then run `chmod +x hello`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Every command gives back an exit code. `;`, `&&`, `||` and `if` all use it to decide what
+  runs next. A script is a file of commands. The shebang tells the kernel which interpreter
+  runs it. The execute bit lets you run it directly. Arguments arrive as `$1`, `$2`, ... and
+  `$#` counts them.'
+extension:
+  title: Go further
+  description: 'Make task 6 better. When `$1` is not an integer (a whole number), it should print `not a
+    number` and exit with code 2. Hint: `[[ $1 =~ ^-?[0-9]+$ ]]`.'
+optional_hardware: []

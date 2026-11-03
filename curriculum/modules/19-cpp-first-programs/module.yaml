@@ -1,0 +1,20 @@
+id: cpp-first-programs
+slug: cpp-first-programs
+title: C++ First Programs
+order: 5
+description: Your very first programs. This module is for people who have never written a program. Write
+  C++ source files. Change them into programs with g++. Read compiler errors. Learn variables, types,
+  functions, decisions, loops and command-line input, one small step at a time. It ends exactly where
+  C++ Toolbox starts.
+prerequisites:
+- linux-cli
+challenges:
+- cpf-first-program
+- cpf-compiler-errors
+- cpf-variables
+- cpf-types
+- cpf-functions
+- cpf-decisions
+- cpf-loops
+- cpf-arguments
+- cpf-capstone

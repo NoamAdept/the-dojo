@@ -1,0 +1,65 @@
+id: pyq-modern-python
+module: python-qualification
+title: Modern Python Features
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- fstring_debug
+- walrus
+- dataclasses
+- dict_merge
+- pattern_matching
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice these topics:
+
+  - f-strings for debugging
+  - the walrus operator
+  - dataclasses
+  - merging dictionaries
+  - structural pattern matching for shapes, configs and network packets
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_modern_python}
+  validation: session
+hints:
+- level: 1
+  text: '`f"{a=}"` prints both the expression and its value.'
+- level: 2
+  text: In a `case`, `int(port)` does 2 things. It matches only ints. It also binds the value to the name
+    `port`.
+- level: 3
+  text: '`case _:` is the branch that matches everything else. So raise ValueError there.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Modern Python adds clear, short syntax:
+
+
+  - debug f-strings
+
+  - assignment expressions
+
+  - dataclasses for record types (types that hold data)
+
+  - `|` for dicts
+
+  - `match`/`case`, which takes data apart and checks its types in 1 step'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

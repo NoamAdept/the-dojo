@@ -1,0 +1,3 @@
+antenna
+cable
+battery

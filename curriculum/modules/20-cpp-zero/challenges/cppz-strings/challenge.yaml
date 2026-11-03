@@ -1,0 +1,64 @@
+id: cppz-strings
+module: cpp-zero
+title: Text with std::string
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- std_string
+- string_concat
+- string_compare
+- find_substr
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Keep text in a `std::string`. In this challenge you will:
+
+  - join text with `+`
+  - compare text with `==`
+  - read single characters and count characters
+  - split `key=value` text with `find` and `substr`
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_strings}
+  validation: session
+hints:
+- level: 1
+  text: 'Task 1 is one line: `return "Hello, " + name + "!";`'
+- level: 2
+  text: 'For keyOf and valueOf, first write `std::size_t pos = line.find(''='');`. Then check `if (pos
+    == std::string::npos)` before you cut anything.'
+- level: 3
+  text: keyOf is `line.substr(0, pos)` (pos characters from the start). valueOf is `line.substr(pos +
+    1)` (everything after the `=`).
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`std::string` holds text. It manages its own memory, so it can grow as long as you need.
+  `+` joins text. `==` compares text. `[i]` reads one letter (counting from 0). `size()` gives the length.
+  `find`/`substr` split text into pieces.'
+extension:
+  title: Go further
+  description: Write `std::string trimSpaces(std::string s)`. It removes the spaces at the start and
+    at the end of a string.
+optional_hardware: []

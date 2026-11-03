@@ -1,0 +1,58 @@
+id: pyq-exceptions
+module: python-qualification
+title: Error and Exception Handling
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- try_except_else_finally
+- custom_exceptions
+- exception_chaining
+- retry_decorator
+- batch_robustness
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you:
+
+  - check input
+  - catch specific exceptions
+  - define your own exceptions
+  - make sure cleanup always happens
+  - write a retry decorator
+  - process a batch of transfers that keeps going when 1 transfer fails
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_exceptions}
+  validation: session
+hints:
+- level: 1
+  text: Catch only the exact exception you expect (`ValueError` for `int("x")`). A bare `except:` catches
+    everything, so it hides real bugs.
+- level: 2
+  text: 'A decorator with arguments has 3 levels of functions. `retry(attempts)` returns `decorator(func)`.
+    `decorator(func)` returns `wrapper`.'
+- level: 3
+  text: In process_batch, put the try/except inside the loop. Then 1 failure does not stop the rest.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Exceptions keep the normal code apart from the error code. `else` runs only on success.
+  `finally` always runs. Your own exception types let the caller handle each kind of failure. Catching
+  inside the loop makes batch processing robust (it keeps working when 1 item fails).'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

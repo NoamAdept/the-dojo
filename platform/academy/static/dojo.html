@@ -1,0 +1,2404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cline%20x1%3D%2260%22%20y1%3D%228%22%20x2%3D%2260%22%20y2%3D%2232%22%20stroke%3D%22%23ff7a45%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%229%22%20r%3D%229%22%20fill%3D%22%23ff7a45%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2228%22%20width%3D%22100%22%20height%3D%2286%22%20rx%3D%2226%22%20fill%3D%22%232f5bea%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2238%22%20width%3D%22100%22%20height%3D%2213%22%20fill%3D%22%23ef4444%22/%3E%3Crect%20x%3D%2224%22%20y%3D%2258%22%20width%3D%2272%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%230f1a3a%22/%3E%3Crect%20x%3D%2242%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3Crect%20x%3D%2267%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3C/svg%3E"/>
+  <title>Signal Dojo</title>
+  <style>
+    /* Signal Dojo UI. Everything here is local: fonts come from /fonts, icons are inline
+       Phosphor SVGs (MIT), belt art from /icons. Nothing is fetched from the internet. */
+    @font-face { font-family: "Geist"; font-style: normal; font-weight: 400; font-display: swap; src: url("/fonts/Geist-400.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-style: normal; font-weight: 500; font-display: swap; src: url("/fonts/Geist-500.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-style: normal; font-weight: 600; font-display: swap; src: url("/fonts/Geist-600.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-style: normal; font-weight: 700; font-display: swap; src: url("/fonts/Geist-700.woff2") format("woff2"); }
+    @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("/fonts/GeistMono-400.woff2") format("woff2"); }
+    @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("/fonts/GeistMono-500.woff2") format("woff2"); }
+
+    /* Tokens. Calm, editor-like greys (VS Code Light+ / Dark+) for long sessions.
+       One accent (blue); green only means "completed". Radii: 8px controls, 14px panels, pill chips. */
+    :root {
+      --bg: #f3f3f3;
+      --panel: #ffffff;
+      --sunken: #ececec;
+      --muted-bg: var(--sunken);
+      --fg: #1f1f1f;
+      --muted: #555555;
+      --faint: #666666;
+      --accent: #005fb8;
+      --accent-hover: #004c93;
+      --accent-soft: #e5eef8;
+      --accent-ink: #004c93;
+      --accent-fg: #ffffff;
+      --border: #e0e0e0;
+      --border-strong: #c8c8c8;
+      --ok: #2e7d32;
+      --ok-soft: #e6f2e6;
+      --ok-text: #256528;
+      --danger: #c42b1c;
+      --code-bg: #1e1e1e;
+      --code-fg: #d4d4d4;
+      --font: "Geist", system-ui, -apple-system, sans-serif;
+      --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      --shadow: 0 1px 2px rgba(0,0,0,0.05), 0 1px 1px rgba(0,0,0,0.03);
+      --shadow-lg: 0 2px 8px rgba(0,0,0,0.1);
+      --r-ctl: 8px;
+      --radius: 8px;
+      --pad: clamp(1rem, 4vw, 1.75rem);
+      --max: 70rem;
+      --ease: cubic-bezier(.16,1,.3,1);
+      /* Sig the mascot keeps its own colours in both themes. */
+      --amber: var(--accent); --sig-body: #007acc; --pop: #f0a35e; --band: #ef4444; --glow: #7cf3c8; --screen: #1e1e1e;
+    }
+    html[data-theme="dark"] {
+      --bg: #1e1e1e;
+      --panel: #252526;
+      --sunken: #2d2d2d;
+      --fg: #d4d4d4;
+      --muted: #a6a6a6;
+      --faint: #949494;
+      --accent: #4daafc;
+      --accent-hover: #7cc0fd;
+      --accent-soft: #1d3346;
+      --accent-ink: #8cc8fd;
+      --accent-fg: #1e1e1e;
+      --border: #333333;
+      --border-strong: #454545;
+      --ok: #73c991;
+      --ok-soft: #1f3324;
+      --ok-text: #89d1a1;
+      --danger: #f48771;
+      --code-bg: #181818;
+      --code-fg: #d4d4d4;
+      --shadow: none;
+      --shadow-lg: 0 2px 8px rgba(0,0,0,0.4);
+      --pop: #f0a35e; --band: #f87171;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; color-scheme: light; }
+    html[data-theme="dark"] { color-scheme: dark; }
+    body {
+      margin: 0; min-height: 100dvh;
+      color: var(--fg); background: var(--bg);
+      font-family: var(--font); font-size: 15px; line-height: 1.55;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .hidden { display: none !important; }
+    .ico { width: 1.05em; height: 1.05em; flex-shrink: 0; display: inline-block; vertical-align: -0.15em; }
+    .ico svg { width: 100%; height: 100%; display: block; }
+    .nowrap { white-space: nowrap; }
+    .num { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+    /* header */
+    .top {
+      position: sticky; top: 0; z-index: 30;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .top-inner {
+      max-width: var(--max); margin: 0 auto; height: 60px;
+      padding: 0 var(--pad);
+      display: flex; align-items: center; gap: 0.35rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.6rem; margin-right: auto;
+      text-decoration: none; color: inherit;
+      font-weight: 600; font-size: 1rem; letter-spacing: -0.02em; white-space: nowrap;
+    }
+    .brand .word b { color: var(--accent); font-weight: 600; }
+    .led { display: none; }
+    .hello {
+      font-size: 0.85rem; color: var(--muted); padding: 0 0.5rem;
+      max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hello b { color: var(--fg); font-weight: 600; }
+    .score {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 500; color: var(--muted);
+      height: 30px; display: inline-flex; align-items: center;
+      padding: 0 0.65rem; border-radius: var(--r-ctl); border: 1px solid var(--border); background: var(--panel);
+      cursor: pointer; white-space: nowrap; margin-right: 0.35rem;
+    }
+    .score strong { color: var(--fg); font-weight: 500; }
+    .score:hover { border-color: var(--border-strong); }
+    .theme-btn, .profile-btn {
+      appearance: none; border: 1px solid transparent; border-radius: var(--r-ctl);
+      background: transparent; color: var(--muted);
+      font-size: 0.86rem; font-weight: 500;
+      height: 34px; padding: 0 0.7rem; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      transition: background-color .15s ease, color .15s ease;
+    }
+    .theme-btn:hover, .profile-btn:hover { background: var(--sunken); color: var(--fg); }
+    .profile-btn[aria-current="page"], .theme-btn[aria-current="page"] { color: var(--fg); background: var(--sunken); }
+    #btn-theme { width: 34px; padding: 0; justify-content: center; }
+    #btn-theme .ico { width: 18px; height: 18px; }
+    .top-progress { height: 2px; background: transparent; }
+    .top-progress > i { display: block; height: 100%; width: 0%; background: var(--amber); transition: width .2s ease; }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 2rem var(--pad) 5rem; }
+
+    /* type + surfaces */
+    .module {
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1rem;
+    }
+    .vents, .stamp, .loop, .device { display: none; }
+    h1 { margin: 0; font-size: clamp(2.1rem, 5vw, 3.4rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.04; }
+    h2 { margin: 0; font-size: 1.3rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.25; }
+    h3 { letter-spacing: -0.01em; }
+    .lede { margin: 0.75rem 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.6; max-width: 58ch; }
+
+    /* buttons */
+    .go, .ghost {
+      appearance: none; border-radius: var(--r-ctl);
+      font-size: 0.88rem; font-weight: 500; letter-spacing: -0.005em;
+      height: 38px; padding: 0 1rem; white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+      transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+    }
+    .go { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-fg); }
+    .go:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .go:disabled, .ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+    .go:disabled:hover { background: var(--accent); border-color: var(--accent); }
+    .ghost { border: 1px solid var(--border-strong); background: var(--panel); color: var(--fg); }
+    .ghost:hover { background: var(--sunken); }
+    .ghost:disabled:hover { background: var(--panel); }
+    .go.ok-btn { background: var(--ok); border-color: var(--ok); color: #fff; }
+    html[data-theme="dark"] .go.ok-btn { color: #1e1e1e; }
+    .go.ok-btn:hover { filter: brightness(0.95); }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; align-items: center; }
+    .go.lg, .ghost.lg { height: 44px; padding: 0 1.25rem; font-size: 0.95rem; }
+
+    .back, #btn-intro, #btn-profile-back {
+      border: 0; background: transparent; color: var(--muted); height: auto; min-height: 0;
+      padding: 0.25rem 0; margin: 0 0 1.25rem; font-size: 0.86rem; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .back:hover, #btn-intro:hover, #btn-profile-back:hover { color: var(--fg); background: transparent; }
+
+    /* intro: see "Home page: zoom" further down */
+    .how { border-top: 1px solid var(--border); padding-top: 2.5rem; }
+    .how h2 { font-size: clamp(1.4rem, 2.6vw, 1.75rem); max-width: 26ch; }
+    .guide {
+      list-style: none; margin: 1.75rem 0 0; padding: 0;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0;
+      border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel); overflow: hidden;
+    }
+    .step { padding: 1.4rem 1.5rem 1.5rem; border-right: 1px solid var(--border); position: relative; }
+    .step:last-child { border-right: 0; }
+    .step .n {
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 500; color: var(--accent);
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 999px; background: var(--accent-soft); margin-bottom: 0.9rem;
+    }
+    .step strong { display: block; font-size: 1.02rem; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 0.3rem; }
+    .step p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    .step p b { color: var(--fg); font-weight: 500; font-family: var(--mono); font-size: 0.85em; }
+    @media (max-width: 760px) {
+      .guide { grid-template-columns: 1fr; }
+      .step { border-right: 0; border-bottom: 1px solid var(--border); }
+      .step:last-child { border-bottom: 0; }
+    }
+
+    /* lab home */
+    .lab-grid { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: 1rem; align-items: start; }
+    .lab-side { position: sticky; top: 76px; display: grid; gap: 1rem; }
+    .lab-side .module { margin: 0; }
+    @media (max-width: 900px) {
+      .lab-grid { grid-template-columns: 1fr; }
+      .lab-side { position: static; }
+    }
+    .now { position: relative; padding: 1.75rem; margin: 0; }
+    .now h2 { font-size: clamp(1.45rem, 3vw, 1.9rem); letter-spacing: -0.035em; padding-right: 9rem; }
+    .now .belt {
+      display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.7rem;
+      font-size: 0.8rem; font-weight: 500; color: var(--muted);
+    }
+    .now .belt::before { content: ""; width: 14px; height: 2px; border-radius: 2px; background: var(--accent); }
+    .now .mission { margin: 1rem 0 0; color: var(--muted); font-size: 0.98rem; max-width: 62ch; }
+    .steps { margin: 1.25rem 0 0; padding: 0; list-style: none; display: grid; gap: 0; border-top: 1px solid var(--border); }
+    .steps li {
+      display: grid; grid-template-columns: 2rem 1fr; align-items: baseline;
+      font-size: 0.92rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: 0; }
+    .steps li::before {
+      content: attr(data-n); font-family: var(--mono); font-size: 0.75rem; color: var(--faint);
+    }
+    .ws {
+      margin-top: 1rem; font-family: var(--mono); font-size: 0.78rem; color: var(--muted);
+      background: var(--sunken); border-radius: var(--r-ctl); padding: 0.55rem 0.75rem; word-break: break-all;
+    }
+    .ws:empty { display: none; }
+    .acts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; align-items: center; }
+    .acts .ghost:nth-last-child(2) { margin-left: auto; }
+    .flagrow { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; margin-top: 0.75rem; width: 100%; }
+    @media (max-width: 420px) { .flagrow { grid-template-columns: 1fr; } }
+    .flagrow input, .login-form input {
+      width: 100%; border: 1px solid var(--border-strong); border-radius: var(--r-ctl);
+      background: var(--panel); color: var(--fg);
+      padding: 0 0.8rem; height: 38px; font-size: 0.9rem; outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    #now-flag, [id^="flag-"] { font-family: var(--mono); font-size: 0.84rem; }
+    /* iOS zooms the page into any input under 16px; keep phones at 16px. */
+    @media (max-width: 700px) { .flagrow input, .login-form input, #now-flag, [id^="flag-"] { font-size: 16px; } }
+    .flagrow input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+    .flagrow input::placeholder { color: var(--faint); opacity: 1; }
+    .flagrow input:disabled { background: var(--sunken); }
+    .fb { margin-top: 0.6rem; font-size: 0.86rem; color: var(--muted); min-height: 1.1em; white-space: pre-line; overflow-wrap: anywhere; }
+    .fb:empty { min-height: 0; margin: 0; }
+    .fb.ok { color: var(--ok-text); }
+    .fb.bad { color: var(--danger); }
+    .hints .h {
+      margin-top: 0.6rem; padding: 0.7rem 0.9rem; border-radius: var(--r-ctl);
+      background: var(--accent-soft); color: var(--fg);
+      font-size: 0.9rem;
+    }
+    .done-msg { margin: 0.5rem 0 0; color: var(--muted); }
+
+    .xp { padding: 1.25rem; }
+    .xp-top { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .xp-top > span:first-child { font-size: 0.86rem; font-weight: 500; color: var(--muted); }
+    .xp-top .num { font-size: 1.6rem; color: var(--faint); }
+    .xp-top em { font-style: normal; color: var(--fg); }
+    .savebox { padding: 1.25rem; }
+    .savebox .xp-top { margin-bottom: 0.35rem; }
+    .savebox p { margin: 0 0 0.9rem; font-size: 0.86rem; color: var(--muted); }
+    .save-acts { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .save-acts button { flex: 1 1 auto; }
+    body.classroom .local-only { display: none !important; }
+    .xp-track { height: 6px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+    .xp-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width .2s ease; }
+    .belts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem 0.25rem; margin-top: 1.1rem; }
+    .belt { text-align: center; font-size: 0.7rem; color: var(--faint); }
+    .belt img { width: 34px; height: 26px; object-fit: contain; opacity: 0.5; filter: saturate(0.8); display: block; margin: 0 auto 0.15rem; transition: opacity .2s ease; }
+    .belt.on { color: var(--fg); font-weight: 600; }
+    .belt.on img, .belt.done img { opacity: 1; filter: none; }
+    .belt.done { color: var(--ok-text); }
+
+    .sec { margin: 2.5rem 0 1rem; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); }
+    .path { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+    @media (max-width: 700px) { .path { grid-template-columns: 1fr; } }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .card {
+      width: 100%; text-align: left; color: inherit;
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1rem 1.1rem 1.1rem;
+      display: grid; grid-template-columns: auto 1fr auto; gap: 0.35rem 0.9rem; align-items: start; align-content: space-between;
+      transition: border-color .15s ease;
+    }
+    .card:not(.locked):hover { border-color: var(--border-strong); }
+    .card.locked { cursor: default; background: transparent; }
+    .card.locked img.b, .card.locked .meter .bar { opacity: 0.55; }
+    .card.locked h3, .card.locked .meta, .card.locked .meter .num { color: var(--muted); }
+    .card img.b { width: 42px; height: 32px; object-fit: contain; }
+    .card h3 { margin: 0; font-size: 0.98rem; font-weight: 600; }
+    .card .meta { margin-top: 0.1rem; font-size: 0.84rem; color: var(--muted); line-height: 1.45; }
+    .card .meter { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.75rem; margin-top: 0.6rem; }
+    .card .meter .bar { height: 4px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+    .card .meter .bar i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+    .card .meter .num { font-size: 0.75rem; color: var(--faint); }
+    .card.complete .meter .bar i { background: var(--ok); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 0.3rem; align-self: start;
+      font-size: 0.72rem; font-weight: 500; padding: 0.2rem 0.5rem; border-radius: 6px;
+      background: var(--accent-soft); color: var(--accent-ink); white-space: nowrap;
+    }
+    .chip .ico { width: 12px; height: 12px; }
+    .chip.lock { background: var(--sunken); color: var(--muted); }
+    .chip.done { background: var(--ok-soft); color: var(--ok-text); }
+    .admin-bar { border-style: dashed; border-color: var(--accent); margin-bottom: 1rem; }
+    .admin-bar .flagrow { margin-top: 0.75rem; }
+    .admin-bar .admin-links { margin: 0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
+    .admin-bar a { color: var(--accent); }
+    .admin-bar code { font-family: var(--mono); font-size: 0.85em; }
+
+    /* belt detail */
+    .dhero-mod { padding: 1.5rem 1.75rem; }
+    .dhero { display: flex; gap: 1.1rem; align-items: center; }
+    .dhero img { width: 64px; height: 48px; object-fit: contain; flex-shrink: 0; }
+    .dhero h2 { font-size: clamp(1.4rem, 3vw, 1.8rem); letter-spacing: -0.035em; }
+    .dhero p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.88rem; }
+    .clist { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); background: var(--panel); overflow: hidden; }
+    .crow { border-bottom: 1px solid var(--border); }
+    .crow:last-child { border-bottom: 0; }
+    .crow > button.row {
+      width: 100%; border: 0; background: transparent; color: inherit;
+      display: grid; grid-template-columns: 2.25rem 1fr auto; gap: 0.5rem; align-items: center;
+      padding: 0.9rem 1.25rem; text-align: left; transition: background-color .15s ease;
+    }
+    .crow > button.row:hover { background: var(--sunken); }
+    .crow.open > button.row { background: var(--sunken); }
+    .crow .ix { font-family: var(--mono); font-size: 0.75rem; color: var(--faint); }
+    .crow h3 { margin: 0; font-size: 0.95rem; font-weight: 500; }
+    .crow.open h3 { font-weight: 600; }
+    .crow.solved h3 { color: var(--ok-text); }
+    .crow .r { font-size: 0.76rem; color: var(--faint); white-space: nowrap; display: inline-flex; align-items: center; gap: 0.3rem; }
+    .crow .r.ok { color: var(--ok-text); font-weight: 500; }
+    .cbody { display: none; padding: 0 1.25rem 1.4rem 3.75rem; }
+    .crow.open .cbody { display: block; padding-top: 1rem; }
+    .cbody .m { margin: 0; font-size: 0.93rem; color: var(--muted); max-width: 65ch; }
+    @media (max-width: 560px) { .cbody { padding-left: 1.25rem; } }
+
+    /* toasts */
+    .toasts { position: fixed; right: 1rem; bottom: 1rem; z-index: 90; display: flex; flex-direction: column; gap: 0.5rem; max-width: min(22rem, calc(100vw - 2rem)); }
+    .toast {
+      border-radius: var(--r-ctl); padding: 0.75rem 1rem; background: var(--panel);
+      border: 1px solid var(--border); box-shadow: var(--shadow-lg); animation: fadein .15s ease;
+    }
+    .toast.err { border-left: 3px solid var(--danger); }
+    .load-err { display: grid; gap: 0.4rem; justify-items: start; margin: 1rem 0; padding: 1rem 1.1rem; border: 1px solid var(--danger); border-radius: var(--radius); background: var(--panel); }
+    .load-err span { color: var(--muted); font-size: 0.9rem; }
+    .toast b { display: block; font-size: 0.9rem; font-weight: 600; }
+    .toast span { color: var(--muted); font-size: 0.8rem; font-family: var(--mono); }
+
+    /* classroom: login, logout */
+    body:not(.classroom) .classroom-only { display: none !important; }
+    .login-form { display: grid; gap: 0.6rem; grid-template-columns: 1fr; }
+    .login-form .go { width: 100%; margin-top: 0.3rem; }
+    .login-tabs { display: flex; gap: 4px; padding: 4px; margin: 0.4rem 0 0.8rem; border-radius: var(--r-ctl); background: var(--sunken); }
+    .login-tabs button { flex: 1; appearance: none; border: 0; border-radius: 6px; height: 34px; background: transparent; color: var(--muted); font-weight: 500; }
+    .login-tabs button[aria-selected="true"] { background: var(--panel); color: var(--fg); box-shadow: var(--shadow); }
+    .login-err { color: var(--danger); min-height: 1.2em; margin: 0.6rem 0 0; font-size: 0.88rem; }
+    #btn-logout { white-space: nowrap; }
+    body.logged-out .top-inner > :not(.brand) { display: none !important; }
+
+    /* dialogs */
+    .overlay {
+      position: fixed; inset: 0; z-index: 80; display: grid; place-items: center;
+      padding: var(--pad); background: rgba(10,12,16,0.5);
+      animation: fadein .15s ease;
+    }
+    @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+    .overlay.hidden { display: none !important; }
+    .overlay-card {
+      width: min(25rem, 100%); background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 1.75rem;
+      position: relative; overflow: hidden;
+    }
+    .overlay-card h2 { margin: 0; font-size: 1.35rem; }
+    .overlay-card .sub { margin: 0.5rem 0 0; color: var(--muted); font-size: 0.92rem; }
+    .overlay-card .flagrow { margin-top: 1.25rem; }
+    .overlay-card .cta-row { margin-top: 1.25rem; }
+    .fbk { margin-top: 1.25rem; text-align: left; display: grid; gap: 0.5rem; }
+    .fbk fieldset { border: 0; margin: 0; padding: 0; }
+    .fbk legend, .fbk label { padding: 0; font-size: 0.9rem; font-weight: 500; }
+    .fbk-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin-top: 0.4rem; }
+    .fbk-opts button { padding: 0 0.5rem; }
+    .fbk-opts button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-ink); }
+    .fbk textarea { width: 100%; font: inherit; font-size: 16px; color: var(--fg); background: var(--panel); border: 1px solid var(--border-strong);
+      border-radius: var(--r-ctl); padding: 0.5rem 0.7rem; resize: vertical; }
+    .fbk-msg { margin: 0; font-size: 0.85rem; min-height: 0; }
+    .fbk-msg.bad { color: var(--danger); }
+    .overlay-card .sig.gate-sig { width: 44px; height: 44px; margin-bottom: 0.75rem; }
+    #celebrate .overlay-card { text-align: center; }
+    #celebrate .cta-row { justify-content: center; }
+    .cele-bar { margin-top: 1.1rem; height: 6px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+    .cele-bar > i { display: block; height: 100%; width: 0%; background: var(--ok); border-radius: 999px; }
+    #cele-title { color: var(--fg); }
+    #cele-count { margin-top: 0.5rem; font-family: var(--mono); font-size: 0.78rem; }
+
+    /* profile */
+    .prof-head { padding: 1.75rem; }
+    .prof-head h2 { font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -0.035em; }
+    .prof-stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 1.5rem; border-top: 1px solid var(--border); }
+    .prof-stat { padding: 1rem 1rem 0 0; }
+    .prof-stat + .prof-stat { padding-left: 1.25rem; border-left: 1px solid var(--border); }
+    .prof-stat b { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); margin-bottom: 0.25rem; }
+    .prof-stat strong { font-family: var(--mono); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 500; letter-spacing: -0.04em; }
+    @media (max-width: 520px) {
+      .prof-stats { grid-template-columns: 1fr; }
+      .prof-stat + .prof-stat { padding-left: 0; border-left: 0; border-top: 1px solid var(--border); padding-bottom: 0.25rem; }
+    }
+    .prof-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .prof-grid .module { margin: 0; }
+    @media (max-width: 860px) { .prof-grid { grid-template-columns: 1fr; } }
+    .module .lede.small { font-size: 0.9rem; margin-top: 0.35rem; }
+
+    .contrib { margin-top: 1.1rem; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 0.25rem; }
+    .contrib-inner { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 0.5rem; align-items: start; min-width: 620px; }
+    .contrib-dows { display: grid; grid-template-rows: repeat(7, 11px); gap: 3px; font-size: 0.62rem; color: var(--faint); padding-top: 1.1rem; font-family: var(--mono); }
+    .contrib-dows span { line-height: 11px; height: 11px; }
+    .contrib-main { display: grid; gap: 0.35rem; }
+    .contrib-months { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; font-size: 0.62rem; color: var(--faint); height: 0.9rem; font-family: var(--mono); }
+    .contrib-grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 11px); grid-auto-columns: 11px; gap: 3px; }
+    .cday { width: 11px; height: 11px; border-radius: 3px; background: var(--sunken); }
+    .cday.l1 { background: color-mix(in srgb, var(--accent) 30%, var(--sunken)); }
+    .cday.l2 { background: color-mix(in srgb, var(--accent) 55%, var(--sunken)); }
+    .cday.l3 { background: color-mix(in srgb, var(--accent) 80%, var(--sunken)); }
+    .cday.l4 { background: var(--accent); }
+    .cday:hover { outline: 1px solid var(--fg); outline-offset: 1px; }
+    .contrib-legend { display: flex; align-items: center; gap: 0.3rem; justify-content: flex-end; margin-top: 0.6rem; font-size: 0.68rem; color: var(--faint); }
+    .contrib-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+    .belt-bars { display: grid; gap: 0.7rem; margin-top: 1.1rem; }
+    .belt-bar { display: grid; grid-template-columns: 30px minmax(0, 1fr) 3.4rem; grid-template-rows: auto auto; column-gap: 0.75rem; row-gap: 0.3rem; align-items: center; font-size: 0.88rem; }
+    .belt-bar img { width: 30px; height: 22px; object-fit: contain; grid-row: 1 / 3; }
+    .belt-bar .t { grid-column: 2; grid-row: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .belt-bar .tr { grid-column: 2 / 4; grid-row: 2; height: 4px; border-radius: 999px; background: var(--sunken); overflow: hidden; }
+    .belt-bar .tr i { display: block; height: 100%; background: var(--accent); border-radius: 999px; }
+    .belt-bar.done .tr i { background: var(--ok); }
+    .belt-bar .n { grid-column: 3; grid-row: 1; text-align: right; color: var(--faint); font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.76rem; }
+
+    .recent-list { display: grid; margin-top: 0.9rem; }
+    .recent-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0; border-top: 1px solid var(--border); }
+    .recent-row img { width: 24px; height: 24px; object-fit: contain; }
+    .recent-row .t { flex: 1; min-width: 0; }
+    .recent-row .t strong { display: block; font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .recent-row .t span { font-size: 0.78rem; color: var(--muted); }
+    .empty { margin: 1rem 0 0; padding: 1.25rem; border: 1px dashed var(--border-strong); border-radius: var(--r-ctl); color: var(--muted); font-size: 0.9rem; text-align: center; }
+
+    /* belt art needs a halo on dark backgrounds (the white belt vanishes otherwise) */
+    html[data-theme="dark"] .belt-bar img, html[data-theme="dark"] .card img.b, html[data-theme="dark"] .dhero img,
+    html[data-theme="dark"] .belt img, html[data-theme="dark"] .recent-row img, html[data-theme="dark"] .cele-belt { filter: drop-shadow(0 0 1px rgba(255,255,255,0.7)); }
+    html[data-theme="dark"] .belt:not(.on):not(.done) img { filter: saturate(0.8) drop-shadow(0 0 1px rgba(255,255,255,0.7)); }
+
+    @media (max-width: 640px) {
+      .top-inner { gap: 0.1rem; height: 56px; }
+      .hello { display: none; }
+      .theme-btn, .profile-btn { padding: 0 0.5rem; font-size: 0.82rem; }
+      .now { padding: 1.25rem; }
+      .now h2 { padding-right: 0; }
+      .acts .ghost:nth-last-child(2) { margin-left: 0; }
+      .card { grid-template-columns: auto 1fr; }
+      .card .chip { grid-column: 2; grid-row: 2; justify-self: start; }
+    }
+    @media (max-width: 400px) { .score { display: none; } .brand .word { font-size: 0.95rem; } }
+
+    /* Sig the mascot */
+    .sig { display: inline-block; line-height: 0; }
+    .sig svg { width: 100%; height: 100%; overflow: visible; }
+    #view-intro .sig .arc { transform-origin: 60px 12px; animation: arc 2.2s ease-out infinite; opacity: 0; }
+    #view-intro .sig .arc.a2 { animation-delay: .5s; }
+    #view-intro .sig .arc.a3 { animation-delay: 1s; }
+    @keyframes arc { 0% { opacity: .9; transform: scale(.5); } 100% { opacity: 0; transform: scale(1.5); } }
+    #view-intro .sig .eye { transform-box: fill-box; transform-origin: center; animation: blink 4.5s infinite; }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    #view-intro .sig .tail { transform-box: fill-box; transform-origin: left center; animation: flap 1.6s ease-in-out infinite; }
+    #view-intro .sig .tail.t2 { animation-delay: .25s; }
+    @keyframes flap { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(14deg); } }
+    .sig.happy .mouth { d: path("M48 72 q12 12 24 0"); }
+    .brand .sig { width: 30px; height: 30px; }
+    .hero-sig.jump { animation: jump .6s cubic-bezier(.3,1.5,.5,1); }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes jump { 0% { transform: translateY(0) rotate(0); } 40% { transform: translateY(-26px) rotate(-12deg); } 100% { transform: translateY(0) rotate(0); } }
+    .bubble {
+      position: relative; margin: 0 auto 0.6rem; max-width: 16rem; min-height: 2.4em;
+      background: var(--accent-soft); color: var(--fg); border-radius: 12px; padding: 0.55rem 0.8rem;
+      font-size: 0.82rem; font-weight: 500; line-height: 1.4;
+    }
+    .bubble::after {
+      content: ""; position: absolute; left: 50%; bottom: -6px; width: 12px; height: 12px;
+      background: inherit; transform: translateX(-50%) rotate(45deg); border-radius: 2px;
+    }
+    @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    /* up-next: Sig coaches from the corner */
+    .now .coach { position: absolute; top: 1.25rem; right: 1.25rem; display: flex; align-items: center; gap: 0.5rem; max-width: 42%; }
+    .now .coach .sig { width: 48px; height: 48px; flex-shrink: 0; }
+    .now .coach .bubble { margin: 0; font-size: 0.76rem; background: var(--sunken); }
+    .now .coach .bubble::after { left: auto; right: -5px; bottom: 50%; transform: translateY(50%) rotate(45deg); }
+    @media (max-width: 1100px) { .now .coach .bubble { display: none; } .now h2 { padding-right: 3.5rem; } }
+    @media (max-width: 640px) { .now .coach { top: 1rem; right: 1rem; } .now .coach .sig { width: 38px; height: 38px; } }
+
+    /* celebration */
+    .cele-sig { width: 64px; height: 64px; margin: 0 auto 0.6rem; }
+    #celebrate.belt-up .overlay-card { border: 2px solid var(--accent); }
+    .cele-belt { display: none; margin: 0.6rem auto 0; width: 86px; height: 60px; object-fit: contain; }
+    #celebrate.belt-up .cele-belt { display: block; }
+
+    /* view changes and list entrances */
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+    @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+    .hero > *, .how { animation: rise .5s var(--ease) both; }
+    .hero > :nth-child(2) { animation-delay: .08s; }
+    .how { animation-delay: .14s; }
+    .score.bump { border-color: var(--ok); color: var(--ok-text); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+
+    /* in-app reader: README (tasks) and LESSON */
+    #reader .overlay-card { width: min(48rem, 100%); max-height: calc(100dvh - 2rem); display: flex; flex-direction: column; padding: 0; }
+    .reader-head { display: flex; align-items: center; gap: 0.7rem; padding: 0.85rem 1rem 0.85rem 1.25rem; border-bottom: 1px solid var(--border); }
+    .reader-head .sig { width: 28px; height: 28px; flex-shrink: 0; }
+    .reader-head h2 { font-size: 1rem; margin: 0; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tabs { display: inline-flex; gap: 0.25rem; align-self: stretch; }
+    .tabs button { appearance: none; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 0.86rem; font-weight: 500; padding: 0 0.6rem; transition: color .15s ease, border-color .15s ease; }
+    .tabs button:hover { color: var(--fg); }
+    .tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+    .reader-x { appearance: none; border: 0; background: transparent; color: var(--muted); width: 32px; height: 32px; border-radius: var(--r-ctl); display: grid; place-items: center; }
+    .reader-x .ico { width: 18px; height: 18px; }
+    .reader-x:hover { background: var(--sunken); color: var(--fg); }
+    .reader-body { overflow-y: auto; padding: 1.5rem 2rem 2rem; font-size: 0.95rem; line-height: 1.7; }
+    .md { max-width: 68ch; }
+    .md h1 { font-size: 1.6rem; letter-spacing: -0.035em; line-height: 1.2; margin: 0.1rem 0 1rem; }
+    .md h2 { font-size: 1.15rem; margin: 1.9rem 0 0.5rem; }
+    .md h3 { font-size: 1rem; margin: 1.4rem 0 0.35rem; }
+    .md p { margin: 0.6rem 0; }
+    .md ul, .md ol { margin: 0.5rem 0; padding-left: 1.4rem; }
+    .md li { margin: 0.25rem 0; }
+    .md li::marker { color: var(--faint); }
+    .md li > ul, .md li > ol { margin: 0.2rem 0; }
+    .md code { font-family: var(--mono); font-size: 0.86em; background: var(--sunken); padding: 0.12em 0.4em; border-radius: 5px; }
+    .md pre { font-family: var(--mono); font-size: 0.83rem; line-height: 1.6; background: var(--code-bg); color: var(--code-fg);
+      border: 1px solid var(--border); border-radius: var(--r-ctl); padding: 0.9rem 1.1rem; overflow-x: auto; margin: 0.8rem 0; }
+    .md pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+    .md a { color: var(--accent); text-underline-offset: 2px; word-break: break-all; }
+    .md strong { font-weight: 600; }
+    .md figure { margin: 1.1rem 0; }
+    .md figure img { display: block; max-width: 100%; height: auto; border-radius: var(--r-ctl); border: 1px solid var(--border); }
+    .md figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+    .md-table { overflow-x: auto; margin: 0.8rem 0; }
+    .md table { border-collapse: collapse; font-size: 0.86rem; line-height: 1.5; }
+    .md th, .md td { border: 1px solid var(--border); padding: 0.35rem 0.6rem; text-align: left; vertical-align: top; }
+    .md th { background: var(--sunken); font-weight: 600; }
+    .reader-foot { padding: 0.75rem 1.25rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); background: var(--sunken); }
+    @media (max-width: 560px) { .reader-body { padding: 1.25rem; } }
+    /* ---------- Motion ----------
+       Outside the intro, motion is limited to quick colour and opacity changes. The intro (zoom,
+       steps, Sig) keeps its own animation further down. Reduced motion (above) turns it all off. */
+
+    /* view changes: a short crossfade; the header stays put */
+    .top { view-transition-name: topbar; }
+    ::view-transition-old(root) { animation: fadeout 0.12s ease both; }
+    ::view-transition-new(root) { animation: fadein 0.15s ease both; }
+    @keyframes fadeout { to { opacity: 0; } }
+
+    /* intro only: the Start learning button's light sweep, Sig's eyes, the steps arriving */
+    #view-intro .go { position: relative; overflow: hidden; isolation: isolate; }
+    #view-intro .go::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+      transform: translateX(-130%);
+    }
+    #view-intro .go:hover:not(:disabled)::after { transform: translateX(130%); transition: transform 0.7s var(--ease); }
+    #view-intro .sig .eyes { transform: translate(var(--ex, 0px), var(--ey, 0px)); transition: transform 0.35s var(--ease); }
+    .sig .mouth { transition: d 0.25s var(--ease); }
+    .hero-sig:hover .mouth, .hero-sig:focus-visible .mouth { d: path("M48 72 q12 12 24 0"); }
+    #view-intro .bubble { animation: pop .35s cubic-bezier(.3,1.6,.5,1); }
+    .guide .step { isolation: isolate; }
+    .guide .step::before {
+      content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none;
+      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 11%, transparent), transparent 70%);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .guide .step:hover::before { opacity: 1; }
+    }
+    .guide.reveal::before {
+      content: ""; position: absolute; left: 0; top: 0; z-index: 2; width: 100%; height: 2px;
+      background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform 1.2s var(--ease) 0.1s;
+    }
+    .guide.reveal.in::before { transform: scaleX(1); }
+    .guide { position: relative; }
+    .reveal .step, .reveal li { opacity: 0; transform: translateY(16px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); transition-delay: calc(var(--i, 0) * 140ms + 0.15s); }
+    .reveal.in .step, .reveal.in li { opacity: 1; transform: none; }
+    .reveal.in .step .n { animation: pop 0.5s cubic-bezier(.3,1.6,.5,1) both; animation-delay: calc(var(--i, 0) * 140ms + 0.3s); }
+
+    /* belt detail: the open challenge gets an accent edge */
+    .crow { position: relative; }
+    .crow.open::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+    .crow.open.solved::before { background: var(--ok); }
+
+    /* ---------- Home page: zoom ----------
+       One idea per screen. Scrolling (or the Zoom in button) zooms from a radio spectrum into one
+       wave, its bits, its bytes and finally the word they spell. The stage is always dark, like a
+       screen at night with the horizon lit in blue and orange; the rest of the page follows the theme. */
+    body { overflow-x: clip; }
+    .zoom { position: relative; height: 560vh; margin: -2rem calc(50% - 50vw) 0; }
+    .zoom-stage {
+      position: sticky; top: 62px; height: calc(100dvh - 62px); overflow: hidden; isolation: isolate;
+      color: #e8e8e8;
+      background:
+        radial-gradient(70% 38% at 50% 104%, rgba(0,122,204,0.35) 0%, rgba(0,122,204,0) 70%),
+        radial-gradient(110% 70% at 50% 110%, #2d2d30 0%, #252526 38%, #1e1e1e 72%, #181818 100%);
+    }
+    .zoom-cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: -1; }
+    .zoom-copy {
+      position: absolute; top: clamp(1.5rem, 7vh, 4.5rem);
+      left: max(var(--pad), calc(50% - var(--max) / 2 + var(--pad))); right: var(--pad);
+    }
+    .zoom-cap {
+      position: absolute; top: 0; left: 0; max-width: 40rem;
+      opacity: 0; transform: translateY(14px); pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.55s var(--ease);
+    }
+    .zoom-cap.is-on { opacity: 1; transform: none; pointer-events: auto; transition-delay: 0.08s; }
+    .zoom-cap h1, .zoom-cap h2 {
+      margin: 0; color: #fff; font-weight: 600; letter-spacing: -0.045em; line-height: 1.02;
+      font-size: clamp(2.3rem, 6.2vw, 4.6rem); text-wrap: balance;
+    }
+    .zoom-cap p { margin: 1rem 0 0; color: #b0b0b0; font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; max-width: 30ch; }
+    .zoom-cap .cta-row { margin-top: 1.5rem; }
+    .zoom .go { box-shadow: 0 8px 30px -8px rgba(0,122,204,0.5); }
+    .zoom-bar {
+      position: absolute; left: 0; right: 0; bottom: clamp(1rem, 4vh, 2rem);
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.6rem 0.9rem; padding: 0 var(--pad);
+    }
+    .zoom-steps { list-style: none; margin: 0; padding: 4px; display: flex; gap: 4px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+    .zoom-steps button {
+      appearance: none; border: 0; border-radius: 999px; height: 34px; padding: 0 0.85rem;
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: transparent; color: #9d9d9d; font-size: 0.84rem; font-weight: 500;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    .zoom-steps button i { font-style: normal; font-family: var(--mono); font-size: 0.72rem; opacity: 0.7; }
+    .zoom-steps button:hover { color: #fff; }
+    .zoom-steps button.done { color: #cccccc; }
+    .zoom-steps button.on { background: #e8e8e8; color: #1e1e1e; }
+    .zoom-next {
+      appearance: none; height: 42px; padding: 0 1.2rem; border-radius: 999px; border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.08); color: #fff; font-size: 0.92rem; font-weight: 500;
+      transition: background-color 0.2s ease, transform 0.15s var(--ease);
+    }
+    .zoom-next:hover { background: rgba(255,255,255,0.16); }
+    .zoom-next:active { transform: scale(0.97); }
+    .zoom :focus-visible { outline-color: #4daafc; }
+    @media (max-width: 640px) {
+      .zoom-stage { top: 58px; height: calc(100dvh - 58px); }
+      .zoom-steps button { padding: 0 0.6rem; }
+      .zoom-steps button:not(.on) span { display: none; }
+    }
+
+    /* below the zoom: three steps, four belts, Sig */
+    .how { border-top: 0; padding-top: 4.5rem; }
+    .how h2, .belt-sec h2, .outro h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); letter-spacing: -0.04em; line-height: 1.05; max-width: none; }
+    .guide .step strong { font-size: 1.2rem; }
+    .guide .step p { font-size: 0.98rem; }
+    .belt-sec { padding-top: 5rem; }
+    .belt-sec .lede { margin-top: 0.6rem; }
+    .belt-strip { list-style: none; margin: 1.75rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+    .belt-strip li {
+      display: grid; justify-items: center; gap: 0.5rem; padding: 1rem 0.25rem 0.85rem;
+      background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+      font-size: 0.86rem; font-weight: 500; color: var(--muted);
+    }
+    .belt-strip img { width: 52px; height: 40px; object-fit: contain; transition: transform 0.45s cubic-bezier(.3,1.6,.5,1); }
+    .belt-strip li:hover img { transform: rotate(-9deg) scale(1.12); }
+    html[data-theme="dark"] .belt-strip img { filter: drop-shadow(0 0 1px rgba(255,255,255,0.7)); }
+    @media (max-width: 760px) { .belt-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .outro { padding: 5.5rem 0 1rem; text-align: center; display: grid; justify-items: center; }
+    .outro .hero-sig-wrap { position: relative; }
+    .outro .hero-sig { width: 120px; height: 120px; cursor: pointer; animation: bob 3.2s ease-in-out infinite; }
+    .outro .lede { margin-top: 0.6rem; }
+    .outro .cta-row { justify-content: center; }
+  </style>
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('academy-theme'); } catch (e) {}  // private windows may block storage
+      var dark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (dark ? 'dark' : 'light'));
+    })();
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="#" id="home-link">
+        <span class="sig" data-sig aria-hidden="true"></span>
+        <span class="word">Signal <b>Dojo</b></span>
+      </a>
+      <span class="led" id="led"><i></i><span>Ready</span></span>
+      <span class="hello" id="hello"></span>
+      <div class="score" id="btn-score" title="Open profile"><strong id="progress">…</strong></div>
+      <button type="button" class="profile-btn" id="btn-profile">Profile</button>
+      <button type="button" class="theme-btn classroom-only" id="btn-logout">Log out</button>
+      <button type="button" class="theme-btn" id="btn-theme" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="top-progress" id="top-progress" role="progressbar" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="top-fill"></i></div>
+  </header>
+
+  <main class="wrap">
+    <!-- INTRO -->
+    <div id="view-intro">
+      <section class="zoom" id="zoom" aria-label="What you will learn">
+        <div class="zoom-stage">
+          <canvas class="zoom-cv" aria-hidden="true"></canvas>
+          <div class="zoom-copy">
+            <div class="zoom-cap is-on" data-s="0">
+              <h1>Learn by doing.</h1>
+              <p>Short challenges. One small step at a time.</p>
+              <div class="cta-row"><button type="button" class="go lg" id="btn-enter">Start learning</button></div>
+            </div>
+            <div class="zoom-cap" data-s="1" aria-hidden="true">
+              <h2>Zoom in on one station.</h2>
+              <p>It is a wave. The wave turns on and off.</p>
+            </div>
+            <div class="zoom-cap" data-s="2" aria-hidden="true">
+              <h2>Read the wave.</h2>
+              <p>On means 1. Off means 0. These are bits.</p>
+            </div>
+            <div class="zoom-cap" data-s="3" aria-hidden="true">
+              <h2>Eight bits make a byte.</h2>
+              <p>A byte is a number. 01010011 is 83.</p>
+            </div>
+            <div class="zoom-cap" data-s="4" aria-hidden="true">
+              <h2>Bytes become words.</h2>
+              <p>83 is the letter S. The signal says SIG!<br>You will learn every step.</p>
+              <div class="cta-row"><button type="button" class="go lg" data-enter tabindex="-1">Start learning</button></div>
+            </div>
+          </div>
+          <div class="zoom-bar">
+            <ol class="zoom-steps">
+              <li><button type="button" data-go="0" class="on"><i>1</i><span>Signal</span></button></li>
+              <li><button type="button" data-go="1"><i>2</i><span>Wave</span></button></li>
+              <li><button type="button" data-go="2"><i>3</i><span>Bits</span></button></li>
+              <li><button type="button" data-go="3"><i>4</i><span>Bytes</span></button></li>
+              <li><button type="button" data-go="4"><i>5</i><span>Words</span></button></li>
+            </ol>
+            <button type="button" class="zoom-next" id="btn-howto">Zoom in</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="how">
+        <h2>Three steps. Every challenge.</h2>
+        <ol class="guide">
+          <li class="step">
+            <div class="n">1</div>
+            <strong>Start</strong>
+            <p>Press Start. Your files appear in the <b>challenge</b> folder.</p>
+          </li>
+          <li class="step">
+            <div class="n">2</div>
+            <strong>Solve</strong>
+            <p>Read the <b>README</b>. Do the tasks in the terminal. Run <b>./check</b> any time.</p>
+          </li>
+          <li class="step">
+            <div class="n">3</div>
+            <strong>Done</strong>
+            <p>When <b>./check</b> passes, press Done. Stuck? Press Hint.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="belt-sec">
+        <h2>Four belts. White to blue.</h2>
+        <p class="lede">Finish a belt to open the next one.</p>
+        <ul class="belt-strip">
+          <li><img src="/icons/belt-white.svg" alt=""/>White</li>
+          <li><img src="/icons/belt-yellow.svg" alt=""/>Yellow</li>
+          <li><img src="/icons/belt-orange.svg" alt=""/>Orange</li>
+          <li><img src="/icons/belt-blue.svg" alt=""/>Blue</li>
+        </ul>
+      </section>
+
+      <section class="outro">
+        <div class="hero-sig-wrap">
+          <div class="bubble" id="sig-say">Hi! I'm Sig. Tap me for a fun fact.</div>
+          <span class="sig hero-sig" data-sig id="hero-sig" role="button" tabindex="0" aria-label="Sig the mascot: tap for a fun fact"></span>
+        </div>
+        <h2>Ready?</h2>
+        <p class="lede">Start with your first command. Sig will help.</p>
+        <div class="cta-row"><button type="button" class="go lg" data-enter>Start learning</button></div>
+      </section>
+    </div>
+
+    <!-- LAB HOME -->
+    <div id="view-home" class="hidden">
+      <h1 class="sr-only">Your lab</h1>
+      <button type="button" class="back" id="btn-intro"><span class="ico" data-ico="arrow-left"></span>About the course</button>
+
+      <section class="module admin-bar hidden" id="admin-bar">
+        <strong>Admin mode</strong>: every belt is unlocked.
+        <div class="flagrow">
+          <input id="admin-jump" list="admin-jump-list" placeholder="Jump to any challenge: type an id or title" aria-label="Challenge id or title"/>
+          <datalist id="admin-jump-list"></datalist>
+          <button type="button" class="go" id="admin-jump-go">Open</button>
+        </div>
+        <p class="admin-links"><a href="/admin">Curriculum admin</a>. Links like <code>/#challenge/pyq-generics</code> open a challenge directly.</p>
+      </section>
+
+      <div class="lab-grid">
+        <section class="module now" id="now" aria-live="polite"></section>
+        <aside class="lab-side">
+          <section class="module xp">
+            <div class="xp-top"><span>Progress</span><span class="num"><em id="xp-count">0</em>/<span id="xp-total">120</span></span></div>
+            <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+            <div class="belts" id="belts"></div>
+          </section>
+          <section class="module savebox" aria-labelledby="save-title">
+            <div class="xp-top"><span id="save-title">Your work</span></div>
+            <p class="local-only">Save your progress and every script you wrote to one file. Restore it on any Signal Dojo to continue from where you stopped.</p>
+            <p class="classroom-only">Your progress saves by itself to your own folder each time you start, solve or take a hint. Log in from any computer on the network to carry on. You can also download a copy of your work.</p>
+            <div class="save-acts">
+              <button type="button" class="ghost" id="btn-save">Save to a file</button>
+              <button type="button" class="ghost local-only" id="btn-restore">Restore</button>
+              <input type="file" id="restore-file" accept=".zip,application/zip" hidden/>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <h2 class="sec">Belts</h2>
+      <div class="path" id="belts-list"></div>
+    </div>
+
+    <!-- DOJO DETAIL -->
+    <div id="view-dojo" class="hidden">
+      <h1 class="sr-only">Belt challenges</h1>
+      <button type="button" class="back" id="btn-back"><span class="ico" data-ico="arrow-left"></span>All belts</button>
+      <section class="module dhero-mod">
+        <div class="dhero" id="dhero"></div>
+      </section>
+      <div class="clist" id="clist"></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="view-profile" class="hidden">
+      <h1 class="sr-only">Profile</h1>
+      <button type="button" class="back" id="btn-profile-back"><span class="ico" data-ico="arrow-left"></span>Back to the lab</button>
+
+      <section class="module prof-head">
+        <h2 id="prof-name">Your path</h2>
+        <p class="lede small" id="prof-lede">Your progress through the course.</p>
+        <div class="prof-stats">
+          <div class="prof-stat"><b>Challenges completed</b><strong id="prof-cleared">0/50</strong></div>
+          <div class="prof-stat"><b>Current streak</b><strong id="prof-streak">0 days</strong></div>
+          <div class="prof-stat"><b>Course progress</b><strong id="prof-ascent">0%</strong></div>
+        </div>
+      </section>
+
+      <section class="module">
+        <h2>Activity</h2>
+        <p class="lede small">Challenges completed per day.</p>
+        <div class="contrib" id="contrib" role="region" tabindex="0" aria-label="Challenges completed per day"></div>
+      </section>
+
+      <div class="prof-grid">
+        <section class="module">
+          <h2>Belts</h2>
+          <p class="lede small">Progress in each belt, from white to black.</p>
+          <div id="mountain" role="group" aria-label="Belt progress"></div>
+        </section>
+
+        <section class="module">
+          <h2>Recently completed</h2>
+          <div class="recent-list" id="recent-list"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="toasts" id="toasts"></div>
+
+  <div class="overlay hidden" id="name-gate" role="dialog" aria-modal="true" aria-labelledby="name-title">
+    <div class="overlay-card">
+      <span class="sig gate-sig" data-sig aria-hidden="true"></span>
+      <h2 id="name-title">What should we call you?</h2>
+      <p class="sub">Your name is saved on this machine only.</p>
+      <div class="flagrow">
+        <input id="name-input" maxlength="32" placeholder="Your name" aria-label="Your name" autocomplete="nickname"/>
+      </div>
+      <div class="cta-row">
+        <button type="button" class="go" id="btn-save-name">Save and enter</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="login-gate" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div class="overlay-card">
+      <span class="sig gate-sig" data-sig aria-hidden="true"></span>
+      <h2 id="login-title">Log in to Signal Dojo</h2>
+      <div class="login-tabs" role="tablist" aria-label="Account">
+        <button type="button" role="tab" id="login-mode-in" aria-selected="true">Log in</button>
+        <button type="button" role="tab" id="login-mode-new" aria-selected="false">Create account</button>
+      </div>
+      <p class="sub" id="login-sub">Log in to carry on where you left off. Your progress saves by itself.</p>
+      <form class="flagrow login-form" id="login-form">
+        <input id="login-user" name="username" maxlength="32" placeholder="Username" aria-label="Username" autocomplete="username" autocapitalize="none" spellcheck="false" required/>
+        <input id="login-pass" name="password" type="password" maxlength="1024" placeholder="Password" aria-label="Password" autocomplete="current-password" required/>
+        <input id="login-pass2" name="password2" type="password" maxlength="1024" placeholder="Type the password again" aria-label="Type the password again" autocomplete="new-password" class="hidden"/>
+        <button type="submit" class="go" id="btn-login">Log in</button>
+      </form>
+      <p class="login-err" id="login-err" role="alert"></p>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="reader" role="dialog" aria-modal="true" aria-labelledby="reader-title">
+    <div class="overlay-card">
+      <div class="reader-head">
+        <span class="sig" data-sig aria-hidden="true"></span>
+        <h2 id="reader-title">README</h2>
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" data-tab="lesson" id="tab-lesson">Lesson</button>
+          <button type="button" role="tab" data-tab="readme" id="tab-readme">Tasks</button>
+        </div>
+        <button type="button" class="reader-x" id="reader-x" aria-label="Close"><span class="ico" data-ico="x"></span></button>
+      </div>
+      <div class="reader-body" id="reader-body" tabindex="0"></div>
+      <div class="reader-foot" id="reader-foot"></div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="celebrate" role="dialog" aria-modal="true" aria-labelledby="cele-title">
+    <div class="overlay-card" id="cele-card">
+      <span class="sig cele-sig happy" data-sig aria-hidden="true"></span>
+      <h2 id="cele-title">Challenge complete</h2>
+      <img class="cele-belt" id="cele-belt" alt=""/>
+      <p class="sub" id="cele-sub"></p>
+      <div class="cele-bar"><i id="cele-fill"></i></div>
+      <p class="sub" id="cele-count"></p>
+      <form class="fbk" id="cele-fbk" onsubmit="return false">
+        <fieldset>
+          <legend>How was this challenge?</legend>
+          <div class="fbk-opts">
+            <button type="button" class="ghost" data-rate="too-easy" aria-pressed="false">Too easy</button>
+            <button type="button" class="ghost" data-rate="about-right" aria-pressed="false">About right</button>
+            <button type="button" class="ghost" data-rate="too-hard" aria-pressed="false">Too hard</button>
+          </div>
+        </fieldset>
+        <label for="cele-note">Anything unclear or broken? (optional)</label>
+        <textarea id="cele-note" rows="3" maxlength="1000"></textarea>
+        <p class="fbk-msg" id="cele-fbk-msg" role="status"></p>
+      </form>
+      <div class="cta-row">
+        <button type="button" class="go ok-btn" id="btn-cele-next">Next challenge</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BELT = { white:'belt-white', yellow:'belt-yellow', orange:'belt-orange', green:'belt-green', blue:'belt-blue' };
+    const intro = document.getElementById('view-intro');
+    const home = document.getElementById('view-home');
+    const detail = document.getElementById('view-dojo');
+    const profile = document.getElementById('view-profile');
+    let nextCh = null;
+    let catalogIntro = '';
+    let lastSolved = 0;
+    let lastTotal = 50;
+    let lastProfile = null;
+
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // Motion: honour reduced motion; swap views with a View Transition where the browser has one.
+    const motionOK = () => !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function viewSwap(target, update) {
+      if (!target.classList.contains('hidden') || !document.startViewTransition || !motionOK()) { update(); return Promise.resolve(); }
+      return document.startViewTransition(update).updateCallbackDone.catch(() => {});
+    }
+
+    // Sig, the Signal Dojo mascot (plain SVG, no assets)
+    const SIG_SVG = `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <path class="arc a1" d="M50 8 q10 -10 20 0" fill="none" stroke="var(--pop)" stroke-width="3" stroke-linecap="round"/>
+      <path class="arc a2" d="M50 8 q10 -10 20 0" fill="none" stroke="var(--pop)" stroke-width="3" stroke-linecap="round"/>
+      <path class="arc a3" d="M50 8 q10 -10 20 0" fill="none" stroke="var(--pop)" stroke-width="3" stroke-linecap="round"/>
+      <line x1="60" y1="16" x2="60" y2="32" stroke="var(--fg)" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="60" cy="13" r="6" fill="var(--pop)"/>
+      <rect x="16" y="30" width="88" height="76" rx="24" fill="var(--sig-body)"/>
+      <rect x="16" y="38" width="88" height="11" fill="var(--band)"/>
+      <path class="tail" d="M103 42 q12 -4 16 4 q-8 0 -16 2z" fill="var(--band)"/>
+      <path class="tail t2" d="M103 45 q10 6 12 14 q-7 -4 -12 -10z" fill="var(--band)"/>
+      <rect x="27" y="55" width="66" height="40" rx="13" fill="var(--screen)"/>
+      <g class="eyes"><rect class="eye" x="43" y="62" width="9" height="13" rx="4.5" fill="var(--glow)"/>
+      <rect class="eye" x="68" y="62" width="9" height="13" rx="4.5" fill="var(--glow)"/></g>
+      <path class="mouth" d="M50 80 q10 7 20 0" fill="none" stroke="var(--glow)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="37" cy="82" r="3.5" fill="#ff8fab" opacity=".55"/><circle cx="83" cy="82" r="3.5" fill="#ff8fab" opacity=".55"/>
+      <rect x="30" y="104" width="18" height="9" rx="4.5" fill="var(--fg)" opacity=".85"/>
+      <rect x="72" y="104" width="18" height="9" rx="4.5" fill="var(--fg)" opacity=".85"/>
+    </svg>`;
+    function paintSigs(root) { (root || document).querySelectorAll('[data-sig]:empty').forEach(el => { el.innerHTML = SIG_SVG; }); }
+    paintSigs();
+
+    // Phosphor Icons (regular weight, MIT licence), inlined so the app needs no network.
+    const ICONS = {
+      'sun': 'M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z',
+      'moon': 'M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z',
+      'arrow-left': 'M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z',
+      'lock-simple': 'M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z',
+      'check': 'M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z',
+      'x': 'M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z'
+    };
+    function icon(name) {
+      return `<span class="ico" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="${ICONS[name]}"/></svg></span>`;
+    }
+    function paintIcons(root) { (root || document).querySelectorAll('[data-ico]').forEach(el => { el.outerHTML = icon(el.dataset.ico); }); }
+    paintIcons();
+    const pick = (a) => a[Math.floor(Math.random() * a.length)];
+    const SIG_FACTS = [
+      'Linux runs most of the world’s servers, every Android phone and the Raspberry Pi.',
+      'Files whose names start with a dot are hidden. ls -a shows them.',
+      'In the shell, | sends the output of one command into the next one.',
+      'chmod 755 means: the owner can read, write and run. Everyone else can read and run.',
+      'vim has modes. i starts typing, Esc stops, :wq saves and quits.',
+      'C++ was first called “C with Classes”.',
+      'A pointer holds the address of a value in memory.',
+      'gdb can stop a program at any line and show every variable.',
+      'Python is named after Monty Python, not the snake.',
+      'One byte is 8 bits. It holds a number from 0 to 255.',
+    ];
+    const heroSig = document.getElementById('hero-sig');
+    function sigPoke() {
+      heroSig.classList.remove('jump'); void heroSig.offsetWidth; heroSig.classList.add('jump');
+      const say = document.getElementById('sig-say');
+      say.textContent = pick(SIG_FACTS);
+      say.style.animation = 'none'; void say.offsetWidth; say.style.animation = '';
+    }
+    heroSig.onclick = sigPoke;
+    heroSig.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sigPoke(); } };
+    heroSig.addEventListener('animationend', () => heroSig.classList.remove('jump'));
+
+    const CHEERS = ['Signal locked!', 'Clean decode!', 'Well done!', 'Loud and clear!', 'Zero bit errors!', 'Great work!', 'Perfect!'];
+    const STARTS = ['Let’s go!', 'Tuning in…', 'You can do this.', 'Your files are ready.', 'Antenna up!'];
+    function coachLine(solved, total, started) {
+      if (started) return pick(['Run ./check whenever you like.', 'Stuck? Try a hint.', 'Read the README first.']);
+      if (!solved) return 'Your first challenge! Press Start.';
+      const pct = total ? solved / total : 0;
+      if (pct > 0.75) return 'Almost done. Wow.';
+      if (pct > 0.4) return 'You’re on a roll!';
+      return pick(['Nice streak. Keep going!', 'Ready for the next one?', 'Every challenge is a step up.']);
+    }
+    let lastDoneBelts = null, pendingBeltUp = null;
+    let CLASSROOM = null;  // {user, signup} when this page is served by `academy serve` (classroom mode)
+    let memName = '';
+    function playerName() {
+      if (CLASSROOM) return CLASSROOM.user || '';
+      try { return (localStorage.getItem('academy-player-name') || memName).trim(); }
+      catch (e) { return memName; }
+    }
+    function setPlayerName(name) {
+      const n = String(name || '').trim().slice(0, 32);
+      if (n) memName = n;  // private windows can refuse storage; keep the name for this visit anyway
+      try { if (n) localStorage.setItem('academy-player-name', n); } catch (e) {}
+      paintHello();
+      return n;
+    }
+    function paintHello() {
+      const el = document.getElementById('hello');
+      const n = playerName();
+      el.innerHTML = n ? `Hi, <b>${esc(n)}</b>` : '';
+      if (CLASSROOM && n) el.title = 'Logged in as ' + n + '. Your progress saves by itself.';
+    }
+    function setTopProgress(solved, total) {
+      lastSolved = solved;
+      lastTotal = total || 50;
+      const pct = lastTotal ? Math.round(100 * solved / lastTotal) : 0;
+      const fill = document.getElementById('top-fill');
+      if (fill) fill.style.width = pct + '%';
+      document.getElementById('top-progress').setAttribute('aria-valuenow', pct);
+      const prog = document.getElementById('progress');
+      const before = parseInt(prog.textContent, 10);
+      prog.textContent = solved + '/' + lastTotal;
+      if (!isNaN(before) && solved > before) {
+        const pill = document.getElementById('btn-score');
+        pill.classList.remove('bump'); void pill.offsetWidth; pill.classList.add('bump');
+      }
+    }
+    function toast(t, d, kind='ok') {
+      const el = document.createElement('div');
+      el.className = 'toast' + (kind === 'err' ? ' err' : '');
+      el.innerHTML = `<b>${esc(t)}</b><span>${esc(d||'')}</span>`;
+      document.getElementById('toasts').appendChild(el);
+      // Errors stay up longer: they usually need reading.
+      setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 260); }, kind === 'err' ? 7000 : 2800);
+    }
+    const OFFLINE = 'Could not reach the Signal Dojo server. Check that ./run.sh is still running, then reload this page.';
+    async function api(path, opts) {
+      let r;
+      try { r = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts || {})); }
+      catch (e) { throw new Error(OFFLINE); }
+      const data = await r.json().catch(() => ({}));
+      if (r.status === 401 && data.classroom) {
+        showLogin(data);
+        throw new Error('Please log in');
+      }
+      if (!r.ok) throw new Error(data.error || r.statusText || 'request failed');
+      return data;
+    }
+
+    // classroom: login
+    let loginCreate = false;
+    function setLoginMode(create) {
+      loginCreate = !!create && !!(CLASSROOM && CLASSROOM.signup);
+      document.getElementById('login-mode-in').setAttribute('aria-selected', String(!loginCreate));
+      document.getElementById('login-mode-new').setAttribute('aria-selected', String(loginCreate));
+      document.getElementById('login-mode-new').classList.toggle('hidden', !(CLASSROOM && CLASSROOM.signup));
+      document.getElementById('login-title').textContent = loginCreate ? 'Create your Signal Dojo account' : 'Log in to Signal Dojo';
+      document.getElementById('login-sub').textContent = loginCreate
+        ? 'Pick a username (3-32 lowercase letters, digits, - or _) and a password of 8 characters or more. Your progress then saves by itself to a folder that is only yours.'
+        : (CLASSROOM && CLASSROOM.signup ? 'Log in to carry on where you left off. First time here? Choose Create account.'
+                                         : 'Use the username and password your instructor gave you.');
+      const p2 = document.getElementById('login-pass2');
+      p2.classList.toggle('hidden', !loginCreate); p2.required = loginCreate; p2.value = '';
+      document.getElementById('login-pass').autocomplete = loginCreate ? 'new-password' : 'current-password';
+      document.getElementById('btn-login').textContent = loginCreate ? 'Create account' : 'Log in';
+      document.getElementById('login-err').textContent = '';
+    }
+    document.getElementById('login-mode-in').onclick = () => setLoginMode(false);
+    document.getElementById('login-mode-new').onclick = () => setLoginMode(true);
+    function showLogin(info) {
+      document.body.classList.add('classroom');
+      CLASSROOM = { user: '', signup: !!(info && info.signup) };
+      setLoginMode(false);
+      document.getElementById('login-gate').classList.remove('hidden'); document.body.classList.add('logged-out');
+      setTimeout(() => document.getElementById('login-user').focus(), 50);
+    }
+    document.getElementById('login-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const err = document.getElementById('login-err');
+      const btn = document.getElementById('btn-login');
+      err.textContent = '';
+      const pass = document.getElementById('login-pass').value;
+      if (loginCreate && pass !== document.getElementById('login-pass2').value) {
+        err.textContent = 'The two passwords are different. Type them again.';
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: document.getElementById('login-user').value.trim().toLowerCase(),
+            password: pass,
+            create: loginCreate,
+          }),
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          err.textContent = data.error || 'Login failed.';
+          if (r.status === 409) setTimeout(() => { setLoginMode(false); err.textContent = data.error; }, 0);
+          return;
+        }
+        CLASSROOM.user = data.user;
+        document.getElementById('login-pass').value = '';
+        document.getElementById('login-pass2').value = '';
+        document.getElementById('login-gate').classList.add('hidden'); document.body.classList.remove('logged-out');
+        if (data.created) toast('Welcome, ' + data.user, 'Your account is ready. Progress saves by itself.');
+        await load();
+      } catch (e2) {
+        err.textContent = e2.message || String(e2);
+      } finally {
+        btn.disabled = false;
+      }
+    };
+    document.getElementById('btn-logout').onclick = async () => {
+      try { await fetch('/api/logout', { method: 'POST', body: '{}' }); } catch (e) {}
+      showLogin(CLASSROOM);
+    };
+
+
+    // in-app reader
+    function mdInline(t) {
+      return t
+        .replace(/`([^`]+)`/g, (_, c) => '<code>' + c + '</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>')
+        .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '$1');
+    }
+    function renderMd(src) {
+      // Small, safe markdown: escape everything first, then add headings, lists, code and emphasis.
+      const lines = esc(src.replace(/\r\n/g, '\n')).split('\n');
+      let html = '', para = [], list = null, sub = null, i = 0;
+      const endPara = () => { if (para.length) { html += '<p>' + mdInline(para.join(' ')) + '</p>'; para = []; } };
+      const endSub = () => { if (sub) { html += '</' + sub + '>'; sub = null; } };
+      // List items stay open (no </li>) so an indented sub-list can nest inside them.
+      const endList = () => { endSub(); if (list) { html += '</li></' + list + '>'; list = null; } };
+      const flush = () => { endPara(); endList(); };
+      while (i < lines.length) {
+        const l = lines[i];
+        if (/^```/.test(l)) {
+          flush(); const code = []; i++;
+          while (i < lines.length && !/^```/.test(lines[i])) code.push(lines[i++]);
+          html += '<pre tabindex="0"><code>' + code.join('\n') + '</code></pre>'; i++; continue;  // wide code scrolls: keep it keyboard-reachable
+        }
+        // A challenge image on a line of its own: ![caption](media/name.png), served from the challenge's files/media/.
+        const img = l.match(/^!\[([^\]]*)\]\(media\/([A-Za-z0-9._-]+\.(?:png|jpe?g|gif))\)\s*$/);
+        if (img && readerId) {
+          flush();
+          const src = '/api/challenges/' + encodeURIComponent(readerId) + '/media/' + img[2];
+          html += `<figure><img src="${src}" alt="${img[1]}" loading="lazy"/>` + (img[1] ? `<figcaption>${img[1]}</figcaption>` : '') + '</figure>';
+          i++; continue;
+        }
+        // A pipe table: a header row, a |---|---| row, then body rows.
+        if (/^\s*\|.*\|\s*$/.test(l) && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1] || '')) {
+          flush();
+          const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => mdInline(c.trim()));
+          html += '<div class="md-table"><table><thead><tr>' + cells(l).map(c => '<th>' + c + '</th>').join('') + '</tr></thead><tbody>';
+          i += 2;
+          while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) html += '<tr>' + cells(lines[i++]).map(c => '<td>' + c + '</td>').join('') + '</tr>';
+          html += '</tbody></table></div>'; continue;
+        }
+        const h = l.match(/^(#{1,4})\s+(.*)$/);
+        if (h) { flush(); const n = Math.min(h[1].length, 3); html += `<h${n}>${mdInline(h[2])}</h${n}>`; i++; continue; }
+        const li = l.match(/^(\s*)([-*]|\d+\.)\s+(.*)$/);
+        if (li) {
+          const kind = /\d/.test(li[2]) ? 'ol' : 'ul';
+          endPara();
+          if (list && li[1].length >= 2) {
+            if (sub !== kind) { endSub(); html += '<' + kind + '>'; sub = kind; }
+            html += '<li>' + mdInline(li[3]) + '</li>'; i++; continue;
+          }
+          endSub();
+          if (list === kind) html += '</li>';
+          else {
+            endList();
+            // A numbered list split by a code block keeps counting from where it left off.
+            const n = kind === 'ol' ? parseInt(li[2], 10) : 1;
+            html += '<' + kind + (n > 1 ? ' start="' + n + '"' : '') + '>'; list = kind;
+          }
+          html += '<li>' + mdInline(li[3]); i++; continue;
+        }
+        if (!l.trim()) { flush(); i++; continue; }
+        if (list && /^\s{2,}\S/.test(l)) {
+          const t = ' ' + mdInline(l.trim());
+          html = sub ? html.replace(/<\/li>$/, t + '</li>') : html + t;
+          i++; continue;
+        }
+        endList();
+        para.push(l.trim()); i++;
+      }
+      flush();
+      return html;
+    }
+    function txtToMd(src) {
+      // Plain-text docs (title + ==== / section + ---- underlines, indented examples) as markdown,
+      // so a README.txt or LESSON.txt still gets headings, lists and code blocks in the reader.
+      const out = [], lines = src.replace(/\r\n/g, '\n').split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const l = lines[i], next = lines[i + 1] || '';
+        if (l.trim() && /^=+\s*$/.test(next)) { out.push('# ' + l.trim()); i++; continue; }
+        if (l.trim() && /^-{3,}\s*$/.test(next)) { out.push('## ' + l.trim()); i++; continue; }
+        if (/^\s{2,}\S/.test(l) && !/^\s*([-*]|\d+[.)])\s/.test(l) && !/^\s*([-*]|\d+[.)])\s/.test(out[out.length - 1] || '')) {
+          const block = [];
+          while (i < lines.length && (/^\s{2,}\S/.test(lines[i]) || (!lines[i].trim() && /^\s{2,}\S/.test(lines[i + 1] || '')))) block.push(lines[i++]);
+          i--;
+          const ind = Math.min(...block.filter(b => b.trim()).map(b => b.match(/^\s*/)[0].length));
+          out.push('```', ...block.map(b => b.slice(ind)), '```');
+          continue;
+        }
+        out.push(l.replace(/^(\d+)\)\s/, '$1. '));
+      }
+      return out.join('\n');
+    }
+    let readerDocs = [], readerId = '';
+    function readerShow(kind) {
+      const doc = readerDocs.find(d => d.kind === kind) || readerDocs[0];
+      if (!doc) return;
+      const body = document.getElementById('reader-body');
+      body.innerHTML = '<div class="md">' + renderMd(doc.name.endsWith('.md') ? doc.text : txtToMd(doc.text)) + '</div>';
+      body.scrollTop = 0;
+      body.classList.remove('swap'); void body.offsetWidth; body.classList.add('swap');
+      ['lesson', 'readme'].forEach(k => {
+        const t = document.getElementById('tab-' + k);
+        t.setAttribute('aria-selected', String(k === doc.kind));
+        t.classList.toggle('hidden', !readerDocs.some(d => d.kind === k));
+      });
+      document.getElementById('reader-foot').textContent = 'Also in your challenge folder as ' + doc.name + (doc.kind === 'lesson' ? '.' : '. Run ./check when you are ready.');
+    }
+    async function openReader(id, title, startTab) {
+      const data = await api('/api/challenges/' + encodeURIComponent(id) + '/docs');
+      readerDocs = data.docs || [];
+      readerId = id;
+      if (!readerDocs.length) { toast('Nothing to read', 'This challenge has no README.'); return; }
+      document.getElementById('reader-title').textContent = title || id;
+      readerOpener = document.activeElement;
+      document.getElementById('reader').classList.remove('hidden');
+      readerShow(startTab);
+      document.getElementById('reader-x').focus();
+    }
+    let readerOpener = null;
+    function closeReader() {
+      const reader = document.getElementById('reader');
+      if (reader.classList.contains('hidden')) return;
+      reader.classList.add('hidden');
+      if (readerOpener && document.contains(readerOpener)) readerOpener.focus();
+      readerOpener = null;
+    }
+    document.getElementById('reader-x').onclick = closeReader;
+    document.getElementById('reader').addEventListener('click', (e) => { if (e.target.id === 'reader') closeReader(); });
+    document.querySelectorAll('#reader [data-tab]').forEach(b => b.onclick = () => readerShow(b.dataset.tab));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReader(); });
+    // Keep Tab inside an open dialog so keyboard users don't land on the page behind it.
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const dlg = [...document.querySelectorAll('.overlay[aria-modal="true"]')].find(d => !d.classList.contains('hidden'));
+      if (!dlg) return;
+      const items = [...dlg.querySelectorAll('button, input, textarea, select, a[href], [tabindex]:not([tabindex="-1"])')]
+        .filter(el => !el.disabled && el.offsetParent !== null);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (!dlg.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+      else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    function askNameThen(enterLab) {
+      if (CLASSROOM) {
+        if (enterLab) showHome();
+        return;
+      }
+      if (playerName()) {
+        if (enterLab) showHome();
+        return;
+      }
+      const gate = document.getElementById('name-gate');
+      const input = document.getElementById('name-input');
+      gate.classList.remove('hidden');
+      input.value = '';
+      setTimeout(() => input.focus(), 50);
+      const save = () => {
+        const n = setPlayerName(input.value);
+        if (!n) { input.focus(); return; }
+        gate.classList.add('hidden');
+        if (enterLab) showHome();
+      };
+      document.getElementById('btn-save-name').onclick = save;
+      input.onkeydown = (e) => { if (e.key === 'Enter') save(); };
+    }
+
+    function celebrateClear({ id, title, solved, total }) {
+      return new Promise((resolve) => {
+        const overlay = document.getElementById('celebrate');
+        const name = playerName();
+        const overlayEl = document.getElementById('celebrate');
+        overlayEl.classList.toggle('belt-up', !!pendingBeltUp);
+        if (pendingBeltUp) {
+          document.getElementById('cele-belt').src = '/icons/' + (BELT[pendingBeltUp.belt] || 'belt-white') + '.svg';
+          document.getElementById('cele-title').textContent = pendingBeltUp.label + ' earned!';
+        } else {
+          const cheer = pick(CHEERS);  // "Well done!" + name used to read "Well done! Well done, Ada."
+          document.getElementById('cele-title').textContent = name ? cheer.replace(/!$/, `, ${name}!`) : cheer;
+        }
+        pendingBeltUp = null;
+        document.getElementById('cele-sub').textContent =
+          title ? `You completed “${title}”.` : 'You completed this challenge.';
+        document.getElementById('cele-count').textContent =
+          `${solved} / ${total} challenges`;
+
+        // Feedback: optional, sent when the learner moves on.
+        let rating = '';
+        const rates = [...document.querySelectorAll('#cele-fbk [data-rate]')];
+        const note = document.getElementById('cele-note');
+        const msg = document.getElementById('cele-fbk-msg');
+        note.value = ''; msg.textContent = ''; msg.className = 'fbk-msg';
+        rates.forEach(b => {
+          b.setAttribute('aria-pressed', 'false');
+          b.onclick = () => {
+            rating = rating === b.dataset.rate ? '' : b.dataset.rate;  // press again to clear
+            rates.forEach(x => x.setAttribute('aria-pressed', String(x.dataset.rate === rating)));
+          };
+        });
+
+        const fill = document.getElementById('cele-fill');
+        fill.style.width = '0%';
+        overlay.classList.remove('hidden');
+        const pct = total ? Math.round(100 * solved / total) : 0;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => { fill.style.width = pct + '%'; });
+        });
+        setTopProgress(solved, total);
+
+        const btn = document.getElementById('btn-cele-next');
+        const finish = async () => {
+          const text = note.value.trim();
+          if (id && (rating || text)) {
+            btn.disabled = true;
+            try {
+              await api('/api/challenges/' + encodeURIComponent(id) + '/feedback',
+                { method: 'POST', body: JSON.stringify({ rating, note: text }) });
+              toast('Thanks for the feedback', '');
+            } catch (e) {
+              // Don't lose what they wrote: say what went wrong and let them try again or clear it.
+              msg.className = 'fbk-msg bad';
+              msg.textContent = 'Could not send your feedback: ' + e.message;
+              return;
+            } finally {
+              btn.disabled = false;
+            }
+          }
+          overlay.classList.add('hidden');
+          btn.onclick = null;
+          resolve();
+        };
+        btn.onclick = finish;
+        btn.focus();
+      });
+    }
+
+    function showIntro() {
+      viewSwap(intro, () => {
+        home.classList.add('hidden');
+        detail.classList.add('hidden');
+        profile.classList.add('hidden');
+        intro.classList.remove('hidden');
+      });
+      document.getElementById('led').querySelector('span').textContent = 'Ready'; document.getElementById('btn-profile').removeAttribute('aria-current');
+      history.replaceState({ view: 'intro' }, '', '#intro');
+    }
+    function showHome() {
+      viewSwap(home, () => {
+        intro.classList.add('hidden');
+        detail.classList.add('hidden');
+        profile.classList.add('hidden');
+        home.classList.remove('hidden');
+      });
+      document.getElementById('led').querySelector('span').textContent = 'Lab'; document.getElementById('btn-profile').removeAttribute('aria-current');
+      history.pushState({ view: 'home' }, '', '#lab');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      paintNow();
+    }
+    async function showProfile() {
+      viewSwap(profile, () => {
+        intro.classList.add('hidden');
+        home.classList.add('hidden');
+        detail.classList.add('hidden');
+        profile.classList.remove('hidden');
+      });
+      document.getElementById('led').querySelector('span').textContent = 'Profile'; document.getElementById('btn-profile').setAttribute('aria-current', 'page');
+      history.pushState({ view: 'profile' }, '', '#profile');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      await paintProfile();
+    }
+
+    async function startChallenge(id, fb) {
+      fb.className = 'fb'; fb.textContent = 'Starting…';
+      const data = await api('/api/challenges/' + encodeURIComponent(id) + '/start', { method: 'POST', body: '{}' });
+      const ws = data.workspace || '';
+      fb.className = 'fb ok';
+      fb.textContent = data.terminal && data.terminal.ok
+        ? 'Started. A terminal just opened in ' + ws + '. Try: ls  then  cat README*'
+        : 'Started. Open a terminal and run:  cd ' + (data.shortcut || ws);
+      toast(pick(STARTS), id);
+      return ws;
+    }
+    async function doneChallenge(id, flag, fb, meta) {
+      fb.className = 'fb';
+      fb.textContent = flag ? 'Submitting…' : 'Checking…';
+      const data = flag
+        ? await api('/api/challenges/' + encodeURIComponent(id) + '/submit', { method: 'POST', body: JSON.stringify({ flag }) })
+        : await api('/api/challenges/' + encodeURIComponent(id) + '/check', { method: 'POST', body: '{}' });
+      if (data.ok) {
+        fb.className = 'fb ok';
+        fb.textContent = 'Cleared!';
+        const status = await api('/api/status');
+        try {
+          const cat = await api('/api/dojos');
+          const cores = (cat.dojos || []).filter(d => d.kind === 'core');
+          const doneNow = cores.filter(d => d.challenges > 0 && d.solved >= d.challenges);
+          if (lastDoneBelts !== null && doneNow.length > lastDoneBelts) {
+            const b = doneNow[doneNow.length - 1];
+            pendingBeltUp = { belt: b.belt, label: b.belt_label || 'Belt' };
+          }
+        } catch (e) {}
+        await celebrateClear({
+          id,
+          title: (meta && meta.title) || id,
+          solved: status.solved,
+          total: status.total,
+        });
+        return true;
+      }
+      fb.className = 'fb bad';
+      fb.textContent = data.error || 'Not yet. Run ./check in the terminal to see what is left.';
+      if (data.detail) {
+        // Show ./check's own lines, the first few failing tasks, so the learner knows what to fix next.
+        const lines = String(data.detail).split('\n').filter(l => l.trim());
+        const shown = lines.slice(0, 7);
+        fb.textContent += '\n' + shown.join('\n') + (lines.length > shown.length ? '\n…run ./check to see the rest.' : '');
+      }
+      return false;
+    }
+    async function hintChallenge(id, box, btn) {
+      if (btn) btn.disabled = true;  // one request at a time: fast clicks must not skip or repeat hints
+      let data;
+      try {
+        data = await api('/api/challenges/' + encodeURIComponent(id) + '/hint', { method: 'POST', body: '{}' });
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+      const hints = data.hints || (data.text ? [data.text] : []);
+      const total = data.total || hints.length;
+      box.innerHTML = '';
+      if (!hints.length) {
+        box.innerHTML = '<div class="h">This challenge has no hints.</div>';
+      }
+      hints.forEach((text, i) => {
+        const row = document.createElement('div');
+        row.className = 'h';
+        row.innerHTML = `<b>Hint ${i + 1} of ${total}</b>`;
+        row.appendChild(document.createTextNode(' ' + text));
+        box.appendChild(row);
+      });
+      if (btn && hints.length >= total) {
+        btn.disabled = true;
+        btn.textContent = 'All hints shown';
+      }
+    }
+
+    function paintNow() {
+      const box = document.getElementById('now');
+      const name = playerName();
+      if (!nextCh) {
+        box.innerHTML = `<h2>Course complete</h2><p class="done-msg">${name ? esc(name) + ', you' : 'You'} completed every challenge.</p>`;
+        return;
+      }
+      const ch = nextCh;
+      const steps = (ch.steps || []).slice(0, 5).map((s, i) =>
+        `<li data-n="${i + 1}">${esc(s)}</li>`
+      ).join('');
+      box.innerHTML = `
+        <div class="coach" aria-hidden="true"><div class="bubble" id="coach-say">${esc(coachLine(lastSolved, lastTotal, ch.started))}</div><span class="sig" data-sig></span></div>
+        <h2>Next: ${esc(ch.title)}</h2>
+        <div class="belt">${esc(ch.belt_label)} · ${esc(ch.dojo_title)}</div>
+        <p class="mission">${esc(ch.mission || '')}</p>
+        ${steps ? `<ol class="steps">${steps}</ol>` : ''}
+        <div class="ws ${ch.workspace ? '' : 'hidden'}" id="now-ws">${ch.workspace ? 'Folder: ' + esc(ch.workspace) : ''}</div>
+        <div class="acts">
+          <button type="button" class="go" id="now-start">${ch.started ? 'Restart' : 'Start'}</button>
+          <button type="button" class="go" id="now-done" ${ch.started ? '' : 'disabled'}>Mark as done</button>
+          <button type="button" class="ghost" id="now-read">Read lesson</button>
+          <button type="button" class="ghost" id="now-hint">Hint</button>
+        </div>
+        <div class="flagrow">
+          <input id="now-flag" placeholder="Have a flag? Paste it here" aria-label="Flag" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false"/>
+          <button type="button" class="ghost" id="now-flag-go">Submit</button>
+        </div>
+        <div class="hints" id="now-hints"></div>
+        <div class="fb" id="now-fb"></div>
+      `;
+      paintSigs(box);
+      const fb = () => document.getElementById('now-fb');
+      document.getElementById('now-start').onclick = async () => {
+        if (ch.started && !confirm('Restart puts the starter files back in the folder. Your changes to this challenge are cleared. Restart?')) return;
+        try {
+          const ws = await startChallenge(ch.id, fb());
+          const el = document.getElementById('now-ws');
+          el.textContent = 'Folder: ' + ws;
+          el.classList.remove('hidden');
+          document.getElementById('now-done').disabled = false;
+          document.getElementById('now-start').textContent = 'Restart';
+          ch.started = true; ch.workspace = ws;
+        } catch (e) { fb().className = 'fb bad'; fb().textContent = e.message; }
+      };
+      document.getElementById('now-done').onclick = async () => {
+        try {
+          if (await doneChallenge(ch.id, '', fb(), { title: ch.title })) {
+            await load(true);
+            showHome();
+          }
+        } catch (e) { fb().className = 'fb bad'; fb().textContent = e.message; }
+      };
+      document.getElementById('now-flag-go').onclick = async () => {
+        const flag = (document.getElementById('now-flag').value || '').trim();
+        if (!flag) { fb().className = 'fb bad'; fb().textContent = 'Paste a flag, or press Done.'; return; }
+        try {
+          if (await doneChallenge(ch.id, flag, fb(), { title: ch.title })) {
+            await load(true);
+            showHome();
+          }
+        } catch (e) { fb().className = 'fb bad'; fb().textContent = e.message; }
+      };
+      document.getElementById('now-read').onclick = () =>
+        openReader(ch.id, ch.title, ch.started ? 'readme' : 'lesson').catch(e => { fb().className = 'fb bad'; fb().textContent = e.message; });
+      document.getElementById('now-hint').onclick = async () => {
+        try { await hintChallenge(ch.id, document.getElementById('now-hints'), document.getElementById('now-hint')); }
+        catch (e) { fb().className = 'fb bad'; fb().textContent = e.message; }
+      };
+      document.getElementById('now-flag').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('now-flag-go').click();
+      });
+    }
+
+    function paintBelts(dojos, solved, total) {
+      const pct = total ? Math.round(100 * solved / total) : 0;
+      document.getElementById('xp-fill').style.width = pct + '%';
+      document.getElementById('xp-count').textContent = solved;
+      document.getElementById('xp-total').textContent = total;
+      const ct = document.getElementById('chals-total'); if (ct) ct.textContent = total;
+      setTopProgress(solved, total);
+
+      const cores = (dojos || []).filter(d => d.kind === 'core');
+      lastDoneBelts = cores.filter(d => d.challenges > 0 && d.solved >= d.challenges).length;
+      const belts = document.getElementById('belts');
+      belts.innerHTML = '';
+      cores.forEach(d => {
+        const done = d.challenges > 0 && d.solved >= d.challenges;
+        const on = nextCh && d.id === nextCh.dojo_id;
+        const el = document.createElement('div');
+        el.className = 'belt' + (done ? ' done' : '') + (on ? ' on' : '');
+        el.style.setProperty('--i', belts.children.length);
+        el.innerHTML = `
+          <img src="/icons/${BELT[d.belt] || 'belt-white'}.svg" alt=""/>
+          <div>${esc((d.belt_label || '').replace(/ Belt$/i, ''))}</div>
+        `;
+        belts.appendChild(el);
+      });
+
+      const list = document.getElementById('belts-list');
+      list.innerHTML = '';
+      const sides = (dojos || []).filter(d => d.kind === 'side');
+      [...cores, ...sides].forEach(d => {
+        const done = d.challenges > 0 && d.solved >= d.challenges;
+        const on = nextCh && d.id === nextCh.dojo_id;
+        let chip = '';
+        if (d.locked) chip = '<span class="chip lock">' + icon('lock-simple') + 'Locked</span>';
+        else if (done) chip = '<span class="chip done">' + icon('check') + 'Done</span>';
+        else if (on) chip = '<span class="chip">Now</span>';
+        else if (d.kind === 'side') chip = '<span class="chip">Extra</span>';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'card' + (d.locked ? ' locked' : '') + (done ? ' complete' : '');
+        const pct = d.challenges ? Math.round(100 * d.solved / d.challenges) : 0;
+        btn.style.setProperty('--i', list.children.length);
+        btn.innerHTML = `
+          <img class="b" src="/icons/${BELT[d.belt] || 'belt-white'}.svg" alt=""/>
+          <div>
+            <h3>${esc(d.title)}</h3>
+            <div class="meta">${esc(d.tagline || d.belt_label || '')}</div>
+          </div>
+          ${chip}
+          <div class="meter"><span class="bar"><i style="width:${pct}%"></i></span><span class="num">${d.solved}/${d.challenges}</span></div>
+        `;
+        btn.onclick = () => { if (!d.locked) openDojo(d.id); };
+        list.appendChild(btn);
+      });
+    }
+
+    function challengeRow(ch, locked, autoOpen, n) {
+      const wrap = document.createElement('div');
+      wrap.className = 'crow' + (ch.solved ? ' solved' : '') + (autoOpen ? ' open' : '');
+      const head = document.createElement('button');
+      head.type = 'button';
+      head.className = 'row';
+      head.innerHTML = `
+        <span class="ix">${String(n || 0).padStart(2, '0')}</span>
+        <h3>${esc(ch.title)}</h3>
+        <span class="r ${ch.solved ? 'ok' : ''}">${ch.solved ? icon('check') + 'Completed' : (locked ? icon('lock-simple') + 'Locked' : 'Not started')}</span>
+      `;
+      const body = document.createElement('div');
+      body.className = 'cbody';
+      const steps = (ch.steps || []).slice(0, 5).map((s, i) =>
+        `<li data-n="${i + 1}">${esc(s)}</li>`
+      ).join('');
+      body.innerHTML = `
+        <p class="m">${esc(ch.mission || ch.description || '')}</p>
+        ${steps ? `<ol class="steps">${steps}</ol>` : ''}
+        <div class="ws" id="ws-${esc(ch.id)}"></div>
+        <div class="acts">
+          <button type="button" class="go" data-act="start" ${locked?'disabled':''}>Start</button>
+          <button type="button" class="go" data-act="done" ${locked||ch.solved||ch.id!==currentId?'disabled':''}>Mark as done</button>
+          <button type="button" class="ghost" data-act="read">Read lesson</button>
+          <button type="button" class="ghost" data-act="hint" ${locked?'disabled':''}>Hint</button>
+        </div>
+        <div class="flagrow">
+          <input id="flag-${esc(ch.id)}" placeholder="Have a flag? Paste it here" aria-label="Flag" autocapitalize="none" autocorrect="off" autocomplete="off" spellcheck="false" ${ch.solved||locked?'disabled':''}/>
+          <button type="button" class="ghost" data-act="flag" ${ch.solved||locked?'disabled':''}>Submit</button>
+        </div>
+        <div class="hints" id="hints-${esc(ch.id)}"></div>
+        <div class="fb" id="fb-${esc(ch.id)}"></div>
+      `;
+      head.onclick = () => wrap.classList.toggle('open');
+      body.addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-act]');
+        if (!btn || btn.disabled) return;
+        const act = btn.dataset.act;
+        const fb = body.querySelector('#fb-' + CSS.escape(ch.id));
+        try {
+          if (act === 'start') {
+            if (ch.id === currentId && !confirm('Restart puts the starter files back in the folder. Your changes to this challenge are cleared. Restart?')) return;
+            const ws = await startChallenge(ch.id, fb);
+            body.querySelector('#ws-' + CSS.escape(ch.id)).textContent = 'Folder: ' + ws;
+            currentId = ch.id;
+            if (!ch.solved) body.querySelector('[data-act="done"]').disabled = false;
+          } else if (act === 'done') {
+            if (await doneChallenge(ch.id, '', fb, { title: ch.title })) {
+              wrap.classList.add('solved');
+              head.querySelector('.r').className = 'r ok';
+              head.querySelector('.r').innerHTML = icon('check') + 'Completed';
+              await load(true);
+              if (!detail.classList.contains('hidden')) {
+                const m = (location.hash || '').match(/^#dojo\/(.+)$/);
+                if (m) await openDojo(decodeURIComponent(m[1]), true);
+              }
+            }
+          } else if (act === 'flag') {
+            const flag = (body.querySelector('input').value || '').trim();
+            if (!flag) { fb.className = 'fb bad'; fb.textContent = 'Paste a flag, or press Done.'; return; }
+            if (await doneChallenge(ch.id, flag, fb, { title: ch.title })) {
+              wrap.classList.add('solved');
+              await load(true);
+              if (!detail.classList.contains('hidden')) {
+                const m = (location.hash || '').match(/^#dojo\/(.+)$/);
+                if (m) await openDojo(decodeURIComponent(m[1]), true);
+              }
+            }
+          } else if (act === 'read') {
+            await openReader(ch.id, ch.title, ch.solved || ch.started ? 'readme' : 'lesson');
+          } else if (act === 'hint') {
+            await hintChallenge(ch.id, body.querySelector('#hints-' + CSS.escape(ch.id)), btn);
+          }
+        } catch (err) {
+          fb.className = 'fb bad';
+          fb.textContent = err.message || String(err);
+        }
+      });
+      wrap.appendChild(head);
+      wrap.appendChild(body);
+      return wrap;
+    }
+
+    async function openDojo(id, keep, focusId) {
+      const d = await api('/api/dojos/' + encodeURIComponent(id));
+      document.getElementById('dhero').innerHTML = `
+        <img src="/icons/${BELT[d.belt] || 'belt-white'}.svg" alt=""/>
+        <div>
+          <h2>${esc(d.title)}</h2>
+          <p>${esc(d.belt_label || '')}, <span class="num">${d.solved}/${d.challenges}</span> completed${d.locked ? '. Locked until you finish the belt before it.' : ''}</p>
+        </div>
+      `;
+      const root = document.getElementById('clist');
+      root.innerHTML = '';
+      const focus = focusId || ((nextCh && nextCh.dojo_id === id) ? nextCh.id : d.next_challenge_id);
+      let n = 0;
+      (d.modules_detail || []).forEach(mod => {
+        (mod.challenges || []).forEach(ch => {
+          root.appendChild(challengeRow(ch, d.locked, ch.id === focus && (!!focusId || !ch.solved), ++n));
+        });
+      });
+      await viewSwap(detail, () => {
+        intro.classList.add('hidden');
+        home.classList.add('hidden');
+        profile.classList.add('hidden');
+        detail.classList.remove('hidden');
+      });
+      if (!keep) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        history.pushState({ view: 'dojo', id }, '', '#dojo/' + id);
+        const open = root.querySelector('.crow.open');
+        if (open) open.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    let challengeIndex = [];
+    async function openChallenge(cid) {
+      let row = challengeIndex.find(r => r.id === cid);
+      if (!row) {
+        try {
+          const ch = await api('/api/challenges/' + encodeURIComponent(cid));
+          const cat = await api('/api/dojos');
+          const d = (cat.dojos || []).find(x => (x.module_slugs || []).includes(ch.module));
+          if (d) row = { id: cid, dojo_id: d.id };
+        } catch (e) {}
+      }
+      if (!row) { toast('No challenge called ' + cid, '', 'bad'); showHome(); return; }
+      await openDojo(row.dojo_id, false, row.id);
+    }
+
+    function paintAdmin(cat) {
+      const bar = document.getElementById('admin-bar');
+      challengeIndex = cat.challenge_index || [];
+      bar.classList.toggle('hidden', !cat.admin);
+      if (!cat.admin) return;
+      document.getElementById('admin-jump-list').innerHTML = challengeIndex
+        .map(r => `<option value="${esc(r.id)}">${esc(r.belt_label)} · ${esc(r.title)}</option>`).join('');
+      const go = () => {
+        const q = document.getElementById('admin-jump').value.trim().toLowerCase();
+        if (!q) return;
+        const hit = challengeIndex.find(r => r.id === q) || challengeIndex.find(r => r.title.toLowerCase().includes(q) || r.id.includes(q));
+        if (hit) openChallenge(hit.id); else toast('No challenge matches ' + q, '', 'bad');
+      };
+      document.getElementById('admin-jump-go').onclick = go;
+      document.getElementById('admin-jump').onkeydown = (e) => { if (e.key === 'Enter') go(); };
+    }
+
+    function levelForCount(n) {
+      if (n <= 0) return 0;
+      if (n === 1) return 1;
+      if (n === 2) return 2;
+      if (n <= 4) return 3;
+      return 4;
+    }
+
+    function paintContrib(days) {
+      const wrap = document.getElementById('contrib');
+      const today = new Date();
+      today.setHours(12, 0, 0, 0);
+      // Align grid to Sunday columns (GitHub-style)
+      const end = new Date(today);
+      const start = new Date(today);
+      start.setDate(start.getDate() - end.getDay() - 52 * 7);
+
+      const weekCount = 53;
+      const cells = [];
+      const monthAtWeek = new Array(weekCount).fill('');
+      let cursor = new Date(start);
+      let prevMonth = -1;
+      for (let w = 0; w < weekCount; w++) {
+        for (let d = 0; d < 7; d++) {
+          const key = [
+            cursor.getFullYear(),
+            String(cursor.getMonth() + 1).padStart(2, '0'),
+            String(cursor.getDate()).padStart(2, '0')
+          ].join('-');
+          const future = cursor > end;
+          const count = future ? 0 : (days[key] || 0);
+          const lvl = future ? 0 : levelForCount(count);
+          const title = future
+            ? ''
+            : (count
+              ? `${count} clear${count === 1 ? '' : 's'} on ${key}`
+              : `Nothing completed on ${key}`);
+          if (d === 0) {
+            const m = cursor.getMonth();
+            if (m !== prevMonth) {
+              monthAtWeek[w] = cursor.toLocaleString('en', { month: 'short' });
+              prevMonth = m;
+            }
+          }
+          cells.push({ lvl, title, future });
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+
+      wrap.innerHTML = `
+        <div class="contrib-inner">
+          <div class="contrib-dows">
+            <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+          </div>
+          <div class="contrib-main">
+            <div class="contrib-months" style="grid-template-columns:repeat(${weekCount},11px);gap:3px">
+              ${monthAtWeek.map(l => `<span>${esc(l)}</span>`).join('')}
+            </div>
+            <div class="contrib-grid">
+              ${cells.map(c =>
+                `<div class="cday${c.lvl ? ' l' + c.lvl : ''}" title="${esc(c.title)}"></div>`
+              ).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="contrib-legend">
+          Less
+          <i class="cday"></i><i class="cday l1"></i><i class="cday l2"></i><i class="cday l3"></i><i class="cday l4"></i>
+          More
+        </div>
+      `;
+      // On a narrow screen the calendar scrolls sideways: show the latest weeks first.
+      requestAnimationFrame(() => { wrap.scrollLeft = wrap.scrollWidth; });
+    }
+
+    function paintMountain(belts) {
+      document.getElementById('mountain').innerHTML = '<div class="belt-bars">' + (belts || []).map(b => {
+        const pct = b.challenges ? Math.round(100 * b.solved / b.challenges) : 0;
+        return `<div class="belt-bar ${b.complete ? 'done' : ''}">
+          <img src="/icons/${BELT[b.belt] || 'belt-white'}.svg" alt=""/>
+          <span class="t">${esc(b.title || b.belt_label || b.belt || '')}</span>
+          <span class="tr"><i style="width:${pct}%"></i></span>
+          <span class="n">${b.solved}/${b.challenges}</span>
+        </div>`;
+      }).join('') + '</div>';
+    }
+
+    async function paintProfile() {
+      const data = await api('/api/profile');
+      lastProfile = data;
+      const name = playerName();
+      document.getElementById('prof-name').textContent = name ? `${name}'s path` : 'Your path';
+      document.getElementById('prof-cleared').textContent = `${data.solved}/${data.total}`;
+      document.getElementById('prof-streak').textContent =
+        (data.streak || 0) === 1 ? '1 day' : `${data.streak || 0} days`;
+      document.getElementById('prof-ascent').textContent = `${data.ascent_pct || 0}%`;
+      paintContrib(data.days || {});
+      paintMountain(data.belts || [], data.ascent_pct || 0);
+
+      const recent = document.getElementById('recent-list');
+      recent.innerHTML = '';
+      const rows = data.recent || [];
+      if (!rows.length) {
+        recent.innerHTML = '<p class="empty">Nothing completed yet. Your finished challenges will show up here.</p>';
+        return;
+      }
+      rows.forEach(r => {
+        const when = r.completed_at
+          ? new Date(r.completed_at * 1000).toLocaleString(undefined, {
+              month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            })
+          : '';
+        const row = document.createElement('div');
+        row.className = 'recent-row';
+        row.innerHTML = `
+          <img src="/icons/${BELT[r.belt] || 'belt-white'}.svg" alt=""/>
+          <div class="t">
+            <strong>${esc(r.title)}</strong>
+            <span>${esc(r.belt_label || '')}${when ? ' · ' + esc(when) : ''}</span>
+          </div>
+        `;
+        recent.appendChild(row);
+      });
+    }
+
+    let currentId = null;  // the challenge whose files are in the folder now; Done checks only that one
+    async function load(stay) {
+      const [status, cat] = await Promise.all([api('/api/status'), api('/api/dojos')]);
+      catalogIntro = cat.intro || '';
+      nextCh = cat.next_challenge || null;
+      currentId = status.current_challenge_id || null;
+      if (nextCh && status.current_challenge_id === nextCh.id) {
+        nextCh.started = true;
+        nextCh.workspace = status.current_workspace;
+      }
+      paintHello();
+      setTopProgress(status.solved, status.total);
+      paintNow();
+      paintBelts(cat.dojos || [], status.solved, status.total);
+      paintAdmin(cat);
+
+      const hash = location.hash || '';
+      if (stay && !detail.classList.contains('hidden')) {
+        const m = hash.match(/^#dojo\/(.+)$/);
+        if (m) await openDojo(decodeURIComponent(m[1]), true);
+        return;
+      }
+      if (stay && !profile.classList.contains('hidden')) {
+        await paintProfile();
+        return;
+      }
+      if (hash.startsWith('#dojo/')) {
+        await openDojo(decodeURIComponent(hash.slice(6)));
+      } else if (hash.startsWith('#challenge/')) {
+        await openChallenge(decodeURIComponent(hash.slice(11)));
+      } else if (hash === '#lab') {
+        showHome();
+      } else if (hash === '#profile') {
+        await showProfile();
+      } else {
+        showIntro();
+      }
+    }
+
+    document.getElementById('btn-enter').onclick = () => askNameThen(true);
+    document.getElementById('btn-howto').onclick = () => {
+      document.querySelector('#view-intro .guide')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+    document.getElementById('btn-intro').onclick = showIntro;
+    document.getElementById('btn-back').onclick = showHome;
+    // Save / Restore: one .zip with progress + the learner's own files (see platform/academy/backup.py)
+    document.getElementById('btn-save').onclick = async () => {
+      const btn = document.getElementById('btn-save');
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/save?name=' + encodeURIComponent(playerName()));
+        if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.statusText);
+        const name = (/filename="([^"]+)"/.exec(r.headers.get('Content-Disposition') || '') || [])[1] || 'signal-dojo-save.zip';
+        const url = URL.createObjectURL(await r.blob());
+        const a = document.createElement('a');
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        toast('Saved', name + ' is in your Downloads. Keep a copy somewhere safe.');
+      } catch (e) {
+        toast('Could not save', e.message, 'err');
+      } finally {
+        btn.disabled = false;
+      }
+    };
+    document.getElementById('btn-restore').onclick = () => document.getElementById('restore-file').click();
+    document.getElementById('restore-file').onchange = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      try {
+        const data = await api('/api/restore', { method: 'POST', headers: { 'Content-Type': 'application/zip' }, body: file });
+        if (data.name && !playerName()) setPlayerName(data.name);
+        const files = data.challenges_with_files;
+        const n = (k, w) => `${k} ${w}${k === 1 ? '' : 's'}`;
+        toast('Restored', `${n(data.solved, 'challenge')} solved.` +
+          (files ? ` Your files from ${n(files, 'challenge')} come back when you start them.` : ''));
+        await load(true);
+      } catch (err) {
+        toast('Could not restore', err.message, 'err');
+      }
+    };
+
+    document.getElementById('btn-profile').onclick = () => showProfile();
+    document.getElementById('btn-profile-back').onclick = showHome;
+    document.getElementById('btn-score').onclick = () => showProfile();
+    document.getElementById('home-link').onclick = (e) => {
+      e.preventDefault();
+      showIntro();
+    };
+
+    (function themeToggle() {
+      const btn = document.getElementById('btn-theme');
+      function sync() {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        btn.innerHTML = icon(dark ? 'sun' : 'moon');
+        btn.title = dark ? 'Switch to light mode' : 'Switch to dark mode';
+        btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      }
+      btn.onclick = () => {
+        const root = document.documentElement;
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        const apply = () => {
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('academy-theme', next); } catch (e) {}
+          sync();
+        };
+        apply();
+      };
+      sync();
+    })();
+
+    paintHello();
+    document.getElementById('hello').onclick = () => {
+      if (CLASSROOM) return;  // classroom: the name is the login
+      // Allow renaming anytime
+      memName = '';
+      try { localStorage.removeItem('academy-player-name'); } catch (e) {}
+      paintHello();
+      askNameThen(false);
+    };
+    document.getElementById('hello').style.cursor = 'pointer';
+    document.getElementById('hello').title = 'Change name';
+
+    window.addEventListener('hashchange', () => {
+      if (location.hash.startsWith('#challenge/')) openChallenge(decodeURIComponent(location.hash.slice(11)));
+    });
+    window.addEventListener('popstate', (e) => {
+      if (e.state && e.state.view === 'dojo' && e.state.id) openDojo(e.state.id);
+      else if (e.state && e.state.view === 'home') showHome();
+      else if (e.state && e.state.view === 'profile') showProfile();
+      else showIntro();
+    });
+    (async function boot() {
+      // Classroom mode (`academy serve`) needs a login; ./run.sh local mode answers {classroom:false}.
+      try {
+        const r = await fetch('/api/me');
+        const me = await r.json().catch(() => ({}));
+        if (me.classroom) {
+          document.body.classList.add('classroom');
+          document.getElementById('hello').title = '';
+          document.getElementById('hello').style.cursor = 'default';
+          if (r.status === 401) return showLogin(me);
+          CLASSROOM = { user: me.user, signup: me.signup };
+        }
+      } catch (e) {}
+      await load();
+    })().catch(err => {
+      // Nothing could load: say so on the page itself, not only in a toast that fades.
+      const box = document.createElement('div');
+      box.className = 'load-err';
+      box.setAttribute('role', 'alert');
+      box.innerHTML = `<b>The lab did not load.</b><span>${esc(err.message || String(err))}</span>` +
+        '<button type="button" class="go">Reload</button>';
+      box.querySelector('button').onclick = () => location.reload();
+      document.querySelector('main').prepend(box);
+    });
+  </script>
+  <script>
+    // Intro motion. Plain DOM, nothing loaded from the network. Every effect checks
+    // motionOK() (prefers-reduced-motion) and falls back to the still, finished state.
+
+    // Intro: the three steps and the facts arrive in order when they scroll into view.
+    (function revealIntro() {
+      if (!motionOK() || !('IntersectionObserver' in window)) return;
+      const groups = document.querySelectorAll('#view-intro .guide, #view-intro .belt-strip');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.25 });
+      groups.forEach(g => {
+        [...g.children].forEach((c, i) => c.style.setProperty('--i', i));
+        g.classList.add('reveal');
+        io.observe(g);
+      });
+    })();
+
+    // Pointer, on the intro: Sig's eyes follow it and the steps light up under it. One frame at a time.
+    (function pointerFx() {
+      let ev = null, queued = false;
+      function run() {
+        queued = false;
+        if (!ev) return;
+        const { clientX: x, clientY: y, target } = ev;
+        if (motionOK()) {
+          document.querySelectorAll('#view-intro .sig').forEach(s => {
+            const r = s.getBoundingClientRect();
+            if (!r.width) return;
+            const dx = x - (r.left + r.width / 2), dy = y - (r.top + r.height * 0.6);
+            const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 260) * 4.5;
+            s.style.setProperty('--ex', (dx / d * k).toFixed(2) + 'px');
+            s.style.setProperty('--ey', (dy / d * k * 0.7).toFixed(2) + 'px');
+          });
+        }
+        const lit = target && target.closest && target.closest('.guide .step');
+        if (lit) {
+          const r = lit.getBoundingClientRect();
+          lit.style.setProperty('--mx', (x - r.left) + 'px');
+          lit.style.setProperty('--my', (y - r.top) + 'px');
+        }
+      }
+      document.addEventListener('pointermove', (e) => {
+        ev = e;
+        if (!queued) { queued = true; requestAnimationFrame(run); }
+      }, { passive: true });
+    })();
+  </script>
+  <script>
+    // Home page zoom: signal -> wave -> bits -> bytes -> words, drawn on one canvas.
+    // Scroll position picks the stage; the drawing eases towards it. Reduced motion jumps
+    // straight to each finished stage and keeps the picture still.
+    (function zoomHome() {
+      const sec = document.getElementById('zoom');
+      if (!sec) return;
+      const stage = sec.querySelector('.zoom-stage');
+      const cv = sec.querySelector('.zoom-cv');
+      const ctx = cv.getContext('2d');
+      const caps = [...sec.querySelectorAll('.zoom-cap')];
+      const pills = [...sec.querySelectorAll('[data-go]')];
+      const next = document.getElementById('btn-howto');
+      const LAST = 4;
+      const BYTES = [83, 73, 71, 33];  // "SIG!"
+      const BITS = BYTES.flatMap(b => [...b.toString(2).padStart(8, '0')].map(Number));
+      const ICE = '#9cdcfe', ORANGE = '#4daafc', DIM = 'rgba(156,220,254,0.28)';
+      const FONT = '"Geist", system-ui, sans-serif', MONO = '"Geist Mono", ui-monospace, monospace';
+
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      const ease = (v) => { v = clamp(v, 0, 1); return v * v * (3 - 2 * v); };
+      const band = (s, a, b) => ease((s - a) / (b - a));
+      const lerp = (a, b, k) => a + (b - a) * k;
+
+      let W = 0, H = 0, s = 0, t = 0, shown = -1, raf = 0, visible = false, lastNow = 0, lastDrawn = -1;
+
+      // Scroll -> stage. Each stage holds still for a while so its sentence can be read.
+      function scrollSpan() { return Math.max(1, sec.offsetHeight - stage.offsetHeight); }
+      function stageFromScroll() {
+        const u = clamp(-sec.getBoundingClientRect().top / scrollSpan(), 0, 1);
+        const x = clamp(u * (LAST + 0.6) - 0.3, 0, LAST);
+        const i = Math.floor(x), f = x - i;
+        return i >= LAST ? LAST : i + ease((f - 0.3) / 0.4);
+      }
+      function goTo(k) {
+        const top = sec.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: top + scrollSpan() * (k + 0.3) / (LAST + 0.6) + 1, behavior: motionOK() ? 'smooth' : 'auto' });
+      }
+
+      // Layout: the copy sits top-left, the drawing fills the band below it.
+      function region() {
+        const narrow = W < 640;
+        const x0 = W * (narrow ? 0.06 : 0.08), x1 = W - x0;
+        const y0 = H * (narrow ? 0.46 : 0.44), y1 = H * (narrow ? 0.8 : 0.82);
+        return { x0, x1, y0, y1, mid: (y0 + y1) / 2, narrow };
+      }
+      function cards(r) {
+        const cols = r.narrow ? 2 : 4, rows = 4 / cols, g = r.narrow ? 12 : 18;
+        const cw = Math.min(230, (r.x1 - r.x0 - (cols - 1) * g) / cols);
+        const ch = Math.min(r.narrow ? 120 : 170, (r.y1 - r.y0 - (rows - 1) * g) / rows);
+        const left = (W - (cols * cw + (cols - 1) * g)) / 2, top = r.mid - (rows * ch + (rows - 1) * g) / 2;
+        return BYTES.map((b, i) => ({ x: left + (i % cols) * (cw + g), y: top + Math.floor(i / cols) * (ch + g), w: cw, h: ch }));
+      }
+
+      function spectrumLevel(xw) {
+        let v = 0.07 + 0.025 * (Math.sin(xw * 913 + t * 3) + 0.6 * Math.sin(xw * 2371 - t * 5) + 0.3 * Math.sin(xw * 5233 + t * 7));
+        for (const [c, w, a] of [[0.2, 0.012, 0.55], [0.5, 0.012, 0.8], [0.79, 0.01, 0.45]]) {
+          const d = (xw - c) / w; v += a * Math.exp(-d * d);
+        }
+        return v;
+      }
+      function drawSpectrum(r, a) {
+        if (a <= 0.01) return;
+        const z = Math.exp(Math.log(40) * ease(s));
+        const hw = 0.5 / z, base = r.y1, amp = (r.y1 - r.y0) * 1.05;
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.beginPath();
+        for (let px = 0; px <= W; px += 2) {
+          const xw = 0.5 - hw + (px / W) * 2 * hw;
+          const y = base - spectrumLevel(xw) * amp;
+          if (px) ctx.lineTo(px, y); else ctx.moveTo(px, y);
+        }
+        const fill = ctx.createLinearGradient(0, base - amp, 0, base);
+        fill.addColorStop(0, 'rgba(156,220,254,0.22)');
+        fill.addColorStop(1, 'rgba(156,220,254,0)');
+        ctx.lineTo(W, base); ctx.lineTo(0, base); ctx.closePath();
+        ctx.fillStyle = fill; ctx.fill();
+        ctx.beginPath();
+        for (let px = 0; px <= W; px += 2) {
+          const xw = 0.5 - hw + (px / W) * 2 * hw;
+          const y = base - spectrumLevel(xw) * amp;
+          if (px) ctx.lineTo(px, y); else ctx.moveTo(px, y);
+        }
+        ctx.strokeStyle = ICE; ctx.lineWidth = 2;
+        ctx.shadowColor = 'rgba(156,220,254,0.9)'; ctx.shadowBlur = 14;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        // the station we are about to zoom into
+        const la = a * (1 - band(s, 0.05, 0.35));
+        if (la > 0.01) {
+          const px = W / 2, py = base - 0.87 * amp;
+          ctx.globalAlpha = la;
+          ctx.strokeStyle = ORANGE; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(px, py, 9 + 3 * Math.sin(t * 3), 0, Math.PI * 2); ctx.stroke();
+          ctx.fillStyle = ORANGE; ctx.font = `500 13px ${MONO}`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.fillText('97.3 MHz', px, py - 16);
+        }
+        ctx.restore();
+      }
+
+      function bitX(r, i, nb) { return r.x0 + ((i + 0.5) / nb) * (r.x1 - r.x0); }
+      function drawWave(r, a, dots) {
+        if (a <= 0.01) return { nb: 32 };
+        const nb = 32 * Math.pow(8 / 32, ease(s - 1));
+        const A = (r.y1 - r.y0) * 0.4, cyc = r.narrow ? 4 : 6;
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.beginPath();
+        for (let px = r.x0; px <= r.x1; px += 1.5) {
+          const tb = ((px - r.x0) / (r.x1 - r.x0)) * nb;
+          const k = Math.floor(tb), f = tb - k;
+          const on = BITS[k] ?? 0, prev = BITS[k - 1] ?? 0;
+          const env = (f < 0.08 ? lerp(prev, on, f / 0.08) : on) * 0.94 + 0.06;
+          const y = r.mid - env * A * Math.sin(2 * Math.PI * cyc * tb + t * 4);
+          if (px === r.x0) ctx.moveTo(px, y); else ctx.lineTo(px, y);
+        }
+        ctx.strokeStyle = ICE; ctx.lineWidth = 1.6;
+        ctx.shadowColor = 'rgba(156,220,254,0.8)'; ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        // samples: one dot per bit, high = 1, low = 0
+        if (dots > 0.01) {
+          ctx.globalAlpha = a * dots;
+          ctx.setLineDash([4, 6]); ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(r.x0, r.mid - A * 0.5); ctx.lineTo(r.x1, r.mid - A * 0.5); ctx.stroke();
+          ctx.setLineDash([]);
+          for (let i = 0; i < Math.ceil(nb); i++) {
+            const on = BITS[i];
+            ctx.fillStyle = on ? ORANGE : DIM;
+            ctx.beginPath(); ctx.arc(bitX(r, i, nb), r.mid - (on ? A : A * 0.06), on ? 6 : 5, 0, Math.PI * 2); ctx.fill();
+          }
+        }
+        ctx.restore();
+        return { nb };
+      }
+
+      function drawBits(r) {
+        const show = band(s, 1.75, 2.1);
+        if (show <= 0.01) return;
+        const k = ease(s - 2);                  // 0: above the wave, 1: inside the byte cards
+        const box = cards(r);
+        const A = (r.y1 - r.y0) * 0.4;
+        const cardA = band(s, 2.45, 2.9), letter = band(s, 3.3, 3.75);
+        ctx.save();
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        box.forEach((c, bi) => {
+          if (cardA > 0.01) {
+            ctx.globalAlpha = cardA;
+            ctx.fillStyle = 'rgba(255,255,255,0.05)';
+            ctx.strokeStyle = bi === 0 || letter > 0 ? 'rgba(156,220,254,0.45)' : 'rgba(255,255,255,0.14)';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.roundRect(c.x, c.y, c.w, c.h, 14); ctx.fill(); ctx.stroke();
+          }
+          const fs = Math.max(9, Math.min(17, c.w / 10.5));
+          for (let j = 0; j < 8; j++) {
+            const i = bi * 8 + j, on = BITS[i];
+            const tx = c.x + c.w * (0.09 + 0.82 * (j + 0.5) / 8), ty = c.y + c.h * 0.26;
+            let x = tx, y = ty, size = fs, alpha;
+            if (bi === 0) {
+              x = lerp(bitX(r, j, 8), tx, k); y = lerp(r.mid - A - 30, ty, k); size = lerp(24, fs, k);
+              alpha = show;
+            } else alpha = cardA;
+            alpha *= lerp(1, 0.55, letter);
+            if (alpha <= 0.01) continue;
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = on ? ORANGE : '#c8c8c8';
+            ctx.font = `500 ${size.toFixed(1)}px ${MONO}`;
+            ctx.fillText(String(on), x, y);
+          }
+          // the number, then the letter
+          const big = Math.min(r.narrow ? 40 : 56, c.w * 0.34);
+          const numA = cardA * (1 - letter);
+          if (numA > 0.01) {
+            ctx.globalAlpha = numA; ctx.fillStyle = '#fff'; ctx.font = `600 ${big.toFixed(0)}px ${FONT}`;
+            ctx.fillText(String(BYTES[bi]), c.x + c.w / 2, c.y + c.h * 0.64);
+          }
+          if (letter > 0.01) {
+            const pop = 0.6 + 0.4 * letter;
+            ctx.globalAlpha = letter; ctx.fillStyle = ORANGE;
+            ctx.shadowColor = 'rgba(77,170,252,0.7)'; ctx.shadowBlur = 18;
+            ctx.font = `700 ${(big * 1.25 * pop).toFixed(0)}px ${FONT}`;
+            ctx.fillText(String.fromCharCode(BYTES[bi]), c.x + c.w / 2, c.y + c.h * 0.66);
+            ctx.shadowBlur = 0;
+          }
+        });
+        ctx.restore();
+      }
+
+      function draw() {
+        if (!W) return;
+        ctx.clearRect(0, 0, W, H);
+        const r = region();
+        drawSpectrum(r, 1 - band(s, 0.55, 0.95));
+        drawWave(r, band(s, 0.5, 0.9) * (1 - band(s, 2.25, 2.65)), band(s, 1.45, 1.85));
+        drawBits(r);
+        lastDrawn = s;
+      }
+
+      function setStage(k) {
+        if (k === shown) return;
+        shown = k;
+        caps.forEach((c, i) => {
+          const on = i === k;
+          c.classList.toggle('is-on', on);
+          c.setAttribute('aria-hidden', String(!on));
+          c.querySelectorAll('button').forEach(b => { b.tabIndex = on ? 0 : -1; });
+        });
+        pills.forEach((p, i) => {
+          p.classList.toggle('on', i === k);
+          p.classList.toggle('done', i < k);
+          if (i === k) p.setAttribute('aria-current', 'step'); else p.removeAttribute('aria-current');
+        });
+        next.textContent = k < LAST ? 'Zoom in' : 'How it works';
+      }
+
+      function frame(now) {
+        raf = 0;
+        if (!visible || intro.classList.contains('hidden')) return;
+        const target = stageFromScroll();
+        const moving = motionOK();
+        if (moving) {
+          s += (target - s) * 0.16;
+          if (Math.abs(target - s) < 0.001) s = target;
+          if (now - lastNow > 33) { t += 0.033; lastNow = now; draw(); }
+        } else {
+          s = Math.round(target);
+          if (s !== lastDrawn) draw();
+        }
+        setStage(Math.round(s));
+        raf = requestAnimationFrame(frame);
+      }
+      function play() { if (!raf && visible) raf = requestAnimationFrame(frame); }
+
+      new ResizeObserver(() => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = cv.clientWidth; H = cv.clientHeight;
+        cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        draw();
+      }).observe(cv);
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; play(); }).observe(sec);
+      document.addEventListener('visibilitychange', play);
+      new MutationObserver(play).observe(intro, { attributes: true, attributeFilter: ['class'] });
+
+      pills.forEach((p, i) => p.addEventListener('click', () => goTo(i)));
+      next.onclick = () => {
+        if (shown < LAST) goTo(shown + 1);
+        else document.querySelector('#view-intro .how').scrollIntoView({ behavior: motionOK() ? 'smooth' : 'auto', block: 'start' });
+      };
+      document.querySelectorAll('#view-intro [data-enter]').forEach(b => { b.onclick = () => askNameThen(true); });
+      s = stageFromScroll();
+      setStage(Math.round(s));
+    })();
+  </script>
+</body>
+</html>

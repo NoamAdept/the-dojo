@@ -1,0 +1,21 @@
+id: py-zero
+slug: py-zero
+title: Python from Zero
+order: 11
+description: 'Your very first Python. This module is for people who know the terminal and some C++, but
+  have never written Python. You learn to run python3 and use print. Then you learn variables and types,
+  f-strings, functions, if/elif/else, loops, lists, strings, dicts and files. You also build a small command-line
+  program, and you learn bytes, hex and binary. The module ends exactly where the Python module begins.'
+prerequisites:
+- cpp-qualification
+challenges:
+- pyz-hello
+- pyz-values
+- pyz-functions
+- pyz-if
+- pyz-loops
+- pyz-lists
+- pyz-text-dicts
+- pyz-files
+- pyz-capstone
+- pyz-bytes-hex

@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.10)
+project(Game CXX)
+add_executable(GameExe src/main.cpp)
+target_include_directories(GameExe PRIVATE include)
+set_target_properties(GameExe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

@@ -1,0 +1,59 @@
+id: pyz-text-dicts
+module: py-zero
+title: Strings and Dictionaries
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites: []
+objectives:
+- string_methods
+- split_join
+- dict_basics
+- dict_get
+- counting_with_dict
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Work with text and dictionaries. You will:
+
+  - clean text and cut it into parts with the string methods strip, upper, lower, split and join
+  - store values by name in a dictionary
+  - count things with a dictionary
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_text_dicts}
+  validation: session
+hints:
+- level: 1
+  text: 'String methods return a new string. So call them one after the other, and return the result:
+    `return text.strip().upper()`. Tasks 2 and 3 are one line each, with `split()` and `"-".join(parts)`.'
+- level: 2
+  text: 'For `parse_pair`, `line.split("=", 1)` gives a list of 2 strings. Strip each one, and put them
+    in a new list: `[parts[0].strip(), parts[1].strip()]`.'
+- level: 3
+  text: For `count_words`, first make the sentence lower case. Then split it. Then use the counting pattern
+    from the lesson, with an empty dict `{}`. `mode_of` is `station.get("mode", "FM")`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Strings are immutable sequences (you cannot change them). Their methods return new strings.
+  `strip`, `lower`/`upper`, `split` and `join` do most of the work to clean up text. A dict maps keys to values,
+  and it finds a key fast. `in` tests if a key is there. `.get` gives a default value. Counting with a dict is
+  the main part of many tasks that summarize data.
+extension:
+  title: Go further
+  description: Write `top_word(sentence)`. It returns the most common word. Use `count_words`. Then use a
+    loop over `.items()` to find the largest count.
+optional_hardware: []

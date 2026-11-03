@@ -1,0 +1,14 @@
+id: systems-programming
+slug: systems-programming
+title: Linux Systems Programming
+order: 9
+description: 'Low-level C++ that talks to Linux directly. You learn file descriptors,
+  pipes, and fork/exec/waitpid.
+
+  '
+prerequisites:
+- debugging-gdb
+challenges:
+- sys-file-descriptors
+- sys-pipes
+- sys-process-controller

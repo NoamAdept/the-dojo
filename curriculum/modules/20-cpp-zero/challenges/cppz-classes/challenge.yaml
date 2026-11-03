@@ -1,0 +1,63 @@
+id: cppz-classes
+module: cpp-zero
+title: 'Classes: Private Data and Constructors'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- class
+- public_private
+- constructor
+- invariants
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Turn a struct into a class. In this challenge you will:
+
+  - hide the data behind `private:`
+  - set up the data with a constructor
+  - allow only valid changes, through methods
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_classes}
+  validation: session
+hints:
+- level: 1
+  text: 'Task 3 is one line: write `private:` on its own line just above `int count = 0;`.'
+- level: 2
+  text: For Radio, add `private:` and `double mhz;` at the bottom of the class. Then use `mhz` in the
+    3 methods.
+- level: 3
+  text: For task 5, the constructor can first set `mhz = 88.0;`. Then it can call `tune(startMhz);`.
+    tune already knows the rules, so you write the rules only once.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A class keeps data together with the only methods that may change it. Use private fields
+  and a constructor. Then an object starts valid and stays valid. Every change goes through a method that
+  checks the rules. This idea is called encapsulation. It is the base of the OOP (object-oriented programming)
+  part of the C++ Qualification.'
+extension:
+  title: Go further
+  description: Add `void stepUp()` to Radio. It tunes 0.1 MHz higher, but never higher than 108.0.
+optional_hardware: []

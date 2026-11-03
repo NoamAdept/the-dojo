@@ -1,0 +1,84 @@
+id: gdb-logic-bug
+module: debugging-gdb
+title: Debug a Wrong Result
+difficulty: medium
+estimated_time: 50-75 minutes
+prerequisites:
+- gdb-segfault
+objectives:
+- gdb
+- watchpoints
+- logic-errors
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'This program runs, but it reports the wrong number of usable samples.
+
+  Set a breakpoint inside the loop.
+
+  Watch `samples[i]` and `usable` as the program runs.
+
+  Fix the condition so that values from 10 to 20 count. Both 10 and 20 must count too.
+
+  The program must print `usable=4`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-logic-bug
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{watch_values_to_find_logic_bugs}
+  validation: session
+hints:
+- level: 1
+  text: 'Set a breakpoint on the line with `if` and type `run`. Then use `display i`, `display samples[i]`, and `display usable`.
+
+    '
+- level: 2
+  text: 'Use `next` to go one line at a time. Watch what happens with the edge values 10 and 20.
+
+    '
+- level: 3
+  text: 'To include both limits, use `>=` for the lower limit and `<=` for the upper limit. Join them with logical AND, which is `&&`.
+
+    '
+solution: 'Replace the condition with
+
+  `samples[i] >= 10 && samples[i] <= 20`. Rebuild and confirm the output before
+
+  running the checker.
+
+  '
+explanation: 'A logic bug does not break memory.
+
+  The program runs, but it follows the wrong rule.
+
+  Go through the code one step at a time with values at the edges, like 10 and 20.
+
+  Then you can see where the written condition is different from what is needed.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

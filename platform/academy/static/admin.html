@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cline%20x1%3D%2260%22%20y1%3D%228%22%20x2%3D%2260%22%20y2%3D%2232%22%20stroke%3D%22%23ff7a45%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%229%22%20r%3D%229%22%20fill%3D%22%23ff7a45%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2228%22%20width%3D%22100%22%20height%3D%2286%22%20rx%3D%2226%22%20fill%3D%22%232f5bea%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2238%22%20width%3D%22100%22%20height%3D%2213%22%20fill%3D%22%23ef4444%22/%3E%3Crect%20x%3D%2224%22%20y%3D%2258%22%20width%3D%2272%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%230f1a3a%22/%3E%3Crect%20x%3D%2242%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3Crect%20x%3D%2267%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3C/svg%3E"/>
+  <title>Admin · Signal Dojo</title>
+  <style>
+    /* Same tokens and local fonts as the dojo (dojo.html); nothing loads from the internet. */
+    @font-face { font-family: "Geist"; font-weight: 400; font-display: swap; src: url("/fonts/Geist-400.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-weight: 500; font-display: swap; src: url("/fonts/Geist-500.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-weight: 600; font-display: swap; src: url("/fonts/Geist-600.woff2") format("woff2"); }
+    @font-face { font-family: "Geist"; font-weight: 700; font-display: swap; src: url("/fonts/Geist-700.woff2") format("woff2"); }
+    @font-face { font-family: "Geist Mono"; font-weight: 400; font-display: swap; src: url("/fonts/GeistMono-400.woff2") format("woff2"); }
+    :root {
+      --bg: #f3f3f3; --panel: #ffffff; --muted-bg: #ececec;
+      --fg: #1f1f1f; --muted: #555555;
+      --accent: #005fb8; --accent-soft: #e5eef8; --ink: #ffffff;
+      --lime: var(--accent); --cyan: var(--accent);
+      --line: #e0e0e0; --danger: #c42b1c; --warn: #8a5a00;
+      --font: "Geist", system-ui, sans-serif;
+      --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    html[data-theme="dark"] {
+      --bg: #1e1e1e; --panel: #252526; --muted-bg: #2d2d2d;
+      --fg: #d4d4d4; --muted: #a6a6a6;
+      --accent: #4daafc; --accent-soft: #1d3346; --ink: #1e1e1e;
+      --line: #333333; --danger: #f48771; --warn: #cca700;
+    }
+    html { color-scheme: light; }
+    html[data-theme="dark"] { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { color: var(--fg); background: var(--bg); font-family: var(--font); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    .bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        var(--bg);
+    }
+
+    .top {
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+    .top-inner {
+      max-width: 960px; margin: 0 auto;
+      padding: 0.7rem 1rem;
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; letter-spacing: -0.02em; }
+    .brand b { color: var(--muted); font-weight: 600; }
+    .top-links { margin-left: auto; display: flex; gap: 0.5rem; align-items: center; }
+    .top-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      border: 1px solid var(--line); border-radius: 8px; padding: 0.35rem 0.65rem;
+    }
+    .top-links a:hover { color: var(--lime); border-color: var(--lime); }
+
+    .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+
+    h1 { margin: 0.75rem 0 0.35rem; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
+    h1 em { font-style: normal; color: var(--cyan); }
+    .sub { color: var(--muted); margin: 0 0 1.25rem; line-height: 1.45; }
+
+    .steps {
+      display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    .step-pill {
+      font-size: 0.78rem; font-weight: 500; padding: 0.3rem 0.65rem; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--muted);
+    }
+    .step-pill.active { color: var(--ink); background: var(--lime); border-color: var(--lime); }
+    .step-pill.done { color: var(--lime); border-color: color-mix(in srgb, var(--lime) 40%, var(--line)); }
+
+    .panel {
+      border: 1px solid var(--line); border-radius: 14px;
+      background: var(--panel);
+      padding: 1.4rem 1.5rem; margin-bottom: 1rem;
+    }
+    .panel h2 { margin: 0 0 0.65rem; font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; }
+    .fb-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .fb-table th, .fb-table td { text-align: left; vertical-align: top; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--line); }
+    .fb-table th { font-weight: 600; color: var(--muted); }
+    .panel p.hint { margin: 0 0 0.85rem; color: var(--muted); font-size: 0.9rem; line-height: 1.45; }
+
+    label {
+      display: block; font-size: 0.85rem; font-weight: 600; color: var(--fg);
+      margin: 0.75rem 0 0.35rem;
+    }
+    label:first-child { margin-top: 0; }
+
+    input[type=text], input[type=number], textarea, select {
+      width: 100%; border: 1px solid var(--line); border-radius: 8px;
+      background: var(--panel); color: var(--fg); padding: 0.6rem 0.7rem;
+    }
+    textarea { min-height: 120px; resize: vertical; line-height: 1.45; font-family: var(--mono); font-size: 0.88rem; }
+    textarea.tall { min-height: 220px; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+
+    .launch-list { max-height: 22rem; overflow-y: auto; margin-top: 0.6rem; }
+    .launch-list h3 { font-size: 0.85rem; margin: 0.8rem 0 0.3rem; color: var(--muted); }
+    .launch-list a { display: block; padding: 0.25rem 0; color: inherit; text-decoration: none; }
+    .launch-list a:hover { text-decoration: underline; }
+    .launch-list code { color: var(--muted); margin-right: 0.5rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--lime) 35%, var(--line));
+      border-radius: 999px; padding: 0.2rem 0.55rem; font-size: 0.82rem;
+    }
+    .tag button {
+      border: 0; background: transparent; color: var(--muted); padding: 0; line-height: 1;
+    }
+
+    .hint-row {
+      border: 1px solid var(--line); border-radius: 10px; padding: 0.65rem;
+      margin-bottom: 0.55rem; background: var(--muted-bg);
+    }
+    .hint-row .row { align-items: start; }
+
+    .actions { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 1rem; }
+    .btn {
+      border: 1px solid transparent; border-radius: 8px; font-weight: 600; padding: 0.55rem 1rem;
+    }
+    .btn-primary { background: var(--accent); color: var(--ink); border-color: var(--accent); }
+    .btn-secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+    .btn-danger { background: transparent; color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--line)); }
+    .btn:hover { filter: brightness(1.05); }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
+    .card {
+      text-align: left; border: 1px solid var(--line); border-radius: 14px;
+      padding: 1.1rem; background: var(--panel); color: inherit;
+      transition: border-color .15s, transform .2s cubic-bezier(.16,1,.3,1);
+    }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .card { display: flex; flex-direction: column; justify-content: flex-start; }
+    .card h3 { margin: 0 0 0.35rem; font-size: 0.98rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.4; }
+
+    .review {
+      font-family: var(--mono); font-size: 0.78rem; white-space: pre-wrap;
+      background: var(--muted-bg); border: 1px solid var(--line); border-radius: 10px;
+      padding: 0.75rem; max-height: 320px; overflow: auto;
+    }
+
+    .errors {
+      border: 1px solid color-mix(in srgb, var(--danger) 50%, var(--line));
+      background: rgba(255,107,107,0.08); border-radius: 10px;
+      padding: 0.65rem 0.75rem; margin-top: 0.75rem; color: var(--danger); font-size: 0.88rem;
+    }
+    .errors ul { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+
+    .toast {
+      position: fixed; bottom: 1rem; right: 1rem; z-index: 50;
+      background: var(--panel); border: 1px solid var(--lime); color: var(--fg);
+      border-radius: 10px; padding: 0.75rem 1rem; max-width: 360px;
+      box-shadow: 0 12px 32px rgba(16,24,40,0.14);
+      animation: pop .2s ease;
+    }
+    @keyframes pop { from { transform: translateY(8px); opacity: 0; } }
+
+    .proposal-list { display: grid; gap: 0.55rem; }
+    .proposal-item {
+      border: 1px solid var(--line); border-radius: 10px; padding: 0.7rem 0.8rem;
+      display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+      background: var(--muted-bg);
+    }
+    .proposal-item .meta { flex: 1; min-width: 180px; }
+    .proposal-item .k { font-size: 0.75rem; font-weight: 600; color: var(--accent); }
+    .proposal-item .t { font-weight: 700; }
+    .proposal-item .s { color: var(--muted); font-size: 0.82rem; }
+
+    .toggle-list { display: grid; gap: 0.5rem; }
+    .toggle-dojo { border: 1px solid var(--line); border-radius: 10px; background: var(--muted-bg); }
+    .toggle-dojo > summary {
+      list-style: none; display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.6rem 0.8rem; cursor: pointer;
+    }
+    .toggle-dojo > summary::-webkit-details-marker { display: none; }
+    .toggle-dojo > summary .count { margin-left: auto; color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+    .toggle-dojo > summary .chev { color: var(--muted); transition: transform .15s; }
+    .toggle-dojo[open] > summary .chev { transform: rotate(90deg); }
+    .toggle-dojo.off > summary .name { color: var(--muted); text-decoration: line-through; }
+    .toggle-body { padding: 0 0.8rem 0.7rem 2.3rem; }
+    .toggle-body h4 { margin: 0.55rem 0 0.2rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    .toggle-row { display: flex; align-items: center; gap: 0.55rem; padding: 0.18rem 0; margin: 0; font-weight: 400; font-size: 0.9rem; cursor: pointer; }
+    .toggle-row code { color: var(--muted); font-family: var(--mono); font-size: 0.8rem; }
+    .toggle-row.off span { color: var(--muted); text-decoration: line-through; }
+    .toggle-dojo.off .toggle-row { opacity: 0.55; cursor: not-allowed; }
+    input[type=checkbox] { width: 1rem; height: 1rem; accent-color: var(--accent); margin: 0; flex: none; }
+    .toggle-tools { display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap; }
+    .toggle-tools input[type=text] { flex: 1; min-width: 200px; }
+
+    .disabled-screen {
+      text-align: center; padding: 4rem 1rem;
+    }
+    .disabled-screen code {
+      background: var(--muted-bg); padding: 0.15rem 0.4rem; border-radius: 6px;
+      font-family: var(--mono); color: var(--lime);
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('academy-theme');
+        document.documentElement.setAttribute('data-theme', saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+    })();
+  </script>
+</head>
+<body>
+  <div class="bg"></div>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cline%20x1%3D%2260%22%20y1%3D%228%22%20x2%3D%2260%22%20y2%3D%2232%22%20stroke%3D%22%23ff7a45%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22/%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%229%22%20r%3D%229%22%20fill%3D%22%23ff7a45%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2228%22%20width%3D%22100%22%20height%3D%2286%22%20rx%3D%2226%22%20fill%3D%22%232f5bea%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2238%22%20width%3D%22100%22%20height%3D%2213%22%20fill%3D%22%23ef4444%22/%3E%3Crect%20x%3D%2224%22%20y%3D%2258%22%20width%3D%2272%22%20height%3D%2244%22%20rx%3D%2214%22%20fill%3D%22%230f1a3a%22/%3E%3Crect%20x%3D%2242%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3Crect%20x%3D%2267%22%20y%3D%2266%22%20width%3D%2211%22%20height%3D%2216%22%20rx%3D%225.5%22%20fill%3D%22%237cf3c8%22/%3E%3C/svg%3E" width="28" height="28" alt=""/> <span>Signal Dojo <b>Admin</b></span></div>
+      <div class="top-links">
+        <a href="/dojo">Student view</a>
+        <a href="#" id="link-proposals">Proposals</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div id="screen-disabled" class="disabled-screen hidden">
+      <h1>Admin mode is off</h1>
+      <p class="sub">Start the server with admin enabled and type the admin password in that terminal:</p>
+      <p><code>ACADEMY_ADMIN=1 ./run.sh</code> &nbsp; or &nbsp; <code>./academy admin</code></p>
+    </div>
+
+    <div id="screen-home" class="hidden">
+      <h1>Curriculum <em>admin</em></h1>
+      <p class="sub">Add challenges with a guided wizard, or save curriculum suggestions for later review.</p>
+      <div class="panel">
+        <div class="cards">
+          <button type="button" class="card" id="btn-new-challenge">
+            <h3>+ New challenge</h3>
+            <p>Write a description, hints and flag, then create files under an existing module.</p>
+          </button>
+          <button type="button" class="card" id="btn-suggest-module">
+            <h3>Suggest module / dojo change</h3>
+            <p>Propose a new module or belt placement without editing YAML by hand.</p>
+          </button>
+          <button type="button" class="card" id="btn-view-proposals">
+            <h3>Review proposals</h3>
+            <p>See saved drafts and curriculum notes waiting to be applied.</p>
+          </button>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Turn dojos and challenges on or off</h2>
+        <p class="hint">Uncheck a dojo or a challenge to hide it from learners: it disappears from the dojo, the profile and <code>./academy</code>, and cannot be started. Check it again to bring it back. Progress is kept either way.</p>
+        <div class="toggle-tools">
+          <input type="text" id="toggle-filter" placeholder="Filter by id, title or belt"/>
+          <button type="button" class="btn btn-secondary" id="toggle-expand">Expand all</button>
+        </div>
+        <div id="toggle-list" class="toggle-list"></div>
+      </div>
+      <div class="panel">
+        <h2>Launch any challenge</h2>
+        <p class="hint">Admin mode unlocks every belt. Pick a challenge to open it in the dojo, then press <b>Start</b> there.</p>
+        <input type="text" id="launch-filter" placeholder="Filter by id, title or belt (e.g. pyq-generics, generics, blue)"/>
+        <div id="launch-list" class="launch-list"></div>
+      </div>
+      <div class="panel">
+        <h2>Learner feedback</h2>
+        <p class="hint">What learners said after finishing a challenge on this machine, newest first. It is also in <code>feedback.jsonl</code> in the data folder and in every save file.</p>
+        <div id="feedback-list"></div>
+      </div>
+      <div class="panel">
+        <h2>Curriculum snapshot</h2>
+        <p class="hint" id="overview-stats">Loading…</p>
+        <div id="overview-modules"></div>
+      </div>
+    </div>
+
+    <div id="screen-wizard" class="hidden">
+      <h1 id="wizard-title">New <em>challenge</em></h1>
+      <p class="sub" id="wizard-sub">Step-by-step authoring for curriculum files.</p>
+      <div class="steps" id="step-pills"></div>
+
+      <!-- Step 0: module -->
+      <div class="panel wizard-step" data-step="0">
+        <h2>1 · Choose module</h2>
+        <p class="hint">Pick where this challenge belongs. The wizard registers it in that module's <code>module.yaml</code>.</p>
+        <label for="field-module">Module</label>
+        <select id="field-module"></select>
+        <label for="field-dojo-note">Curriculum suggestion (optional)</label>
+        <textarea id="field-dojo-note" placeholder="e.g. Consider moving this module to the Python dojo after py-zero…"></textarea>
+      </div>
+
+      <!-- Step 1: identity -->
+      <div class="panel wizard-step hidden" data-step="1">
+        <h2>2 · Identity</h2>
+        <div class="row">
+          <div>
+            <label for="field-title">Title</label>
+            <input type="text" id="field-title" placeholder="Find the Hidden Signal"/>
+          </div>
+          <div>
+            <label for="field-id">Challenge ID (kebab-case)</label>
+            <input type="text" id="field-id" placeholder="pyq-generics"/>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="field-difficulty">Difficulty</label>
+            <select id="field-difficulty">
+              <option value="easy">easy</option>
+              <option value="medium">medium</option>
+              <option value="hard">hard</option>
+            </select>
+          </div>
+          <div>
+            <label for="field-time">Estimated time</label>
+            <input type="text" id="field-time" placeholder="30-60 minutes"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: description -->
+      <div class="panel wizard-step hidden" data-step="2">
+        <h2>3 · Description</h2>
+        <p class="hint">Markdown-friendly text shown to students. A <code>README.md</code> stub is generated from this.</p>
+        <label for="field-description">Challenge description</label>
+        <textarea class="tall" id="field-description"></textarea>
+      </div>
+
+      <!-- Step 3: learning -->
+      <div class="panel wizard-step hidden" data-step="3">
+        <h2>4 · Learning details</h2>
+        <label>Objectives (one tag per line or comma-separated)</label>
+        <input type="text" id="field-objectives-input" placeholder="use_fft, identify_peak"/>
+        <div class="tags" id="objectives-tags"></div>
+        <label for="field-explanation">Post-solve explanation</label>
+        <textarea id="field-explanation"></textarea>
+        <label for="field-solution">Instructor solution walkthrough</label>
+        <textarea id="field-solution"></textarea>
+        <h2 style="margin-top:1rem;font-size:0.95rem;">Hints (minimum 2)</h2>
+        <div id="hints-list"></div>
+        <button type="button" class="btn btn-secondary" id="btn-add-hint">+ Add hint</button>
+      </div>
+
+      <!-- Step 4: flag -->
+      <div class="panel wizard-step hidden" data-step="4">
+        <h2>5 · Flag &amp; files</h2>
+        <div class="row">
+          <div>
+            <label for="field-flag-value">Flag template</label>
+            <input type="text" id="field-flag-value" placeholder="flag{my_challenge_template}"/>
+          </div>
+          <div>
+            <label for="field-flag-validation">Validation</label>
+            <select id="field-flag-validation">
+              <option value="session">session (recommended)</option>
+              <option value="exact">exact</option>
+              <option value="regex">regex</option>
+              <option value="case_insensitive">case_insensitive</option>
+              <option value="script">script</option>
+            </select>
+          </div>
+        </div>
+        <label for="field-files">Staged files (comma-separated)</label>
+        <input type="text" id="field-files" value="README.md"/>
+        <label for="field-tools">Expected tools (comma-separated)</label>
+        <input type="text" id="field-tools" placeholder="python, numpy, fft"/>
+      </div>
+
+      <!-- Step 5: review -->
+      <div class="panel wizard-step hidden" data-step="5">
+        <h2>6 · Review &amp; publish</h2>
+        <p class="hint">Validate against the challenge schema, then create curriculum files or save as a proposal for review.</p>
+        <div class="review" id="review-box"></div>
+        <div id="validation-errors" class="errors hidden"></div>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btn-create-now">Create challenge files</button>
+          <button type="button" class="btn btn-secondary" id="btn-save-proposal">Save as proposal</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-secondary" id="btn-wizard-back">Back</button>
+        <button type="button" class="btn btn-primary" id="btn-wizard-next">Next</button>
+        <button type="button" class="btn btn-secondary" id="btn-wizard-cancel">Cancel</button>
+      </div>
+    </div>
+
+    <div id="screen-module-suggest" class="hidden">
+      <h1>Suggest <em>curriculum</em> change</h1>
+      <p class="sub">Save a proposal for a new module or dojo placement. An maintainer can create the module folder and update dojos.yaml.</p>
+      <div class="panel">
+        <label for="suggest-title">Proposal title</label>
+        <input type="text" id="suggest-title" placeholder="Add OFDM fundamentals module"/>
+        <label for="suggest-module-slug">Suggested module slug</label>
+        <input type="text" id="suggest-module-slug" placeholder="ofdm-fundamentals"/>
+        <label for="suggest-module-title">Module title</label>
+        <input type="text" id="suggest-module-title" placeholder="OFDM Fundamentals"/>
+        <label for="suggest-dojo">Target dojo</label>
+        <select id="suggest-dojo"></select>
+        <label for="suggest-description">Module description</label>
+        <textarea class="tall" id="suggest-description"></textarea>
+        <label for="suggest-notes">Notes for maintainers</label>
+        <textarea id="suggest-notes"></textarea>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btn-save-module-proposal">Save proposal</button>
+          <button type="button" class="btn btn-secondary" id="btn-cancel-suggest">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-proposals" class="hidden">
+      <h1>Saved <em>proposals</em></h1>
+      <p class="sub">Pending curriculum suggestions and challenge drafts.</p>
+      <div class="panel">
+        <div class="proposal-list" id="proposal-list">Loading…</div>
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" id="btn-proposals-back">Back to home</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const STEP_LABELS = ["Module", "Identity", "Description", "Learning", "Flag", "Review"];
+    let overview = null;
+    let wizardStep = 0;
+    let draft = {};
+    let objectives = [];
+    let hints = [];
+
+    async function api(path, opts = {}) {
+      const res = await fetch(path, {
+        headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
+        ...opts,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || data.detail || res.statusText);
+      return data;
+    }
+
+    function toast(msg) {
+      const el = document.createElement("div");
+      el.className = "toast";
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4200);
+    }
+
+    function show(id) {
+      for (const screen of ["screen-disabled", "screen-home", "screen-wizard", "screen-module-suggest", "screen-proposals"]) {
+        document.getElementById(screen).classList.toggle("hidden", screen !== id);
+      }
+    }
+
+    function slugify(text) {
+      return text.toLowerCase().trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+    }
+
+    function renderObjectives() {
+      const box = document.getElementById("objectives-tags");
+      box.innerHTML = objectives.map((o, i) =>
+        `<span class="tag">${o}<button type="button" data-i="${i}" aria-label="Remove">×</button></span>`
+      ).join("");
+      box.querySelectorAll("button").forEach(btn => {
+        btn.onclick = () => { objectives.splice(+btn.dataset.i, 1); renderObjectives(); };
+      });
+    }
+
+    function renderHints() {
+      const box = document.getElementById("hints-list");
+      box.innerHTML = hints.map((h, i) => `
+        <div class="hint-row">
+          <div class="row">
+            <div style="max-width:90px">
+              <label>Level</label>
+              <input type="number" min="1" value="${h.level}" data-hint="${i}" data-field="level"/>
+            </div>
+            <div>
+              <label>Hint text</label>
+              <textarea data-hint="${i}" data-field="text">${h.text || ""}</textarea>
+            </div>
+          </div>
+          ${hints.length > 2 ? `<button type="button" class="btn btn-danger" data-remove-hint="${i}" style="margin-top:0.4rem;padding:0.3rem 0.55rem;font-size:0.78rem">Remove</button>` : ""}
+        </div>
+      `).join("");
+      box.querySelectorAll("[data-hint]").forEach(el => {
+        el.oninput = () => {
+          const i = +el.dataset.hint;
+          const field = el.dataset.field;
+          hints[i][field] = field === "level" ? +el.value : el.value;
+        };
+      });
+      box.querySelectorAll("[data-remove-hint]").forEach(btn => {
+        btn.onclick = () => { hints.splice(+btn.dataset.removeHint, 1); renderHints(); };
+      });
+    }
+
+    function renderStepPills() {
+      const box = document.getElementById("step-pills");
+      box.innerHTML = STEP_LABELS.map((label, i) => {
+        let cls = "step-pill";
+        if (i === wizardStep) cls += " active";
+        else if (i < wizardStep) cls += " done";
+        return `<span class="${cls}">${i + 1}. ${label}</span>`;
+      }).join("");
+      document.querySelectorAll(".wizard-step").forEach(el => {
+        el.classList.toggle("hidden", +el.dataset.step !== wizardStep);
+      });
+      document.getElementById("btn-wizard-next").classList.toggle("hidden", wizardStep >= STEP_LABELS.length - 1);
+      document.getElementById("btn-wizard-back").disabled = wizardStep === 0;
+    }
+
+    async function loadDraftForModule(slug) {
+      const data = await api(`/api/admin/challenges/draft?module=${encodeURIComponent(slug)}`);
+      draft = data.draft || {};
+      document.getElementById("field-title").value = draft.title || "";
+      document.getElementById("field-id").value = draft.id || "";
+      document.getElementById("field-difficulty").value = draft.difficulty || "easy";
+      document.getElementById("field-time").value = draft.estimated_time || "";
+      document.getElementById("field-description").value = draft.description || "";
+      document.getElementById("field-explanation").value = draft.explanation || "";
+      document.getElementById("field-solution").value = draft.solution || "";
+      document.getElementById("field-flag-value").value = (draft.flags && draft.flags.value) || "";
+      document.getElementById("field-flag-validation").value = (draft.flags && draft.flags.validation) || "session";
+      document.getElementById("field-files").value = (draft.files || ["README.md"]).join(", ");
+      document.getElementById("field-tools").value = (draft.expected_tools || []).join(", ");
+      objectives = [...(draft.objectives || [])];
+      hints = (draft.hints || []).map(h => ({ level: h.level, text: h.text }));
+      renderObjectives();
+      renderHints();
+    }
+
+    function collectDraft() {
+      const module = document.getElementById("field-module").value;
+      return {
+        id: document.getElementById("field-id").value.trim(),
+        module,
+        title: document.getElementById("field-title").value.trim(),
+        difficulty: document.getElementById("field-difficulty").value,
+        estimated_time: document.getElementById("field-time").value.trim(),
+        prerequisites: [],
+        objectives: [...objectives],
+        description: document.getElementById("field-description").value,
+        environment: { type: "workspace", notes: "Offline workspace challenge." },
+        files: document.getElementById("field-files").value.split(",").map(s => s.trim()).filter(Boolean),
+        expected_tools: document.getElementById("field-tools").value.split(",").map(s => s.trim()).filter(Boolean),
+        flags: {
+          value: document.getElementById("field-flag-value").value.trim(),
+          validation: document.getElementById("field-flag-validation").value,
+        },
+        hints: hints.map((h, i) => ({ level: h.level || i + 1, text: h.text || "" })),
+        solution: document.getElementById("field-solution").value,
+        explanation: document.getElementById("field-explanation").value,
+        curriculum_note: document.getElementById("field-dojo-note").value.trim(),
+      };
+    }
+
+    async function validateDraft() {
+      const payload = collectDraft();
+      const result = await api("/api/admin/challenges/validate", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      document.getElementById("review-box").textContent = JSON.stringify(result.normalized || payload, null, 2);
+      const errBox = document.getElementById("validation-errors");
+      if (result.errors && result.errors.length) {
+        errBox.classList.remove("hidden");
+        errBox.innerHTML = "<strong>Fix before publishing:</strong><ul>" +
+          result.errors.map(e => `<li>${e}</li>`).join("") + "</ul>";
+      } else {
+        errBox.classList.add("hidden");
+        errBox.innerHTML = "";
+      }
+      return result;
+    }
+
+    function fillModuleSelect(selectEl, selected) {
+      selectEl.innerHTML = "";
+      if (!overview) return;
+      for (const dojo of overview.dojos || []) {
+        const group = document.createElement("optgroup");
+        group.label = `${dojo.title} (${dojo.belt})`;
+        for (const mod of dojo.modules || []) {
+          if (mod.missing) continue;
+          const opt = document.createElement("option");
+          opt.value = mod.slug;
+          opt.textContent = `${mod.title} (${mod.challenge_count} challenges)`;
+          group.appendChild(opt);
+        }
+        if (group.children.length) selectEl.appendChild(group);
+      }
+      if (selected) selectEl.value = selected;
+    }
+
+    function paintLaunchList() {
+      const q = document.getElementById("launch-filter").value.trim().toLowerCase();
+      const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      let html = "";
+      for (const dojo of overview.dojos || []) {
+        const rows = [];
+        for (const mod of dojo.modules || []) {
+          for (const c of mod.challenges || []) {
+            if (!dojo.enabled || !c.enabled) continue;  // switched off: cannot be opened
+            const hay = `${c.id} ${c.title} ${dojo.title} ${dojo.belt}`.toLowerCase();
+            if (!q || hay.includes(q)) {
+              rows.push(`<a href="/#challenge/${encodeURIComponent(c.id)}"><code>${esc(c.id)}</code>${esc(c.title)}</a>`);
+            }
+          }
+        }
+        if (rows.length) html += `<h3>${esc(dojo.title)} · ${esc(dojo.belt)}${dojo.kind === "side" ? " (extra)" : ""}</h3>` + rows.join("");
+      }
+      document.getElementById("launch-list").innerHTML = html || "<p class='hint'>No match.</p>";
+    }
+
+    function paintToggles() {
+      const q = document.getElementById("toggle-filter").value.trim().toLowerCase();
+      const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      const box = document.getElementById("toggle-list");
+      const open = new Set([...box.querySelectorAll("details[open]")].map(d => d.dataset.dojo));
+      let html = "";
+      for (const dojo of overview.dojos || []) {
+        const dojoHay = `${dojo.id} ${dojo.title} ${dojo.belt}`.toLowerCase();
+        let total = 0, on = 0, body = "";
+        for (const mod of dojo.modules || []) {
+          const rows = [];
+          for (const c of mod.challenges || []) {
+            total++; if (c.enabled) on++;
+            if (q && !dojoHay.includes(q) && !`${c.id} ${c.title}`.toLowerCase().includes(q)) continue;
+            rows.push(`<label class="toggle-row${c.enabled ? "" : " off"}"><input type="checkbox" data-kind="challenge" data-id="${esc(c.id)}"${c.enabled ? " checked" : ""}${dojo.enabled ? "" : " disabled"}/><span>${esc(c.title)}</span><code>${esc(c.id)}</code></label>`);
+          }
+          if (rows.length) body += `<h4>${esc(mod.title)}</h4>` + rows.join("");
+        }
+        if (q && !body) continue;
+        const isOpen = open.has(dojo.id) || (q && body);
+        html += `<details class="toggle-dojo${dojo.enabled ? "" : " off"}" data-dojo="${esc(dojo.id)}"${isOpen ? " open" : ""}>
+          <summary><input type="checkbox" data-kind="dojo" data-id="${esc(dojo.id)}"${dojo.enabled ? " checked" : ""} aria-label="Show ${esc(dojo.title)} to learners"/>
+            <span class="name">${esc(dojo.title)} · ${esc(dojo.belt)}${dojo.kind === "side" ? " (extra)" : ""}</span>
+            <span class="count">${dojo.enabled ? `${on} of ${total} on` : "off"}</span><span class="chev">›</span></summary>
+          <div class="toggle-body">${body || "<p class='hint'>No challenges.</p>"}</div>
+        </details>`;
+      }
+      box.innerHTML = html || "<p class='hint'>No match.</p>";
+    }
+
+    async function onToggle(ev) {
+      const el = ev.target;
+      if (!(el instanceof HTMLInputElement) || !el.dataset.kind) return;
+      const { kind, id } = el.dataset;
+      const enabled = el.checked;
+      el.disabled = true;
+      try {
+        await api("/api/admin/toggle", { method: "POST", body: JSON.stringify({ kind, id, enabled }) });
+        for (const dojo of overview.dojos || []) {
+          if (kind === "dojo" && dojo.id === id) dojo.enabled = enabled;
+          for (const mod of dojo.modules || []) for (const c of mod.challenges || []) if (kind === "challenge" && c.id === id) c.enabled = enabled;
+        }
+        toast(`${kind === "dojo" ? "Dojo" : "Challenge"} ${enabled ? "on: learners can see it" : "off: hidden from learners"}.`);
+        paintLaunchList();
+      } catch (e) {
+        el.checked = !enabled;
+        toast(e.message);
+      }
+      paintToggles();
+    }
+
+    const RATING = { "too-easy": "Too easy", "about-right": "About right", "too-hard": "Too hard" };
+    async function loadFeedback() {
+      const { feedback } = await api("/api/admin/feedback");
+      const box = document.getElementById("feedback-list");
+      if (!feedback.length) {
+        box.innerHTML = '<p class="hint">No feedback yet.</p>';
+        return;
+      }
+      const esc = (t) => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      box.innerHTML = `<table class="fb-table"><thead><tr><th>When</th><th>Challenge</th><th>Rating</th><th>Note</th></tr></thead><tbody>${
+        feedback.map(f => `<tr><td>${esc(new Date(f.at * 1000).toLocaleString())}</td><td>${esc(f.title || f.challenge)}</td>` +
+          `<td>${esc(RATING[f.rating] || "")}</td><td>${esc(f.note || "")}</td></tr>`).join("")
+      }</tbody></table>`;
+    }
+
+    async function loadOverview() {
+      overview = await api("/api/admin/overview");
+      if (!overview.admin_enabled) {
+        show("screen-disabled");
+        return;
+      }
+      show("screen-home");
+      document.getElementById("overview-stats").textContent =
+        `${overview.module_count} modules · ${overview.challenge_count} challenges (${overview.enabled_challenge_count} on) · ${overview.curriculum_root}`;
+      const mods = overview.modules.slice().sort((a, b) => a.order - b.order);
+      document.getElementById("overview-modules").innerHTML =
+        `<div class="tags">${mods.map(m =>
+          `<span class="tag">${m.title} <span style="color:var(--muted)">(${m.challenge_count})</span></span>`
+        ).join("")}</div>`;
+
+      paintLaunchList();
+      document.getElementById("launch-filter").oninput = paintLaunchList;
+      loadFeedback().catch(err => {
+        document.getElementById("feedback-list").textContent = "Could not load feedback: " + err.message;
+      });
+      paintToggles();
+      document.getElementById("toggle-filter").oninput = paintToggles;
+
+      fillModuleSelect(document.getElementById("field-module"));
+      fillModuleSelect(document.getElementById("suggest-dojo"), null);
+      const dojoSelect = document.getElementById("suggest-dojo");
+      dojoSelect.innerHTML = "";
+      for (const dojo of overview.dojos || []) {
+        const opt = document.createElement("option");
+        opt.value = dojo.id;
+        opt.textContent = `${dojo.title} (${dojo.belt} belt)`;
+        dojoSelect.appendChild(opt);
+      }
+    }
+
+    async function loadProposals() {
+      const rows = await api("/api/admin/proposals");
+      const box = document.getElementById("proposal-list");
+      if (!rows.length) {
+        box.innerHTML = "<p class='hint'>No proposals yet.</p>";
+        return;
+      }
+      box.innerHTML = rows.map(p => `
+        <div class="proposal-item">
+          <div class="meta">
+            <div class="k">${p.kind} · ${p.status}</div>
+            <div class="t">${p.title}</div>
+            <div class="s">${p.created_at || ""} ${p.notes ? ": " + p.notes : ""}</div>
+          </div>
+          ${p.kind === "challenge" && p.status === "pending" ?
+            `<button type="button" class="btn btn-primary" data-apply="${p.filename}">Apply</button>` : ""}
+        </div>
+      `).join("");
+      box.querySelectorAll("[data-apply]").forEach(btn => {
+        btn.onclick = async () => {
+          try {
+            const res = await api(`/api/admin/proposals/${encodeURIComponent(btn.dataset.apply)}/apply`, { method: "POST", body: "{}" });
+            toast(res.ok ? "Proposal applied." : (res.error || "Apply failed"));
+            await loadProposals();
+            await loadOverview();
+          } catch (e) { toast(e.message); }
+        };
+      });
+    }
+
+    function startWizard() {
+      wizardStep = 0;
+      document.getElementById("field-dojo-note").value = "";
+      const mod = document.getElementById("field-module").value;
+      loadDraftForModule(mod);
+      renderStepPills();
+      show("screen-wizard");
+    }
+
+    document.getElementById("toggle-list").addEventListener("change", onToggle);
+    // A checkbox inside <summary> must not also open/close the dojo.
+    document.getElementById("toggle-list").addEventListener("click", (ev) => {
+      if (ev.target instanceof HTMLInputElement && ev.target.closest("summary")) ev.stopPropagation();
+    });
+    document.getElementById("toggle-expand").onclick = () => {
+      const all = [...document.querySelectorAll("#toggle-list details")];
+      const openAll = all.some(d => !d.open);
+      all.forEach(d => { d.open = openAll; });
+      document.getElementById("toggle-expand").textContent = openAll ? "Collapse all" : "Expand all";
+    };
+    document.getElementById("btn-new-challenge").onclick = startWizard;
+    document.getElementById("btn-suggest-module").onclick = () => show("screen-module-suggest");
+    document.getElementById("btn-view-proposals").onclick = async () => {
+      show("screen-proposals");
+      await loadProposals();
+    };
+    document.getElementById("link-proposals").onclick = (e) => {
+      e.preventDefault();
+      document.getElementById("btn-view-proposals").click();
+    };
+
+    document.getElementById("field-module").onchange = () => loadDraftForModule(document.getElementById("field-module").value);
+    document.getElementById("field-title").oninput = () => {
+      const title = document.getElementById("field-title").value;
+      const mod = document.getElementById("field-module").value;
+      const prefix = mod.split("-")[0];
+      const base = slugify(title);
+      document.getElementById("field-id").value = base.startsWith(prefix + "-") ? base : `${prefix}-${base}`;
+    };
+
+    document.getElementById("field-objectives-input").onkeydown = (e) => {
+      if (e.key === "Enter" || e.key === ",") {
+        e.preventDefault();
+        const val = e.target.value.replace(/,/g, "").trim();
+        if (val && !objectives.includes(val)) objectives.push(val);
+        e.target.value = "";
+        renderObjectives();
+      }
+    };
+
+    document.getElementById("btn-add-hint").onclick = () => {
+      hints.push({ level: hints.length + 1, text: "" });
+      renderHints();
+    };
+
+    document.getElementById("btn-wizard-next").onclick = async () => {
+      if (wizardStep === 1) {
+        const title = document.getElementById("field-title").value.trim();
+        if (!title) { toast("Enter a title."); return; }
+      }
+      if (wizardStep < STEP_LABELS.length - 1) {
+        wizardStep += 1;
+        renderStepPills();
+        if (wizardStep === STEP_LABELS.length - 1) await validateDraft();
+      }
+    };
+    document.getElementById("btn-wizard-back").onclick = () => {
+      if (wizardStep > 0) { wizardStep -= 1; renderStepPills(); }
+    };
+    document.getElementById("btn-wizard-cancel").onclick = () => show("screen-home");
+
+    document.getElementById("btn-create-now").onclick = async () => {
+      const v = await validateDraft();
+      if (v.errors && v.errors.length) { toast("Fix validation errors first."); return; }
+      try {
+        const payload = collectDraft();
+        const note = payload.curriculum_note;
+        delete payload.curriculum_note;
+        const res = await api("/api/admin/challenges/create", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        if (note) {
+          await api("/api/admin/proposals", {
+            method: "POST",
+            body: JSON.stringify({
+              kind: "curriculum_note",
+              title: `Note for ${payload.id}`,
+              notes: note,
+              challenge_id: payload.id,
+            }),
+          });
+        }
+        toast(`Created ${res.challenge_id}`);
+        show("screen-home");
+        await loadOverview();
+      } catch (e) { toast(e.message); }
+    };
+
+    document.getElementById("btn-save-proposal").onclick = async () => {
+      const v = await validateDraft();
+      if (v.errors && v.errors.length) { toast("Fix validation errors first."); return; }
+      try {
+        const payload = collectDraft();
+        const note = payload.curriculum_note || "";
+        delete payload.curriculum_note;
+        await api("/api/admin/proposals", {
+          method: "POST",
+          body: JSON.stringify({
+            kind: "challenge",
+            title: payload.title,
+            notes: note,
+            challenge: v.normalized || payload,
+          }),
+        });
+        toast("Proposal saved.");
+        show("screen-home");
+      } catch (e) { toast(e.message); }
+    };
+
+    document.getElementById("btn-save-module-proposal").onclick = async () => {
+      try {
+        await api("/api/admin/proposals", {
+          method: "POST",
+          body: JSON.stringify({
+            kind: "module",
+            title: document.getElementById("suggest-title").value.trim() || "New module proposal",
+            notes: document.getElementById("suggest-notes").value.trim(),
+            module: {
+              slug: document.getElementById("suggest-module-slug").value.trim(),
+              title: document.getElementById("suggest-module-title").value.trim(),
+              description: document.getElementById("suggest-description").value,
+              dojo_id: document.getElementById("suggest-dojo").value,
+            },
+          }),
+        });
+        toast("Module proposal saved.");
+        show("screen-home");
+      } catch (e) { toast(e.message); }
+    };
+
+    document.getElementById("btn-cancel-suggest").onclick = () => show("screen-home");
+    document.getElementById("btn-proposals-back").onclick = () => show("screen-home");
+
+    loadOverview().catch(err => {
+      if (String(err.message).includes("403") || String(err.message).includes("Admin")) {
+        show("screen-disabled");
+      } else {
+        toast(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

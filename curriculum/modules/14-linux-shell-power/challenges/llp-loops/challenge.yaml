@@ -1,0 +1,72 @@
+id: llp-loops
+module: linux-shell-power
+title: Loops over Files
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites:
+- llp-chaining
+objectives:
+- for_loop_glob
+- nullglob
+- quoting_spaces
+- command_substitution
+- basename
+- stat_size
+- sha256sum
+- sort_output
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Repeat a command once for each file with a bash for loop. Handle empty folders with
+  nullglob. Keep file names with spaces in 1 piece. Capture the output of a command with
+  $(...). Ask for sizes, hashes and sorted results.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- check
+- check.py
+expected_tools:
+- bash
+- basename
+- stat
+- sha256sum
+- cut
+- sort
+flags:
+  value: flag{llp_loops}
+  validation: session
+hints:
+- level: 1
+  text: 'First try the loop by hand: `mkdir t; touch t/a.txt "t/b c.txt"; for f in t/*.txt; do echo
+    "[$f]"; done`. The square brackets show you exactly where each value starts and ends.'
+- level: 2
+  text: 'Start every script with a loop with `shopt -s nullglob`. Write the glob as `"$1"/*.txt`:
+    quotes around the variable, and the star outside. Inside the loop, `basename "$f"` gives
+    the name without the folder. `stat -c %s "$f"` gives the size.'
+- level: 3
+  text: 'To count or to add, set a variable to 0 before the loop. Inside the loop, update it with
+    `n=$((n + 1))` or `total=$((total + $(stat -c %s "$f")))`. To sort the output of a loop,
+    put `| sort -n` directly after `done`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A for loop over a glob is the basic way to repeat work for every file. With nullglob, "no
+  files" means "the loop does not run". Quotes keep names with spaces in 1 piece. Command
+  substitution lets each pass of the loop ask other tools (basename, stat, sha256sum) for
+  facts. The loop can then print these facts, add them up or sort them.'
+extension:
+  title: Go further
+  description: 'Change task 7 so that it also prints a last line `TOTAL N`. N is the sum of all the sizes.'
+optional_hardware: []

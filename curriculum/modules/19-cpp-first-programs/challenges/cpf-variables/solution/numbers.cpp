@@ -1,0 +1,23 @@
+#include <iostream>
+
+int main()
+{
+    int apples = 7;
+    int friends = 3;
+
+    std::cout << "We have " << apples << " apples and " << friends << " friends.\n";
+
+    // Task 1: print apples=7 using the variable apples
+    std::cout << "apples=" << apples << "\n";
+
+    // Task 2: print total=10 (apples + friends)
+    std::cout << "total=" << apples + friends << "\n";
+
+    // Task 3: print each=2 (apples / friends)
+    std::cout << "each=" << apples / friends << "\n";
+
+    // Task 4: print left=1 (apples % friends)
+    std::cout << "left=" << apples % friends << "\n";
+
+    return 0;
+}

@@ -1,0 +1,85 @@
+id: py-socket-client
+module: python
+title: Talk to a Local Signal Server
+difficulty: medium
+estimated_time: 45-70 minutes
+prerequisites:
+- py-binary-decoder
+objectives:
+- tcp-sockets
+- localhost
+- network-protocols
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Complete a TCP client for a tiny line protocol. Your client must:
+
+  connect to the host and port it gets as arguments,
+
+  send `READ <channel>\n`,
+
+  read until the server closes the connection,
+
+  and return the reply with `strip()` applied.
+
+  The given `run` script starts a practice server on localhost. It asks your client for channel 7.
+
+  No Internet connection is used.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: py-socket-client
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- client.py
+- run
+- check
+- check.py
+expected_tools:
+- python3
+flags:
+  value: flag{localhost_sockets_can_talk}
+  validation: session
+hints:
+- level: 1
+  text: 'Use `socket.create_connection((host, port), timeout=3)` in a `with` block.
+
+    '
+- level: 2
+  text: 'Before `sendall`, convert text to bytes with `.encode()`.
+
+    '
+- level: 3
+  text: 'Call `recv` in a loop until it returns `b''''`. Then join the chunks, decode,
+    and strip.
+
+    '
+solution: 'Create a connection, `sendall(f"READ {channel}\n".encode())`, collect
+
+  chunks from `recv(4096)` until EOF, then return `b''''.join(chunks).decode().strip()`.
+
+  Use the command-line arguments in the provided main block.
+
+  '
+explanation: 'TCP carries a stream of bytes, not complete messages. The receiver
+
+  must keep reading, because one `recv` may return only part of a reply. This local
+
+  line protocol marks the end of a message in its own way: a newline, and then the server closes.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Make your solution handle the new case.
+
+    Do not change the output format.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

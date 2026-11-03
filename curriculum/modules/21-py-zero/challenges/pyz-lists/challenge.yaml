@@ -1,0 +1,61 @@
+id: pyz-lists
+module: py-zero
+title: Lists
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- list_literal
+- indexing
+- slicing
+- append_len
+- loop_over_list
+- list_comprehension
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Work with lists. You will:
+
+  - store many values in a list
+  - read them by index and by slice
+  - make a list grow with append
+  - loop over its items
+  - build lists in one line with a list comprehension
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_lists}
+  validation: session
+hints:
+- level: 1
+  text: The first item is `items[0]` and the last is `items[-1]`. Put them in a new list with square brackets.
+    For "all except the first and last", use the slice `items[1:-1]`.
+- level: 2
+  text: For `evens_up_to`, start with `result = []`. Loop with `range(0, n + 1, 2)`. Call `result.append(i)`
+    inside the loop. Return `result` after the loop.
+- level: 3
+  text: '`average` is `sum(items) / len(items)`. `squares` is one line: `return [i * i for i in range(n)]`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Lists are Python''s arrays that can grow. Indexes start at 0. Negative indexes count from the
+  end. A slice copies a range of items. `append` makes the list grow. `for x in items` goes through the values
+  directly. A list comprehension is a short loop that builds a new list. It can also have an `if` filter. You
+  will see list comprehensions everywhere in normal, well-written Python.'
+extension:
+  title: Go further
+  description: Write `strongest(items, k)`. It returns the k largest values, with the biggest first. Use `sorted(items,
+    reverse=True)` and a slice.
+optional_hardware: []

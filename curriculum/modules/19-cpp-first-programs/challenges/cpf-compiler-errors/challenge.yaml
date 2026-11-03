@@ -1,0 +1,56 @@
+id: cpf-compiler-errors
+module: cpp-first-programs
+title: Read a Compiler Error
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- compiler_errors
+- line_numbers
+- syntax
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  There are 4 very small programs. Each one has 1 mistake. Read what g++ tells you. Find the line that it shows. Then fix each file.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- oops1.cpp
+- oops2.cpp
+- oops3.cpp
+- oops4.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_compiler_errors}
+  validation: session
+hints:
+- level: 1
+  text: Compile one file at a time. Look only at the first line that has `error:` in it. The 2 numbers
+    after the file name are the line and the column.
+- level: 2
+  text: 'oops1.cpp: line 5 needs a `;` at the end. oops2.cpp: compare the name after `std::` with `cout`,
+    one letter at a time. (g++ even suggests the right name.) oops3.cpp: count the `{` and the `}`.'
+- level: 3
+  text: 'oops4.cpp: g++ says that `retrun` was not declared. This is because it does not know the word.
+    The word that C++ uses to end main is `return`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'g++ reports errors like this: `file:line:column: error: message`. Fix the first message
+  first. The later messages often come from the first mistake. g++ often reports a missing semicolon on
+  the next line. This is because g++ only sees there that the instruction did not end.'
+extension:
+  title: Go further
+  description: 'Make a copy of hello.cpp from the last challenge. Break it on purpose in 3 different ways:
+    delete a quote mark, delete a `<`, and delete the `#include` line. Read each message that g++ gives
+    you.'
+optional_hardware: []

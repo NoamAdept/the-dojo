@@ -1,0 +1,66 @@
+id: zt-variables-dojo
+module: zero-terminal
+title: Variables, Quotes and the Practice Dojo
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- variables
+- home_and_tilde
+- double_quotes
+- dojo_variable
+- source_env
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn what a shell variable is. Use $HOME and ~. Make your own variables. Use double quotes to keep paths with spaces together. Use $DOJO, . ./env.sh and ./try N in the same way as Linux Shell Basics does.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- check
+- check.py
+- dojo/home/hacker/.keep
+- dojo/message.txt
+- dojo/my notes/today.txt
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+- vim
+flags:
+  value: flag{zt_variables_dojo}
+  validation: session
+hints:
+- level: 1
+  text: Run `. ./env.sh` once. Then try your commands by hand first, for example `ls "$DOJO"`.
+    When a command works, put it into the answer file.
+- level: 2
+  text: 'Task 2: `band=fm` must have no spaces around `=`. If you see `band: command not found`, there
+    is a space. Task 4: use `echo` with `>` into a path that starts with `"$DOJO/tmp/`.'
+- level: 3
+  text: 'Task 5: without quotes, the shell splits `my notes` into 2 arguments. Then cat prints `No
+    such file or directory` 2 times. Write the whole path inside 1 pair of double quotes.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell replaces `$NAME` with the variable''s value before it runs a command. `NAME=value`
+  (no spaces) sets a variable. Double quotes keep text with spaces in 1 piece. Variables inside them are
+  still replaced. That is why we write paths as `"$DOJO/..."`. `. ./env.sh` runs a file in the current
+  shell, so its variables stay set.'
+extension:
+  title: Go further
+  description: Set `place="my notes"`. Print the same file with `"$DOJO/$place/today.txt"`. Then try
+    it without the quotes and read the error.
+optional_hardware: []

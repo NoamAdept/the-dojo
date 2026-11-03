@@ -1,0 +1,66 @@
+id: cpp-function-pointers
+module: cpp-under-the-hood
+title: Type Aliases, Function Pointers and Bounds Checks
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites:
+- cpp-memory-layout
+objectives:
+- type_aliases
+- function_pointers
+- callbacks
+- void_pointer_cast
+- unsigned_sizes
+- bounds_checks
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+  - give types new names with typedef and using
+  - store functions in variables, and call them through the variables
+  - pass a void* context to a callback, and cast it back with static_cast
+  - check unsigned sizes safely before you read from a buffer
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- funcs.cpp
+- funcs.hpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_function_pointers}
+  validation: session
+hints:
+- level: 1
+  text: 'Task 1 is one line in funcs.hpp: `using byte = uint8_t;`. Task 2 is also one line. Call `op` in
+    the same way as a function name.'
+- level: 2
+  text: 'Task 3: compare `symbol` with `''+''` and `''*''`. Return the function name without brackets.
+    Task 4: write a `for (std::size_t i = 0; i < count; i++)` loop that calls `visit(values[i], context)`.
+    Task 5: write `stats* s = static_cast<stats*>(context);`. Then use `s->count` and `s->sum`.'
+- level: 3
+  text: 'Task 6: compare before you subtract. If `offset >= size`, return 0. Otherwise return `size - offset`.
+    Task 7: refuse nullptrs first. Then use your `bytes_left(size, offset) < 2`. It has no addition, so nothing
+    can wrap. Only after that, read the 2 bytes in big-endian order.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: using and typedef give names to types. This makes function pointer types easy to read.
+  A function pointer lets code call any function that it was given. A callback can get a void* context
+  and cast it back with static_cast. Then the callback can keep its own data, and the caller does not
+  need to know its type. With unsigned sizes, compare before you subtract. Never add to an offset you
+  do not trust. This stops a parser from reading outside its buffer.
+extension:
+  title: Go further
+  description: Add `int reduce(const int* values, std::size_t count, int_op op, int start)`. It combines
+    all values with `op`. So `reduce(v, n, add, 0)` adds them up, and `reduce(v, n, mul, 1)` multiplies
+    them.
+optional_hardware: []

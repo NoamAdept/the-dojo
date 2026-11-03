@@ -1,0 +1,68 @@
+id: cppq-modern-cpp
+module: cpp-qualification
+title: Modern C++ and Optimization
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- auto
+- range_for
+- inline_vs_macros
+- optional
+- variant_visit
+- constexpr_recursion
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will use:
+
+  - range-based for loops and `auto`
+  - safe inline functions instead of macros
+  - `std::optional`
+  - `std::variant` with `std::visit`
+  - recursion at compile time to set the size of a `std::array`
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_modern_cpp}
+  validation: session
+hints:
+- level: 1
+  text: 'A macro only pastes text. `SQUARE_BAD(a++)` becomes `((a++) * (a++))`. This increments `a` 2
+    times. It is also undefined behaviour (the C++ rules do not say what happens).'
+- level: 2
+  text: 'Use `std::visit` with a generic lambda (a lambda with an `auto` parameter). Inside it, use `if
+    constexpr (std::is_same_v<T, int>)` to handle each possible type.'
+- level: 3
+  text: The compiler can run a recursive constexpr function. So you can use its result as the size of a
+    `std::array`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Modern C++ replaces old patterns that often cause errors. Use `auto` and range-for instead
+  of counting with an index. Use inline functions instead of macros. Use `optional` and `variant` instead
+  of special "missing" values and unions. Use `constexpr` to calculate values at compile time.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

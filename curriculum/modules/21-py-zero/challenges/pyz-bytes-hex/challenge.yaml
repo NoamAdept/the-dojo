@@ -1,0 +1,73 @@
+id: pyz-bytes-hex
+module: py-zero
+title: Bytes, Hex and Binary
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites:
+- pyz-capstone
+objectives:
+- hex_binary_notation
+- bytes_vs_str
+- fromhex_hex
+- bytes_index_ints
+- int_from_bytes
+- struct_first_look
+- xor_checksum
+- moving_position
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn to work with raw data, the way radios and files send it. You will learn:
+
+  - bytes vs str, and b"..." literals
+  - hex and binary notation
+  - bytes.fromhex and .hex()
+  - why indexing bytes gives ints
+  - int.from_bytes with byteorder and signed
+  - a first look at struct.unpack
+  - an XOR checksum
+  - how to walk through a buffer (a block of bytes) with a moving position
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_bytes_hex}
+  validation: session
+hints:
+- level: 1
+  text: 'Most tasks need only one call from the lesson: `hex(n)`, `int(text, 16)`, `bin(n)[2:]`, `text.encode()`,
+    `data.decode()`, `bytes.fromhex(text)`, `data.hex()`, `list(data)`, `data[-1]`.'
+- level: 2
+  text: 'Two-byte numbers: first take a slice of the 2 bytes, `data[pos:pos + 2]`. Then use `int.from_bytes(part,
+    "little")`. Add `signed=True` for read_i16. For struct, use `struct.unpack("<H", part)[0]`. Checksum:
+    start with `check = 0`. Then do `check ^= b` for each byte.'
+- level: 3
+  text: 'split_chunks: start with `pos = 0` and `while pos < len(data):`. Read `length = data[pos]`. The chunk is
+    `data[pos + 1:pos + 1 + length]`. If `pos + 1 + length > len(data)`, raise ValueError. If not, append
+    the chunk and set `pos = pos + 1 + length`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Raw data comes as bytes. Bytes are numbers from 0 to 255, and you index them as ints. Hex and
+  binary are only other ways to write the same numbers. A number of 2 or more bytes needs a byte order. It
+  also needs to be signed or unsigned. int.from_bytes and struct format codes like <H say both of these. A
+  checksum, such as the XOR of all bytes, helps you find damaged data. A moving position lets you read a buffer
+  one field at a time. Before each read, check that there is enough data left. The next module builds binary
+  decoders and protocol parsers (code that reads a data format) from exactly these pieces.'
+extension:
+  title: Go further
+  description: Add `read_u32(data, pos)`. It reads a 4-byte little-endian unsigned number. Write it once with
+    `int.from_bytes` and once with `struct.unpack("<I", ...)`. Then check that both give the same answer on a
+    few random buffers.
+optional_hardware: []

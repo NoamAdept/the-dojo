@@ -1,0 +1,10 @@
+#!/bin/bash
+case "$1" in
+    /*) ;;
+    *) echo "copyflag: give me an ABSOLUTE path (it must start with /), got: '$1'" >&2; exit 1;;
+esac
+case "$1" in
+    "$HOME"/*) ;;
+    *) echo "copyflag: the path must be inside your home directory ($HOME)" >&2; exit 1;;
+esac
+echo "academy{practice_home}" > "$1" && echo "copied the secret to $1"

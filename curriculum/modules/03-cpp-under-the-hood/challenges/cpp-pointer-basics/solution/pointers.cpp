@@ -1,0 +1,32 @@
+#include "pointers.hpp"
+
+void add_one(int* x)
+{
+    *x = *x + 1;
+}
+
+void swap_ints(int* a, int* b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int sum_array(const int* values, std::size_t count)
+{
+    int total = 0;
+    for (std::size_t i = 0; i < count; i++) {
+        total += values[i];
+    }
+    return total;
+}
+
+int* find_value(int* values, std::size_t count, int wanted)
+{
+    for (std::size_t i = 0; i < count; i++) {
+        if (values[i] == wanted) {
+            return &values[i];
+        }
+    }
+    return nullptr;
+}

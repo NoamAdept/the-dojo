@@ -1,0 +1,52 @@
+id: zt-first-commands
+module: zero-terminal
+title: Your First Commands
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- terminal_and_shell
+- running_commands
+- arguments
+- redirect_output
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Meet the terminal and the shell. Type your first commands: echo, whoami and date. Then save what they print into files with > and >>.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{zt_first_commands}
+  validation: session
+hints:
+- level: 1
+  text: Type exactly what the task shows. Then press Enter. Do not type the `$` from the examples.
+    After each command, `ls` shows the files you made. `cat NAME` shows what is inside one file.
+- level: 2
+  text: 'Tasks 2 and 3 work like task 1. But do not use `echo Hello terminal`. Put a different command
+    before the `>`: the command whose output you want to save. The form is `COMMAND > FILE`.'
+- level: 3
+  text: 'Here are all the commands: `echo Hello terminal > hello.txt`, `whoami > me.txt`, `date > today.txt`,
+    `echo first > list.txt`, `echo second >> list.txt`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: The shell reads a line. It splits the line at spaces into a command and its arguments.
+  Then it runs the command. The output normally goes to the screen. `>` sends it into a file and replaces
+  the file. `>>` adds it to the end of the file.
+extension:
+  title: Go further
+  description: 'Make a file `diary.txt` with 3 lines: the output of `date`, the output of `whoami`,
+    and the text `learned the terminal`. Use 1 `>` and 2 `>>`.'
+optional_hardware: []

@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "PWN=${PWN-<unset>}"
+echo "COLLEGE=${COLLEGE-<unset>}"

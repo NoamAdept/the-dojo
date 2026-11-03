@@ -1,0 +1,85 @@
+id: cli-log-detective
+module: linux-cli
+title: Investigate a Receiver Log
+difficulty: easy
+estimated_time: 25-40 minutes
+prerequisites:
+- cli-text-extraction
+objectives:
+- log-analysis
+- counting
+- command-line-tools
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'The receiver had warnings during a short test. Make `report.txt`.
+
+  It must show how many warnings each component had. Put the components in
+
+  alphabetical order. Each line must use the shape `component=count`, for
+
+  example `audio=2`. Count only lines whose level is exactly `WARN`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: cli-log-detective
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- receiver.log
+- check
+- check.py
+expected_tools:
+- bash
+- grep
+- cut
+- sort
+- uniq
+flags:
+  value: flag{logs_tell_a_story}
+  validation: session
+hints:
+- level: 1
+  text: 'First, keep only the lines that contain ` level=WARN `.
+
+    '
+- level: 2
+  text: 'The component is field 3, when you split the line at spaces. It looks like `component=audio`.
+
+    '
+- level: 3
+  text: '`sort | uniq -c` counts identical lines that are next to each other. A small
+    loop or `awk` can change the result into the right shape.
+
+    '
+solution: 'One solution is:
+
+  `grep '' level=WARN '' receiver.log | cut -d'' '' -f3 | cut -d= -f2 | sort | uniq
+  -c | awk ''{print $2 "=" $1}'' > report.txt`
+
+  Then run `./check`.
+
+  '
+explanation: 'Logs are structured text, even when they look like sentences.
+
+  You filter by the exact level. So ERROR and INFO lines are not counted.
+
+  Sorting puts equal component names next to each other. Then `uniq -c` can
+
+  count them.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Then make your solution work with the new data.
+
+    The output format must stay the same.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

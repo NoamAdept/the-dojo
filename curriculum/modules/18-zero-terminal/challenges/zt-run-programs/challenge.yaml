@@ -1,0 +1,59 @@
+id: zt-run-programs
+module: zero-terminal
+title: Running Programs and Reading Errors
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- dot_slash
+- permissions
+- error_messages
+- reading_check_output
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Run programs from the current folder with ./name. Learn what "command not found", "Permission denied" and "No such file or directory" mean. Learn to read the messages that a checker prints.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- checkme
+- config.txt
+- greet
+- locked
+- report
+expected_tools:
+- bash
+- coreutils
+- vim
+flags:
+  value: flag{zt_run_programs}
+  validation: session
+hints:
+- level: 1
+  text: 'Read each error from the end. `command not found` means "add ./ or fix the spelling". `Permission
+    denied` means "chmod +x it". `No such file or directory` means "that path does not exist (yet)".'
+- level: 2
+  text: 'Task 3: run `mkdir data`. Then run `vim data/settings.txt`: press `i`, type `volume=7`, press `Esc`,
+    type `:wq`. Then run `./report` to see that it works. Then run `./report > report.txt`.'
+- level: 3
+  text: 'Task 4: run `vim config.txt`. Fix only the problem that `./checkme` reports. Save and quit with `:wq`. Run
+    `./checkme` again. Use the up arrow to repeat the last command quickly.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'For a bare name, the shell only looks in the system command folders. So you run programs in
+  the current folder with `./name`. A file must be executable (`chmod +x`) to run as a program. An error
+  message names 3 things: the program, the thing it worked on, and the problem. Read it from the end. This
+  usually tells you what to fix.'
+extension:
+  title: Go further
+  description: Run `ls -l`. Compare the first column for `greet`, `locked` and `config.txt`. Then try
+    `chmod -x greet` and `./greet` to see the error. Use `chmod +x greet` to fix it again.
+optional_hardware: []

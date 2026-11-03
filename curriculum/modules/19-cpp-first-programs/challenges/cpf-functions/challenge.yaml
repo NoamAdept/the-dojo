@@ -1,0 +1,54 @@
+id: cpf-functions
+module: cpp-first-programs
+title: 'Functions: Inputs and Outputs'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- functions
+- parameters
+- return_values
+- calling_functions
+- declaration_order
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Write your own functions. Give them inputs (parameters). Send back a result with return. Call them from main and from other functions.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_functions}
+  validation: session
+hints:
+- level: 1
+  text: 'In each stub, change `return 0;` to `return` and then the calculation. For example: `return a
+    + b;`.'
+- level: 2
+  text: 'For task 4, copy the shape of `square`: a first line `int perimeter(int width, int height)`,
+    then `{`, a return line, and `}`. It must be above main. Then add `std::cout << "perimeter(3, 4) =
+    " << perimeter(3, 4) << "\n";` inside main.'
+- level: 3
+  text: 'For task 5, call the function that you already wrote: `return square(a) + square(b);`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A function has a return type, a name, parameters and a body. When you call it, C++ copies
+  the arguments into the parameters. Then it runs the body. The returned value takes the place of the
+  call. You must write a function above the code that calls it.
+extension:
+  title: Go further
+  description: Write `double circle_area(double r)`. It returns 3.14159 * r * r. In main, print the area
+    of a circle with radius 2.
+optional_hardware: []

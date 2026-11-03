@@ -1,0 +1,7 @@
+{
+  "name": "pi-receiver",
+  "version": "0.1.0",
+  "dependencies": [
+    { "name": "nlohmann-json", "version>=": "3.11.2" }
+  ]
+}

@@ -1,0 +1,62 @@
+id: cppz-struct-methods
+module: cpp-zero
+title: Structs That Do Things
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- struct
+- member_functions
+- methods_change_state
+- return_struct
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Make your own type with a struct. In this challenge you will:
+
+  - group named fields together
+  - add member functions that read the fields
+  - add one member function that changes the fields
+  - write a free function that builds and returns a struct
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_struct_methods}
+  validation: session
+hints:
+- level: 1
+  text: 'Inside a method, use the field names directly: `return width * height;`'
+- level: 2
+  text: 'scale changes the fields themselves: `width = width * factor;`. Do the same for height.'
+- level: 3
+  text: 'makeSquare: `Rectangle r{side, side}; return r;`'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Member functions keep the data and the code that works on it in one place. When you call
+  `r.area()`, the function sees the fields of that object. This is the first half of what C++ calls a
+  class. The next challenge adds the second half: hiding the fields.'
+extension:
+  title: Go further
+  description: Add a method `bool fitsInside(Rectangle other)`. It returns true when this rectangle fits
+    inside `other`. You may not turn the rectangle.
+optional_hardware: []

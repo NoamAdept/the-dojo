@@ -1,0 +1,67 @@
+id: llp-processes
+module: linux-shell-power
+title: Processes and Jobs
+difficulty: easy
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- ps_pgrep
+- signals_kill
+- sigint
+- stop_continue
+- background_jobs
+- exit_codes
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Find processes by name. End the right one among decoys (processes that only look similar).
+  Interrupt, suspend and resume processes with signals. Run jobs in the background. Read exit
+  codes.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- check
+- check.py
+expected_tools:
+- bash
+- ps
+- pgrep
+- pkill
+- kill
+flags:
+  value: flag{llp_processes}
+  validation: session
+hints:
+- level: 1
+  text: 'First run `ps -ef | grep beacon` in a terminal. You can see what the helper processes look
+    like. Read the word with `$(cat target.txt)`.'
+- level: 2
+  text: '`pgrep -f WORD` prints the PIDs that match. `pkill -f WORD` sends a signal to them. `kill
+    -INT`, `kill -STOP` and `kill -CONT` take a PID.'
+- level: 3
+  text: 'For task 4, give the kernel a short time (`sleep 0.2`) after `kill -STOP`. Then read `ps
+    -o stat= -p PID`. For task 5, end each line with `&` and then call `wait`. For task 6, run
+    `echo $?` directly after `./mystery`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A process is a running program with a PID. Signals are short messages that the kernel
+  delivers. TERM and INT ask the process to exit. STOP freezes it and CONT unfreezes it. KILL
+  cannot be ignored. The shell adds job control on top of this (`&`, `jobs`, `fg`, `bg`,
+  `wait`). Every command reports success or failure with its exit code in `$?`.'
+extension:
+  title: Go further
+  description: 'Write a script that starts 3 `sleep` jobs with different lengths. It prints the PID of
+    each one with `$!`. Then it reports which one finishes first.'
+optional_hardware: []

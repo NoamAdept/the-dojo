@@ -1,0 +1,3 @@
+name=pi-radio
+band=fm
+gain=10

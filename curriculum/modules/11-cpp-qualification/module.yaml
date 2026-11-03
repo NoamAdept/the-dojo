@@ -1,0 +1,26 @@
+id: cpp-qualification
+slug: cpp-qualification
+title: C++ Qualification
+order: 10
+description: 'The team C++17 qualification. Each challenge is C++ code that you write, compile and
+  test. The topics are: namespaces, strings and files, OOP and patterns, const/volatile, pointers, modern
+  C++, the STL, RAII, error handling, CMake, package management, low-level data, templates, concurrency
+  and networking, and ISR-style code.'
+prerequisites:
+- systems-programming
+challenges:
+- cppq-namespaces
+- cppq-strings-files
+- cppq-pointers-references
+- cppq-stl
+- cppq-raii-smart-pointers
+- cppq-oop-patterns
+- cppq-const-volatile
+- cppq-error-handling
+- cppq-modern-cpp
+- cppq-templates
+- cppq-low-level-data
+- cppq-cmake
+- cppq-package-management
+- cppq-concurrency-networking
+- cppq-isr-integration

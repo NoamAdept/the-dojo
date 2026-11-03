@@ -1,0 +1,69 @@
+id: lls-data
+module: linux-shell-basics
+title: Data Manipulation
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- tr_translate
+- tr_delete
+- escapes
+- head
+- cut
+- sort
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Change the shape of text in pipelines:
+  - change and delete characters with tr,
+  - keep the first lines with head,
+  - take out columns with cut,
+  - put lines in order with sort.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- check
+- check.py
+- dojo/challenge/carets
+- dojo/challenge/college
+- dojo/challenge/columns
+- dojo/challenge/flags.txt
+- dojo/challenge/newlines
+- dojo/challenge/pwn
+- dojo/challenge/swapcase
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{lls_data}
+  validation: session
+hints:
+- level: 1
+  text: 'First run each program alone to see its output. Then add 1 filter at a time.'
+- level: 2
+  text: 'Task 3 and 5: `tr -d "\n"` deletes newlines. The quotes are important.'
+- level: 3
+  text: 'Task 6: `sort FILE | tail -n 1` (or `sort -r FILE | head -n 1`).'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'tr changes or deletes single characters. head and tail keep lines from the start or the end. cut takes out fields (columns). sort puts lines in order. Each tool reads stdin (standard input) and writes stdout (standard output). So you can join them in any order with pipes.'
+extension:
+  title: Go further
+  description: 'Print the 3 most common words in a text file with `tr -s " " "\n" | sort | uniq -c | sort -rn | head -n 3`.'
+optional_hardware: []

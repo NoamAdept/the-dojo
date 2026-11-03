@@ -1,0 +1,69 @@
+id: cppq-concurrency-networking
+module: cpp-qualification
+title: Concurrency and Networking
+difficulty: hard
+estimated_time: 60-90 minutes
+prerequisites: []
+objectives:
+- std_thread
+- mutex
+- atomic
+- condition_variable
+- sockets
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - fix a data race with a mutex and with an atomic
+  - run work in threads
+  - build `sockaddr_in` structs (network addresses)
+  - test if a port is open with `connect()`
+  - write a thread-safe producer/consumer queue
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_concurrency_networking}
+  validation: session
+hints:
+- level: 1
+  text: '`std::lock_guard<std::mutex> lock(m);` locks the mutex until the end of the scope. Then it unlocks
+    by itself. This also works when an exception happens.'
+- level: 2
+  text: A thread copies its arguments. Put an output variable inside `std::ref(...)`. Then the thread
+    writes to the original variable, not to a copy.
+- level: 3
+  text: 'A blocking pop is `cv.wait(lock, [&]{ return !q.empty(); })`. The predicate (the test that returns
+    true or false) protects you from spurious wakeups. A spurious wakeup is when a thread wakes up but there
+    is no work.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Two threads can read, change and write the same value without a lock. Then some updates
+  are lost. A mutex lets only 1 thread in at a time. An atomic makes a single operation happen in one step.
+  A condition variable lets threads sleep until there is work. A socket is a file descriptor (a number
+  for an open connection). You connect, read, write, and close it.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

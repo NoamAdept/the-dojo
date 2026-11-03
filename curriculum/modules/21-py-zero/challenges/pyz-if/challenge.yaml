@@ -1,0 +1,52 @@
+id: pyz-if
+module: py-zero
+title: 'Decisions: if, elif, else'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- comparisons
+- and_or_not
+- if_elif_else
+- boundaries
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Compare values. Combine conditions with and, or and not. Choose what to do with if, elif and else. Test the edge cases.
+
+  Read `README.md`. Complete the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_if}
+  validation: session
+hints:
+- level: 1
+  text: 'A comparison is already True or False. So `is_even` can be one line: `return n % 2 == 0`.'
+- level: 2
+  text: 'For `band`, check the smallest range first: `if mhz < 30:` ... `elif mhz < 300:` ...
+    elif only runs when the earlier tests failed. So you do not need to repeat the lower limit.'
+- level: 3
+  text: 'For `largest`: if `a` is at least as big as both others, return a. If not, the answer is the
+    bigger of b and c.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Comparisons give bools. `and`/`or`/`not` combine them. `if`/`elif`/`else` runs only
+  the first block that matches. Put the tests in order, from the smallest range to the largest. Then each `elif` knows
+  that the earlier tests failed. This keeps the boundary logic simple. Test at the edge values.
+extension:
+  title: Go further
+  description: Write `grade(score)`. It returns "A" for 90 and up, "B" for 80 to 89, "C" for 70 to 79
+    and "F" below 70. Try all the edges.
+optional_hardware: []

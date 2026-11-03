@@ -1,0 +1,57 @@
+id: pyq-collections
+module: python-qualification
+title: Collections and Comprehensions
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- comprehensions
+- counter
+- defaultdict
+- deque
+- running_sum
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice list and dict comprehensions, Counter and defaultdict. You also build a text analyzer and a moving average on a deque. The moving average runs in O(1) time.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_collections}
+  validation: session
+hints:
+- level: 1
+  text: '`{v: k for k, v in d.items()}` inverts a dict (swaps keys and values).'
+- level: 2
+  text: '`re.findall(r"[a-z0-9'']+", text.lower())` finds the words and leaves out the punctuation.'
+- level: 3
+  text: The deque may be full before you append. Then 1 value will fall out (`window[0]`). Subtract
+    that value from the running sum first.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A comprehension builds a collection in 1 short expression. You say what you want, not each step.
+  The `collections` module gives you fast special structures:
+
+
+  - Counter counts things.
+
+  - defaultdict puts things into groups.
+
+  - deque appends and pops at both ends in O(1) time. This makes it good for sliding windows, such
+  as a moving average.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

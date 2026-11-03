@@ -1,0 +1,127 @@
+id: lls-globbing
+module: linux-shell-basics
+title: File Globbing
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- glob_star
+- glob_question
+- glob_brackets
+- glob_exclusion
+- tab_completion
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Let the shell expand file names for you with globs (patterns for file names): *, ? and [].
+  This includes [!...] globs, which leave names out.
+  You also see how tab completion works, with compgen.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task10.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- answers/task8.sh
+- answers/task9.sh
+- check
+- check.py
+- dojo/bin/pwncollege-practice
+- dojo/cache/.keep
+- dojo/challenge/files/file_a
+- dojo/challenge/files/file_b
+- dojo/challenge/files/file_c
+- dojo/challenge/files/file_d
+- dojo/challenge/files/file_e
+- dojo/challenge/files/file_f
+- dojo/challenge/files/file_g
+- dojo/challenge/files/file_h
+- dojo/challenge/files/file_i
+- dojo/challenge/files/file_j
+- dojo/challenge/files/file_k
+- dojo/challenge/files/file_l
+- dojo/challenge/files/file_m
+- dojo/challenge/files/file_n
+- dojo/challenge/files/file_o
+- dojo/challenge/files/file_p
+- dojo/challenge/files/file_q
+- dojo/challenge/files/file_r
+- dojo/challenge/files/file_s
+- dojo/challenge/files/file_t
+- dojo/challenge/files/file_u
+- dojo/challenge/files/file_v
+- dojo/challenge/files/file_w
+- dojo/challenge/files/file_x
+- dojo/challenge/files/file_y
+- dojo/challenge/files/file_z
+- dojo/challenge/pwncollege
+- dojo/challenge/run
+- dojo/challenge/tabfiles/hack-the-planet
+- dojo/challenge/tabfiles/pwn
+- dojo/challenge/tabfiles/pwn-college
+- dojo/challenge/tabfiles/pwn-the-planet
+- dojo/challenge/tabfiles/pwncollege-family
+- dojo/challenge/tabfiles/pwncollege-flamingo
+- dojo/challenge/tabfiles/pwncollege-flyswatter
+- dojo/challenge/tabfiles/pwncollege-hacking
+- dojo/challenge/words/amazing
+- dojo/challenge/words/beautiful
+- dojo/challenge/words/challenging
+- dojo/challenge/words/delightful
+- dojo/challenge/words/educational
+- dojo/challenge/words/fantastic
+- dojo/challenge/words/great
+- dojo/challenge/words/happy
+- dojo/challenge/words/incredible
+- dojo/challenge/words/jovial
+- dojo/challenge/words/kind
+- dojo/challenge/words/laughing
+- dojo/challenge/words/magical
+- dojo/challenge/words/nice
+- dojo/challenge/words/optimistic
+- dojo/challenge/words/pwning
+- dojo/challenge/words/queenly
+- dojo/challenge/words/radiant
+- dojo/challenge/words/splendid
+- dojo/challenge/words/thrilling
+- dojo/challenge/words/uplifting
+- dojo/challenge/words/victorious
+- dojo/challenge/words/wonderful
+- dojo/challenge/words/xenial
+- dojo/challenge/words/youthful
+- dojo/challenge/words/zesty
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{lls_globbing}
+  validation: session
+hints:
+- level: 1
+  text: 'Test globs with `echo` first: `cd "$DOJO/challenge/words"; echo *p*` shows exactly what a command would get.'
+- level: 2
+  text: 'Keep the glob part outside the double quotes: `"$DOJO"/challenge/files/file_[absh]`.'
+- level: 3
+  text: 'Task 6: look at the first letters of the 3 words you need. Task 10: `compgen -c` can list a name 2 times. `| sort -u` removes the duplicates.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell expands *, ? and [] before the program starts. So the program only sees a list of file names. Inside quotes, globs are not expanded. Tab completion uses the same system. compgen prints the possible names, so scripts can use them.'
+extension:
+  title: Go further
+  description: 'Try `shopt -s nullglob` and `shopt -s dotglob`. See how the output of `echo nope_*` and `echo *` changes.'
+optional_hardware: []

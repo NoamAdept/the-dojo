@@ -1,0 +1,11 @@
+#!/bin/bash
+if [ $# -eq 0 ]; then
+    echo "Hello! You just ran your first command."
+    echo "TOKEN ${TOKEN:-practice}"
+elif [ $# -eq 1 ] && [ "$1" = hackers ]; then
+    echo "Hello, hackers! You passed exactly one argument."
+    echo "ARG-TOKEN ${TOKEN:-practice}"
+else
+    echo "hello: give me no arguments, or exactly one argument: hackers (you gave $#: $*)" >&2
+    exit 1
+fi

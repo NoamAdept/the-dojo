@@ -1,0 +1,18 @@
+id: zero-terminal
+slug: zero-terminal
+title: Terminal from Zero
+order: 0
+description: Your very first steps. You do not need any experience. Learn what a terminal,
+  a shell and a command are. Run your first commands. Move between folders. Create and edit text
+  files with vim. Run programs and read their error messages. Write very small bash scripts into
+  answers/taskN.sh files. Use variables and quotes. Learn how to get help when you are stuck. This
+  module gets you ready for Linux Shell Basics.
+prerequisites: []
+challenges:
+- zt-first-commands
+- zt-files-folders
+- zt-vim-cat
+- zt-run-programs
+- zt-first-script
+- zt-variables-dojo
+- zt-help-keys

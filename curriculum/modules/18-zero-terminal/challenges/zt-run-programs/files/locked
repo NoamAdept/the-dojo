@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "unlocked: $(( 5000 + 150 ))-door"

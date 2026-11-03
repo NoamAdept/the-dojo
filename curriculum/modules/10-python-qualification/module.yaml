@@ -1,0 +1,24 @@
+id: python-qualification
+slug: python-qualification
+title: Python Qualification
+order: 13
+description: 'The team Python qualification as hands-on challenges: modules and scope, types, OOP, immutability,
+  the memory model, modern syntax, collections, context managers, errors, packaging, bits and structs,
+  serialization, performance, and generics.'
+prerequisites:
+- python
+challenges:
+- pyq-data-types
+- pyq-collections
+- pyq-modules-scope
+- pyq-exceptions
+- pyq-oop
+- pyq-immutability
+- pyq-memory-model
+- pyq-context-managers
+- pyq-modern-python
+- pyq-serialization
+- pyq-bits-structs
+- pyq-packaging
+- pyq-performance
+- pyq-generics

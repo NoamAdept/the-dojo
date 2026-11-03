@@ -1,0 +1,53 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  platform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install
+        run: |
+          sudo apt-get update -qq
+          # The answer tests run every challenge's checker, and some checkers drive these tools.
+          sudo apt-get install -y -qq gdb tmux cmake
+          python -m pip install --upgrade pip
+          pip install -e ./platform pytest
+      - name: Test
+        env:
+          ACADEMY_CURRICULUM: ${{ github.workspace }}/curriculum
+          PYTHONPATH: ${{ github.workspace }}/vendor:${{ github.workspace }}/platform
+        run: python -m pytest platform/tests -q
+      - name: Curriculum check
+        run: python3 scripts/check_curriculum.py
+
+  browsers:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: e2e
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium firefox webkit
+      - name: Test in Chromium, Firefox, WebKit, Pixel 7 and iPhone 13
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: e2e/playwright-report

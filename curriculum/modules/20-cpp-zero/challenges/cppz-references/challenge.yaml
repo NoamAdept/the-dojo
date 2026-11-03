@@ -1,0 +1,64 @@
+id: cppz-references
+module: cpp-zero
+title: 'References: Another Name for a Variable'
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- pass_by_value
+- references
+- pass_by_reference
+- const_reference
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  First, see that functions normally get copies. Then use C++ references. With references you will:
+
+  - let functions change your variables
+  - change vector items in place
+  - pass big values cheaply with `const&`
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_references}
+  validation: session
+hints:
+- level: 1
+  text: 'plusOne is one line: `return x + 1;`. addOne has no return. It changes `x` itself with `x = x
+    + 1;`. `x` is a reference, so this changes the caller''s variable.'
+- level: 2
+  text: 'swapValues: `int old = a; a = b; b = old;`'
+- level: 3
+  text: 'doubleAll: `for (int x : v)` changes only copies. Write `for (int& x : v) x = x * 2;`'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A reference is an alias: a second name for one variable. Normal parameters are copies.
+  So a function cannot change your variables by accident. A reference parameter (`int& x`) lets a function
+  change the caller''s variable on purpose. `const` references pass big values with no copy, and the
+  function cannot change them. In C++ Under the Hood you will learn about pointers. Pointers are the
+  lower-level tool that references are built on.'
+extension:
+  title: Go further
+  description: Write `void clampAll(std::vector<int>& v, int low, int high)`. It moves every item into
+    the range low..high. An item below low becomes low. An item above high becomes high.
+optional_hardware: []

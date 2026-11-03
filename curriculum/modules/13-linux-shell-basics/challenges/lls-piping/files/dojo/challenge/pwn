@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ "$1" != --secret ] || [ "$2" != pipeline7 ]; then
+    echo "Usage: pwn --secret SECRET_ARG"
+    echo "SECRET_ARG should be pipeline7"
+    exit 2
+fi
+echo "SUPERSECRET:practice"

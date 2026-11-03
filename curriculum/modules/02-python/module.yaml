@@ -1,0 +1,17 @@
+id: python
+slug: python
+title: Python
+order: 12
+description: 'Python basics. You use them to read binary formats, talk over sockets, and analyse data automatically.
+
+  '
+prerequisites:
+- py-zero
+challenges:
+- py-control-flow
+- py-file-parser
+- py-binary-decoder
+- sys-tcp-client
+- py-socket-client
+- py-protocol-parser
+- py-auto-investigator

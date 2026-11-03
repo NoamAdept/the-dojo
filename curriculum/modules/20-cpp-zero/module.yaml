@@ -1,0 +1,19 @@
+id: cpp-zero
+slug: cpp-zero
+title: C++ Toolbox
+order: 6
+description: 'Learn the everyday tools of C++, one small idea at a time. You will use text with std::string.
+  You will use lists with std::vector and range-based for. You will learn references, structs with member
+  functions, and classes with private data and constructors. You will use std::map with auto. You will
+  read and write text files. This module starts right after C++ First Programs. After it comes C++ Under
+  the Hood.'
+prerequisites:
+- cpp-first-programs
+challenges:
+- cppz-strings
+- cppz-vector
+- cppz-references
+- cppz-struct-methods
+- cppz-classes
+- cppz-map-auto
+- cppz-files

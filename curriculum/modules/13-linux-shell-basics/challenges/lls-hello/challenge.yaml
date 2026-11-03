@@ -1,0 +1,57 @@
+id: lls-hello
+module: linux-shell-basics
+title: Hello Hackers
+difficulty: easy
+estimated_time: 15-25 minutes
+prerequisites: []
+objectives:
+- run_a_command
+- command_arguments
+- shell_history
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Run your first commands. Give them arguments. Then find the most recent command in the shell history file.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- check
+- check.py
+- dojo/bin/hello
+- dojo/home/hacker/.bash_history
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{lls_hello}
+  validation: session
+hints:
+- level: 1
+  text: Each answer file only holds the command you would type, for example `whoami`. `./try 1` runs it
+    in the practice copy.
+- level: 2
+  text: 'Task 2 is 2 words on 1 line: the command and then its argument.'
+- level: 3
+  text: 'Task 3: the newest command is on the last line of the file. `tail -n 1 FILE` prints the last line.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell splits a line into words. The first word is the command. The other words are
+  its arguments. Bash keeps your history in memory. It also saves it to ~/.bash_history. So you can get
+  recent commands with the up arrow, and also with `tail ~/.bash_history`.'
+extension:
+  title: Go further
+  description: Print the 5 most recent commands, oldest first, with line numbers. Use `tail` and then `cat -n`.
+optional_hardware: []

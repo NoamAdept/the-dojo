@@ -1,0 +1,88 @@
+id: gdb-follow-stack
+module: debugging-gdb
+title: Follow the Call Stack
+difficulty: medium
+estimated_time: 35-55 minutes
+prerequisites:
+- gdb-find-variable
+objectives:
+- gdb
+- backtrace
+- stack-frames
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Set a breakpoint at `capture`.
+
+  Use a backtrace (a list of the active function calls) to find the path of calls from `main` to that point.
+
+  Write the function names in `answer.txt`.
+
+  Start with the outermost function and end with the innermost one.
+
+  Put ` -> ` between the names. Include `main` and `capture`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-follow-stack
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{backtraces_show_the_route}
+  validation: session
+hints:
+- level: 1
+  text: 'Use `break capture`, then `run`, then `backtrace` (or the short form `bt`).
+
+    '
+- level: 2
+  text: 'Frame 0 is the innermost function. The frame with the largest number is the outermost function.
+
+    '
+- level: 3
+  text: 'So write the names in the reverse order of the list GDB shows. Names with parameter types, like `capture(int)`, are also accepted.
+
+    '
+solution: 'At the capture breakpoint, run `bt`. Read the function name in each
+
+  frame and write them in reverse frame-number order, from `main` through the
+
+  intermediate functions to `capture`.
+
+  '
+explanation: 'Each function call that is still running has a stack frame (a block of memory for that call).
+
+  A backtrace lists these frames.
+
+  It starts at the current function and goes outward.
+
+  It shows how the program got to the place where it stopped.
+
+  C++ tools may show a function with its parameter types, like `capture(int)`.
+
+  That is the same function.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

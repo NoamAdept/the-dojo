@@ -1,0 +1,52 @@
+id: cpf-decisions
+module: cpp-first-programs
+title: 'Making Decisions: if and else'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- if_else
+- comparisons
+- logical_operators
+- else_if
+- bool_functions
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Let your program make choices. Compare values with == != < > <= >=. Choose what to run with if, else if and else. Join conditions with && and ||.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_decisions}
+  validation: session
+hints:
+- level: 1
+  text: 'Start with this shape: `if (a > b) { return a; } else { return b; }`. Change it for each task.'
+- level: 2
+  text: 'For is_even, return the comparison itself: `return n % 2 == 0;`. For in_range, `x >= low` and
+    `x <= high` must both be true. So join them with `&&`.'
+- level: 3
+  text: 'For grade_letter, check from the top down: `if (score >= 90) { return ''A''; } else if (score
+    >= 80) ...`. C++ stops at the first true condition. So a score of 85 never reaches the 70 check.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A comparison gives a bool. `if` runs a block when its condition is true. In an `else if`
+  chain, C++ runs the first branch that is true. `&&` and `||` join conditions. `==` compares, but `=`
+  stores.
+extension:
+  title: Go further
+  description: Write `int max3(int a, int b, int c)`. Use your `bigger` function 2 times.
+optional_hardware: []

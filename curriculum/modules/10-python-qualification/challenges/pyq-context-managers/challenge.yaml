@@ -1,0 +1,56 @@
+id: pyq-context-managers
+module: python-qualification
+title: Resource Management and Context Managers
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- with_statement
+- enter_exit
+- contextmanager
+- exception_handling_in_exit
+- decorators
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you:
+
+  - write files safely with `with`
+  - build context managers with `@contextmanager` and as classes
+  - measure how long functions take
+  - make a fake (mock) database connection with commit and rollback
+  - track nested indentation
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_context_managers}
+  validation: session
+hints:
+- level: 1
+  text: In a `@contextmanager`, put `yield` inside `try:`. Put the closing print in `finally:`.
+- level: 2
+  text: If `__exit__` returns True, it swallows (hides) the exception. Return False (or None) to let the
+    exception continue to the caller.
+- level: 3
+  text: Use `time.perf_counter()` to measure time. Store the result on the Timer in `__exit__`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'A context manager joins a setup step with a cleanup step that always runs. `__exit__` gets
+  the exception (if there is one). It decides if it should suppress (hide) it. Files, locks, transactions
+  and temporary state all use this pattern.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

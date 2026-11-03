@@ -1,0 +1,109 @@
+id: orient-environment
+module: orientation
+title: Environment
+difficulty: medium
+estimated_time: 1-2 hours
+prerequisites:
+- orient-process-hunt
+objectives:
+- inspect_environment_variables
+- use_env_printenv_export
+- recover_hidden_config_from_env
+- understand_process_environ
+mastery_evidence:
+- observe
+- apply
+- debug
+description: 'Start in the challenge folder and read `README.md`.
+
+
+  Run `./lab_shell.sh` to open a prepared lab shell. The flag is split into
+
+  2 environment variables. Use `env` or `printenv` to find the 2 parts.
+
+  Then join them in the correct order.
+
+
+  When you are done with the lab shell, type `exit`. Put the complete flag
+
+  in the academy flag file. Then run `academy submit`.
+
+  '
+environment:
+  type: workspace
+  notes: Single challenge folder. Local environment only.
+files:
+- lab_shell.sh
+- decoy.env
+- README_OPS.txt
+- README.md
+expected_tools:
+- env
+- printenv
+- bash
+- grep
+- tr
+- cat
+flags:
+  value: flag{env_vars_are_process_state}
+  validation: session
+  plant_files:
+  - lab_shell.sh
+hints:
+- level: 1
+  text: 'Start `./lab_shell.sh`, then run `env | sort`.
+
+    '
+- level: 2
+  text: 'Look for variables whose names start with `ACADEMY_` or `LAB_`.
+
+    '
+- level: 3
+  text: 'Some values are split into more than 1 variable. You must concatenate (join) them.
+
+    '
+- level: 4
+  text: 'Join `LAB_FLAG_PART1` and then `LAB_FLAG_PART2`, in that order.
+
+    '
+solution: '```bash
+
+  ./lab_shell.sh
+
+  # inside:
+
+  printenv | grep ''^LAB_''
+
+  echo "${LAB_FLAG_PART1}${LAB_FLAG_PART2}"
+
+  exit
+
+  printf ''%s\n'' ''flag{env_vars_are_process_state}'' > "$(cat .flagpath 2>/dev/null
+  || echo $HOME/flag.txt)"
+
+  academy submit
+
+  ```
+
+  '
+explanation: 'Environment variables are key/value data that belong to one process.
+
+  A new program started with `exec` inherits (gets a copy of) them, unless
+
+  they are cleared. They often hold configuration (settings).
+
+  `/proc/<pid>/environ` shows them for any process that you can read. Later
+
+  modules will hide similar settings in service units and challenge servers.
+
+  '
+extension:
+  title: Parent environ
+  description: 'Open another terminal. Find the PID of lab_shell. Then print its
+    environ file from `/proc`.
+
+    '
+performance_notes: 'Negligible.
+
+  '
+optional_hardware: []

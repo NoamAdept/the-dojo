@@ -1,0 +1,11 @@
+#!/bin/bash
+cd "$DOJO/etc"
+"$DOJO/challenge/tour"
+cd "$DOJO/usr/share"
+"$DOJO/challenge/tour"
+cd "$DOJO/var/log"
+"$DOJO/challenge/tour"
+cd "$DOJO/home"
+"$DOJO/challenge/tour"
+cd "$DOJO/tmp"
+"$DOJO/challenge/tour"

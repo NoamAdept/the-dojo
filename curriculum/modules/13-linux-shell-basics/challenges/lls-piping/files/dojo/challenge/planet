@@ -1,0 +1,2 @@
+#!/bin/bash
+printf "planet got %s\n" "$(cat)"

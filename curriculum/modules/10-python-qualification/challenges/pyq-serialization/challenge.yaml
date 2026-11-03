@@ -1,0 +1,57 @@
+id: pyq-serialization
+module: python-qualification
+title: Dataclasses and Serialization
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- dataclasses
+- json
+- pickle
+- frozen_dataclass
+- file_cache
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you save and load Python data. You will work with:
+
+  - dataclasses
+  - JSON and pickle round trips (save the data, then load it back)
+  - frozen dataclasses (you cannot change them)
+  - saving and loading configs and lists of users
+  - a file cache decorator that stores results with pickle
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_serialization}
+  validation: session
+hints:
+- level: 1
+  text: '`dataclasses.asdict(obj)` changes a dataclass into a dict. `json.dump` can write this dict.'
+- level: 2
+  text: 'With `@dataclass(frozen=True)`, if you set a field, Python raises FrozenInstanceError.'
+- level: 3
+  text: In file_cache, read the pickle file inside the wrapper, on every call. Do not read it when the decorator
+    is applied.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Serialization turns objects into bytes or text. JSON works everywhere and people can read it.
+  But it supports only basic types. Pickle handles any Python object. But never load a pickle from a source
+  you do not trust, because unpickling can run code.
+extension:
+  title: Go further
+  description: Make file_cache safe to use from several processes at the same time. To do this, write to a
+    temp file first. Then rename the temp file to the real file name.
+optional_hardware: []

@@ -1,0 +1,66 @@
+id: cppq-raii-smart-pointers
+module: cpp-qualification
+title: RAII and Smart Pointers
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- unique_ptr
+- move_semantics
+- shared_ptr
+- raii
+- ownership
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - replace raw `new`/`delete` with `unique_ptr`
+  - pass ownership on with `std::move`
+  - watch `shared_ptr` reference counts
+  - write RAII tracers
+  - build a linked list where `unique_ptr`s own the nodes
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_raii_smart_pointers}
+  validation: session
+hints:
+- level: 1
+  text: '`std::make_unique<T>(args...)` is the safe way to allocate memory. You never need to write `delete`.'
+- level: 2
+  text: You cannot copy a `unique_ptr`. You can only move it. After `std::move(ptr)`, the source pointer
+    is null.
+- level: 3
+  text: 'It is easiest to build the list from the back. Each new node takes ownership of the current head.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'RAII links the life of a resource to an object. You get the resource in the constructor.
+  You give it back in the destructor. `unique_ptr` means one owner, with zero extra cost. `shared_ptr`
+  means many owners. The program counts them while it runs. Use `weak_ptr` to break a cycle of shared
+  pointers.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

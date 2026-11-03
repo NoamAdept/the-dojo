@@ -1,0 +1,57 @@
+id: cpf-capstone
+module: cpp-first-programs
+title: 'Capstone: A Signal Level Report'
+difficulty: medium
+estimated_time: 25-35 minutes
+prerequisites: []
+objectives:
+- combining_basics
+- running_min_max
+- input_validation
+- functions_and_loops
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Put everything together. Build a small command-line tool. It reads radio signal levels as arguments and prints a report. It uses functions that you write, a loop over the words, decisions and input checks.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- report.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_capstone}
+  validation: session
+hints:
+- level: 1
+  text: smaller is the same as larger with 1 character changed. average is `static_cast<double>(total)
+    / count`. is_strong can return the comparison `level >= -60` directly.
+- level: 2
+  text: In main, calculate `int count = argc - 1;`. Do the usage check first. Then write one for loop
+    from `i = 1` while `i < argc`. Inside it, change argv[i] into a number inside try/catch. For the first
+    level (i == 1), set both smallest and largest to it.
+- level: 3
+  text: 'Inside the loop: `low = smaller(low, level); high = larger(high, level); total += level;` and
+    `if (is_strong(level)) { strong++; }`. Print the report only after the loop. This way, the program
+    finds a bad word before it prints anything. Set `std::fixed << std::setprecision(2)` before you print
+    the average.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Real programs are small pieces put together. argv gives text. std::stoi changes it into numbers.
+  A loop keeps running values up to date (total, smallest, largest, count). Functions do the small calculations.
+  std::cout prints the report. Always check input before you use it. Then the program does not crash or
+  print wrong results.
+extension:
+  title: Go further
+  description: 'Add a line `weak: N`. It counts the levels below -90. Use a new function `bool is_weak(int
+    level)`.'
+optional_hardware: []

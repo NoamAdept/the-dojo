@@ -1,0 +1,86 @@
+id: py-protocol-parser
+module: python
+title: Parse Noisy Radio Frames
+difficulty: medium
+estimated_time: 50-75 minutes
+prerequisites:
+- py-socket-client
+objectives:
+- stateful-parsing
+- checksums
+- error-recovery
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Complete a parser for frames hidden in noise. A frame has:
+
+  the marker `AA 55`,
+
+  one length byte,
+
+  that many payload bytes,
+
+  and one checksum byte. The checksum is the XOR of the payload bytes.
+
+  Return the valid payloads. Continue searching after any of these problems:
+
+  bad markers, impossible lengths, incomplete data, or wrong checksums.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: py-protocol-parser
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- protocol.py
+- check
+- check.py
+expected_tools:
+- python3
+flags:
+  value: flag{checksums_reject_bad_frames}
+  validation: session
+hints:
+- level: 1
+  text: 'Search for `b''\xAA\x55''`. Start each search at an index that moves forward.
+
+    '
+- level: 2
+  text: 'After a marker, the size of the whole frame is `2 + 1 + length + 1`.
+
+    '
+- level: 3
+  text: 'After an invalid frame, move forward by one byte. Then you can still find a
+    later marker.
+
+    '
+solution: 'Scan with an index. Find the marker, read length only if available,
+
+  calculate the frame end, and stop if incomplete. XOR all payload bytes and
+
+  append `bytes(payload)` only when it equals the checksum. Advance past a valid
+
+  frame; advance one byte after an invalid one.
+
+  '
+explanation: 'A protocol parser turns a byte stream into messages. It does not trust the input.
+
+  Length fields show where each message ends. Checksums find damage.
+
+  Careful resynchronization (finding the next real frame) means one bad frame does not make you lose later good data.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Make your solution handle the new case.
+
+    Do not change the output format.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

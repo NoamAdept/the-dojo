@@ -1,0 +1,81 @@
+id: cppq-cmake
+module: cpp-qualification
+title: CMake Build Systems
+difficulty: medium
+estimated_time: 45-75 minutes
+prerequisites: []
+objectives:
+- cmakelists
+- targets
+- cxx_standard
+- options
+- static_libraries
+- find_package_threads
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will write real `CMakeLists.txt` files. You will make:
+
+  - a program (executable) from several source files
+  - a rule that requires C++20
+  - a build option
+  - an include/src folder layout with an output folder
+  - a static library
+  - a link to the Threads library
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- projects/Game/include/game.h
+- projects/Game/src/main.cpp
+- projects/calculator/calc.cpp
+- projects/calculator/history.cpp
+- projects/calculator/ui.cpp
+- projects/gui_option/gui/CMakeLists.txt
+- projects/gui_option/gui/gui.cpp
+- projects/gui_option/main.cpp
+- projects/physics/main.cpp
+- projects/physics/physics.cpp
+- projects/physics/physics.h
+- projects/threads/main.cpp
+- tests/cmake_helper.py
+- tests/task1.py
+- tests/task2.py
+- tests/task3.py
+- tests/task4.py
+- tests/task5.py
+- tests/task6.py
+- tests/task7.py
+expected_tools:
+- cmake
+- g++
+- python3
+flags:
+  value: flag{cppq_cmake}
+  validation: session
+hints:
+- level: 1
+  text: First configure with `cmake -S projects/calculator -B /tmp/b`. Then build with `cmake --build /tmp/b`.
+- level: 2
+  text: An `option()` becomes a cache variable (a setting CMake remembers). So `-DBUILD_GUI=OFF` on the
+    command line replaces its default value.
+- level: 3
+  text: Use `target_*` commands (`target_include_directories`, `target_link_libraries`). They are better
+    than global settings.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'CMake describes targets (programs and libraries) and how they connect. Then it generates
+  the real build files. Modern CMake puts targets at the center. Each target keeps its own sources, include
+  paths and dependencies. When you link a target, you also get its usage requirements (the include paths
+  and libraries it needs).'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

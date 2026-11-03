@@ -1,0 +1,61 @@
+id: cppz-vector
+module: cpp-zero
+title: Lists with std::vector
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- std_vector
+- push_back
+- range_based_for
+- return_vector
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Keep a list of values in a `std::vector`. In this challenge you will:
+
+  - add items with `push_back`
+  - loop with range-based `for`
+  - return whole lists from functions
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/explain.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppz_vector}
+  validation: session
+hints:
+- level: 1
+  text: 'sumAll: first write `int total = 0;`. Then write `for (int x : v) total += x;`. Then `return total;`.'
+- level: 2
+  text: 'largest: do not start with `best = 0`. With a list of only negative numbers, that gives the
+    wrong answer. Start with `best = v[0]`.'
+- level: 3
+  text: 'longWords: loop with `for (std::string w : words)`. Call `out.push_back(w)` when `w.size() >= minLen`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`std::vector` is the normal C++ choice for "a list of things". It grows with `push_back`.
+  It knows its own `size()`. You can return it from functions. A range-based `for` visits every item,
+  so you cannot make index mistakes.'
+extension:
+  title: Go further
+  description: Write `std::vector<int> evensOnly(std::vector<int> v)`. It keeps only the even numbers.
+optional_hardware: []

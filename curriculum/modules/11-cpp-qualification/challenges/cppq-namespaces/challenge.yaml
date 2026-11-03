@@ -1,0 +1,65 @@
+id: cppq-namespaces
+module: cpp-qualification
+title: Namespaces and Scope Resolution
+difficulty: easy
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- namespaces
+- scope_resolution
+- nested_namespaces
+- namespace_alias
+- using_declarations
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - create namespaces
+  - pick a name from a scope with `::`
+  - use C++17 nested namespaces and aliases
+  - organize a deep hierarchy without `using namespace`
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_namespaces}
+  validation: session
+hints:
+- level: 1
+  text: Many files can include the same header. A variable defined in that header needs `inline` (C++17).
+    For example, `inline int counter = 0;`.
+- level: 2
+  text: '`::counter` always means the global one. This is true even when a closer `counter` hides
+    it.'
+- level: 3
+  text: In C++17 you can write `namespace A::B::C { ... }`. You do not need 3 nested blocks.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Namespaces stop names in different libraries from clashing. `::` picks one exact scope.
+  Aliases give long paths a short name. A `using` declaration brings in one single name. Do not put `using
+  namespace` in headers. It spreads to every file that includes the header.
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

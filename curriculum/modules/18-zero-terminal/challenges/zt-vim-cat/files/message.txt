@@ -1,0 +1,5 @@
+Well done, you can read files!
+
+The code word is: violet-6666
+
+Create a file named code.txt (with vim) and put the code word in it, alone on the first line.

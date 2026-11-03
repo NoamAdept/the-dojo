@@ -1,0 +1,16 @@
+#!/bin/bash
+# A tiny checker for config.txt. It reports one problem at a time.
+cd "$(dirname "$0")"
+if [ ! -f config.txt ]; then echo "Problem: there is no file config.txt in this folder."; exit 1; fi
+l1=$(sed -n 1p config.txt); l2=$(sed -n 2p config.txt); l3=$(sed -n 3p config.txt)
+case "$l1" in *" ="*|*"= "*) echo "Problem in line 1: remove the spaces around the = sign."; exit 1;; esac
+if [ "$l1" != "name=pi-radio" ]; then
+    echo "Problem in line 1: the name must be pi-radio (small letters, a dash, no spaces), so the line reads name=pi-radio"; exit 1
+fi
+if [ "$l2" != "band=fm" ]; then
+    echo "Problem in line 2: it must read band=fm. Write fm in small letters: Linux treats FM and fm as different."; exit 1
+fi
+if ! [[ "$l3" =~ ^gain=[0-9]+$ ]]; then
+    echo "Problem in line 3: gain must be a number written with digits, like gain=10, not a word."; exit 1
+fi
+echo "ALL GOOD: config.txt is correct."

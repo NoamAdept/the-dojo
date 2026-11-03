@@ -1,0 +1,68 @@
+id: cpp-structs-hex
+module: cpp-under-the-hood
+title: Hex, Fixed-Size Types and Structs
+difficulty: easy
+estimated_time: 25-30 minutes
+prerequisites:
+- cpp-pointer-basics
+objectives:
+- hex_notation
+- cstdint_types
+- sizeof
+- structs_dot_arrow
+- shifts_masks
+- endianness
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practise the parts that binary data is made of, one at a time:
+  - hex numbers
+  - uint8_t/uint16_t/uint32_t
+  - sizeof
+  - plain structs with . and ->
+  - shifts and masks
+  - building numbers from bytes in big-endian and little-endian order
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- structs.cpp
+- structs.hpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpp_structs_hex}
+  validation: session
+hints:
+- level: 1
+  text: 'Do 1 task at a time. Run `./check` after each task. Task 1: `std::cout << "0x" << std::hex <<
+    std::setw(2) << std::setfill(''0'') << static_cast<int>(b) << std::dec << "\n";`. Task 2: multiply
+    `count` by `sizeof(uint16_t)`.'
+- level: 2
+  text: 'Task 3: set `r.channel`, `r.freq_hz` and `r.gain`. Then `return r;`. Task 4 is one line with
+    `r->freq_hz`. Task 5: the low nibble is `b & 0x0f`. The high nibble is `b >> 4`. A bit is `((flags >>
+    bit) & 1) != 0`.'
+- level: 3
+  text: 'Task 6: `(p[0] << 8) | p[1]`, cast to `uint16_t`. Task 7: the first byte is the lowest. So shift
+    `p[1]` by 8, `p[2]` by 16 and `p[3]` by 24. Before each shift, convert the byte to `uint32_t` with `static_cast`.
+    Then join them with `|`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Binary data is just bytes. Hex makes bytes easy to read. The <cstdint> types give values
+  an exact size. Plain structs give names to groups of values. Masks and shifts pick out bits and put
+  bits in place. When you rebuild a number from several bytes, the byte order decides which byte you
+  shift the furthest.
+extension:
+  title: Go further
+  description: 'Write `read_be32` and `write_le16(uint16_t v, uint8_t* out)`. `write_le16` does the reverse:
+    it splits a number into 2 bytes with `&` and `>>`. Test that writing and then reading gives back the
+    same number.'
+optional_hardware: []

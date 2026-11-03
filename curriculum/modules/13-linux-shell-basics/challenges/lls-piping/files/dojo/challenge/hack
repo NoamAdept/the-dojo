@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "out-practice"
+echo "err-practice" >&2

@@ -1,0 +1,7 @@
+#!/bin/bash
+# Usage: ./try N   runs answers/taskN.sh like ./check does, inside a fresh, empty practice/ folder.
+here="$(cd "$(dirname "$0")" && pwd)"
+[ -n "$1" ] || { echo "usage: ./try N   (N is the task number, for example ./try 1)" >&2; exit 2; }
+[ -f "$here/answers/task$1.sh" ] || { echo "there is no file answers/task$1.sh" >&2; exit 2; }
+rm -rf "$here/practice" && mkdir "$here/practice"
+cd "$here/practice" && exec bash "$here/answers/task$1.sh"

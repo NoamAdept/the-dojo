@@ -1,0 +1,55 @@
+id: pyq-performance
+module: python-qualification
+title: Performance and Decorators
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- decorators
+- generators
+- timeit
+- slots
+- lazy_io
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you make code faster and lighter. You will write:
+
+  - decorators for logging and for rate-limiting (limiting how many times a function runs)
+  - generators that process large files lazily (a little at a time)
+  - `timeit` comparisons
+  - objects that use less memory, with `__slots__`
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_performance}
+  validation: session
+hints:
+- level: 1
+  text: A function that contains `yield` returns a generator. A generator makes each value only when you ask for it.
+- level: 2
+  text: Use `nonlocal calls`. Then the wrapper can change a counter that lives in the outer decorator function.
+- level: 3
+  text: A loop `for line in fh` reads 1 line at a time. So the whole file is never in memory.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Decorators add behaviour without changing the body of the function. Generators make values
+  only when needed, so they use little memory. This lets you process files that are larger than RAM.
+  `__slots__` removes the `__dict__` from each instance. Always measure with timeit before you try to
+  make code faster.
+extension:
+  title: Go further
+  description: Write 1 more test of your own in check.py. Then make it pass.
+optional_hardware: []

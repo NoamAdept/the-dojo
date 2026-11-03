@@ -1,0 +1,10 @@
+#!/bin/bash
+# Prints a line every second until you press Ctrl-C.
+cd "$(dirname "$0")"
+trap 'echo; echo "stopped with Ctrl-C"; echo "stopped with Ctrl-C" >> stopped.txt; exit 130' INT
+n=0
+while true; do
+    n=$((n + 1))
+    echo "still running ($n)... press Ctrl-C to stop me"
+    sleep 1
+done

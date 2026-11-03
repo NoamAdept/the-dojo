@@ -1,0 +1,56 @@
+id: zt-vim-cat
+module: zero-terminal
+title: Creating and Editing Text Files
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- vim_editor
+- save_and_exit
+- cat
+- edit_existing_file
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Use the vim text editor to create and fix text files. Learn how to save and quit. Use cat to read files and to join them together.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- message.txt
+- poem.txt
+expected_tools:
+- bash
+- coreutils
+- vim
+flags:
+  value: flag{zt_vim_cat}
+  validation: session
+hints:
+- level: 1
+  text: vim starts in Normal mode. In this mode, keys are commands. Press `i` to start typing (Insert mode).
+    Press `Esc` when you finish typing. Then type `:wq` and Enter to save and quit. Check the result with `cat shopping.txt`.
+- level: 2
+  text: 'For task 2, run `vim poem.txt`. Use the arrow keys to move to line 2. Put the cursor on the
+    wrong `o` in `radoi` and press `x` to delete it. Then move onto the `i` and press `a`. Type an `o`
+    after it, then press Esc. Another way: delete the word with `cw` and type `radio`. Save with `:wq`.'
+- level: 3
+  text: 'Task 4 is 1 command: `cat shopping.txt poem.txt > both.txt`. If you change shopping.txt
+    or poem.txt later, run it again. Stuck inside vim? Press Esc, type `:q!` and press Enter. This leaves vim without saving.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'vim is a terminal text editor with modes. In Normal mode, keys are commands (move, delete,
+  undo). `i` switches to Insert mode for typing. `Esc` switches back. `:wq` saves and quits. `cat`
+  prints files in the order you name them. With `>` you can join several files into 1 file.'
+extension:
+  title: Go further
+  description: Open `shopping.txt` again. Put the cursor on `battery` and press `dd` to cut the line. Move
+    to the top with `gg`. Press `P` to paste the line above. Run `vimtutor` for a 30 minute guided tour.
+optional_hardware: []

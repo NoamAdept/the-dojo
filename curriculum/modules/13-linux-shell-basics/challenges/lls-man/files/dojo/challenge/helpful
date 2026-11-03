@@ -1,0 +1,15 @@
+#!/bin/bash
+case "$1" in
+    --help|-h)
+        echo "Usage: helpful [OPTION]"
+        echo "A helpful program with no man page."
+        echo
+        echo "  -h, --help                 show this help and exit"
+        echo "  --version                  print the version"
+        echo "  --open-the-pod-bay-doors    print the success message"
+        exit 0;;
+    --version) echo "helpful 1.0"; exit 0;;
+    --open-the-pod-bay-doors) echo "helpful OK ${TOKEN:-practice}"; exit 0;;
+esac
+echo "helpful: try --help" >&2
+exit 1

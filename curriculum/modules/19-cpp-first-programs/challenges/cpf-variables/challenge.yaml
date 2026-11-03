@@ -1,0 +1,54 @@
+id: cpf-variables
+module: cpp-first-programs
+title: Variables and Whole Numbers
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- variables
+- int
+- arithmetic
+- remainder
+- cout_chaining
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Store whole numbers in variables. Calculate with + - * / %. Print the results with std::cout.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- numbers.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_variables}
+  validation: session
+hints:
+- level: 1
+  text: 'Look at the line that is already in the file: `std::cout << "We have " << apples << ...`. Your
+    lines work in the same way: some text in quotes, then `<<`, then the value, then `<< "\n"`.'
+- level: 2
+  text: Task 1 is `std::cout << "apples=" << apples << "\n";`. Does ./check say that it expected `apples=23`?
+    Then you typed the number 7. Use the variable instead.
+- level: 3
+  text: 'You can put a calculation where the value goes: `std::cout << "total=" << apples + friends <<
+    "\n";`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A variable has a name, a type and a value. When you calculate with 2 ints, the result is
+  an int. So `/` removes the decimals, and `%` gives the remainder. `std::cout << a << b` prints each
+  piece, one after the other.
+extension:
+  title: Go further
+  description: Add a line `product=21` (apples times friends). Then delete the `int` from `int friends
+    = 3;`. Read the error that g++ gives you. Then put the `int` back.
+optional_hardware: []

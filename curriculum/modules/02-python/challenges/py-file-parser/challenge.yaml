@@ -1,0 +1,80 @@
+id: py-file-parser
+module: python
+title: Parse a Receiver Configuration
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites:
+- py-control-flow
+objectives:
+- file-io
+- string-parsing
+- exceptions
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Complete a small parser for a configuration (settings) file.
+
+  Ignore blank lines and lines that start with `#`.
+
+  Other lines look like `name = value`. Remove the spaces around each part.
+
+  A line that is not a comment and has no `=` is an error. Raise `ValueError` for it.
+
+  When you run the script, it writes sorted `name=value` lines to `parsed.txt`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: py-file-parser
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- receiver.conf
+- parse_config.py
+- check
+- check.py
+expected_tools:
+- python3
+flags:
+  value: flag{parsers_make_text_useful}
+  validation: session
+hints:
+- level: 1
+  text: 'Loop over the file object. Call `strip()` on each line.
+
+    '
+- level: 2
+  text: 'Use `line.split(''='', 1)`. It splits only at the first `=`, so a value can contain `=`.
+
+    '
+- level: 3
+  text: 'When you write parsed.txt, sort the dictionary keys first.
+
+    '
+solution: 'Ignore empty/comment lines, check for `=`, split once, strip both
+
+  pieces, and assign `result[key] = value`. The main block can iterate over
+
+  `sorted(config)` to produce deterministic output.
+
+  '
+explanation: 'Parsing separates the form of the text (syntax) from its meaning.
+
+  You remove extra spaces. Then different ways that people write the same line give the same result.
+
+  You also reject broken lines. This stops a wrong configuration from being used without any warning.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Make your solution handle the new case.
+
+    Do not change the output format.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

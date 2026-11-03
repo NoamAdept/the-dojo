@@ -1,0 +1,68 @@
+id: cppq-package-management
+module: cpp-qualification
+title: Package Management with vcpkg
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- vcpkg_manifest
+- find_package
+- semantic_versioning
+- string_parsing
+- toolchain_files
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will write a vcpkg manifest with a version rule. You will also write the CMake lines that go with it.
+
+  Then you will build the parts that a package manager is made of:
+
+  - version checks
+  - semantic version ordering (which version is newer)
+  - manifest parsing (reading the list of dependencies)
+  - toolchain arguments
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.py
+- tests/task2.py
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_package_management}
+  validation: session
+hints:
+- level: 1
+  text: In manifest mode, vcpkg reads the `vcpkg.json` file next to your CMakeLists.txt. Then it installs
+    exactly the dependencies in that file.
+- level: 2
+  text: 'Compare versions as numbers. `std::tie(major, minor, patch) < std::tie(...)` compares the parts
+    one by one for you.'
+- level: 3
+  text: 'For the parser: first find `"dependencies"`. Then find the `[` and `]` after it. Then collect
+    each string in quotes between them.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'You list the dependencies you need. A package manager turns this list into real, installed
+  versions. A vcpkg manifest keeps the requirements fixed inside the repo. The toolchain file lets `find_package`
+  find the packages that vcpkg installed.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

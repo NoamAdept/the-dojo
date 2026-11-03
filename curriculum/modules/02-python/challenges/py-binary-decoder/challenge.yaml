@@ -1,0 +1,87 @@
+id: py-binary-decoder
+module: python
+title: Decode Binary Sensor Records
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites:
+- py-file-parser
+objectives:
+- binary-data
+- struct-module
+- endianness
+mastery_evidence:
+- understand
+- observe
+- apply
+description: '`samples.bin` contains 7-byte records, one after another. Each record has:
+
+  a little-endian unsigned 32-bit frequency,
+
+  a little-endian signed 16-bit power,
+
+  and one status byte.
+
+  Complete `decode.py`. `decode_records(path)` must return tuples.
+
+  It must raise `ValueError` if the bytes at the end do not make a complete record.
+
+  The program must write the given file as CSV.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: py-binary-decoder
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- samples.bin
+- decode.py
+- check
+- check.py
+expected_tools:
+- python3
+flags:
+  value: flag{bytes_have_structure}
+  validation: session
+hints:
+- level: 1
+  text: 'For little-endian, start the `struct` format with `<`.
+
+    '
+- level: 2
+  text: 'Unsigned int is `I`. Signed short is `h`. Unsigned byte is `B`.
+
+    '
+- level: 3
+  text: 'First check the length. Then `struct.iter_unpack(''<IhB'', data)` reads
+    all the fixed-size records.
+
+    '
+solution: 'Read in binary mode, ensure `len(data) % struct.calcsize(''<IhB'') == 0`,
+
+  then return `list(struct.iter_unpack(''<IhB'', data))`. Write a CSV header and one
+
+  row per tuple.
+
+  '
+explanation: 'Binary files have no visible separators between fields. A format definition tells Python:
+
+  how many bytes belong to each field,
+
+  if the integers are signed,
+
+  and which byte comes first in values that use more than one byte.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Make your solution handle the new case.
+
+    Do not change the output format.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

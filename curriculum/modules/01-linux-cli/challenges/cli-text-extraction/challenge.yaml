@@ -1,0 +1,79 @@
+id: cli-text-extraction
+module: linux-cli
+title: Extract Frequencies from Text
+difficulty: easy
+estimated_time: 20-35 minutes
+prerequisites:
+- cli-pipeline
+objectives:
+- regular-expressions
+- text-extraction
+- unique-sorting
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'An operations bulletin contains normal text and radio frequencies.
+
+  Take out every value that comes directly before `MHz`. Remove duplicates.
+
+  Sort the values as numbers. Save 1 number per line in `frequencies.txt`.
+
+  Write each number exactly as the bulletin writes it, with the same decimals.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: cli-text-extraction
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- bulletin.txt
+- check
+- check.py
+expected_tools:
+- bash
+- grep
+- sort
+flags:
+  value: flag{regex_finds_the_signal}
+  validation: session
+hints:
+- level: 1
+  text: '`grep -o` prints only the matching part, not the whole line.
+
+    '
+- level: 2
+  text: 'An extended pattern, such as `[0-9]+\.[0-9]+ MHz`, finds these values.
+
+    '
+- level: 3
+  text: 'Send the output through `cut -d'' '' -f1`. Then send it through `sort -n -u`.
+
+    '
+solution: 'Run:
+
+  `grep -Eo ''[0-9]+\.[0-9]+ MHz'' bulletin.txt | cut -d'' '' -f1 | sort -n -u > frequencies.txt`
+
+  and then `./check`.
+
+  '
+explanation: 'A regular expression describes the shape of the text you want to find.
+
+  `grep -Eo` takes out only the matches. `cut` removes the unit. `sort -n -u`
+
+  sorts as numbers and also removes repeated lines.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Then make your solution work with the new data.
+
+    The output format must stay the same.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

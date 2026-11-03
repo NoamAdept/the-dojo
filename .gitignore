@@ -1,0 +1,11 @@
+.academy-data/
+/challenge/
+dist/
+.DS_Store
+*.egg-info/
+.env
+*.pyc
+__pycache__/
+.pytest_cache/
+.venv/
+venv/

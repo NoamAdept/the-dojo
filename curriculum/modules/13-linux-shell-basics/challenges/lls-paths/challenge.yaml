@@ -1,0 +1,71 @@
+id: lls-paths
+module: linux-shell-basics
+title: Pondering Paths
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- absolute_paths
+- working_directory
+- relative_paths
+- dot_and_dotdot
+- home_tilde
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Run programs by absolute paths and relative paths.
+  Change the working directory with cd.
+  Use . and .., and let ~ expand to your home directory.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- answers/task8.sh
+- check
+- check.py
+- dojo/challenge/copyflag
+- dojo/challenge/position
+- dojo/challenge/run
+- dojo/challenge/tour
+- dojo/etc/.keep
+- dojo/home/.keep
+- dojo/home/hacker/.keep
+- dojo/pwn
+- dojo/tmp/.keep
+- dojo/usr/share/.keep
+- dojo/var/lib/academy/.keep
+- dojo/var/log/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{lls_paths}
+  validation: session
+hints:
+- level: 1
+  text: 'Always put `$DOJO` paths inside double quotes: `"$DOJO/challenge/run"`. If a folder name has a space, the quotes keep the path together as 1 word.'
+- level: 2
+  text: 'A script can have many lines. A `cd` on one line changes the directory for every line after it.'
+- level: 3
+  text: 'Task 8: you type `~/f` as 3 characters. Bash changes it to `$HOME/f` before copyflag gets it.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Absolute paths start at the root, so they work from any folder. Relative paths start at the working directory, and `cd` changes the working directory. `.` means the current directory and `..` means the parent directory. To run a program in the current directory, you type `./prog`, because by default `$PATH` never includes the current directory. A `~` at the start of a word expands to your home directory.'
+extension:
+  title: Go further
+  description: 'Do task 7 again, but start from `$DOJO/var/log`. Use only `..` steps, and do not type `$DOJO` in the cd command.'
+optional_hardware: []

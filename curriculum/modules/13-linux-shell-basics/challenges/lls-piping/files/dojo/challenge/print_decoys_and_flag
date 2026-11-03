@@ -1,0 +1,3 @@
+#!/bin/bash
+fake() { seq "$1" "$2" | sed -e 's/^\(.*[02468]\)$/academy{DECOY_\1}/' -e 's/^\([0-9]*[13579]\)$/academy{\1_DECOY}/'; }
+{ fake 1 400; echo "academy{practice_pipe}"; fake $((400 + 1)) 1000; }

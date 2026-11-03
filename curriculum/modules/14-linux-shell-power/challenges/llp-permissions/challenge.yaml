@@ -1,0 +1,71 @@
+id: llp-permissions
+module: linux-shell-power
+title: File Permissions
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- ls_l_modes
+- chmod_symbolic
+- chmod_octal
+- execute_bit
+- umask
+- setuid
+- chgrp
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Read permission strings from ls -l. Change modes with symbolic chmod and octal chmod. Make
+  scripts executable. Set a umask. Find setuid files. Change the group of a file with chgrp.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- check
+- check.py
+expected_tools:
+- bash
+- ls
+- chmod
+- umask
+- find
+- stat
+- chgrp
+flags:
+  value: flag{llp_permissions}
+  validation: session
+hints:
+- level: 1
+  text: 'First try `ls -l` and `stat -c "%a %A %n" *` on your own files. The 8th character of the
+    mode string is the "others read" bit.'
+- level: 2
+  text: '`find DIR -perm -o=r` finds files that others can read. `-perm -4000` finds setuid files.
+    `-printf "%f\n"` prints only the file name. In symbolic chmod, join the parts with commas:
+    `g+w,o-rwx`.'
+- level: 3
+  text: 'umask removes bits. 666 minus 027 gives 640 for files. 777 minus 027 gives 750 for
+    directories. Set the umask first. Then use `touch` and `mkdir`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Each file has 12 permission bits: setuid, setgid, sticky, and then rwx for the owner, the
+  group and others. Symbolic chmod changes the bits that you name. Octal chmod sets all of
+  them. umask removes bits from everything new. setuid makes a program run as its owner. This
+  is why people check (audit) setuid root files. Normal users can chgrp their own files to
+  groups they belong to. Only root can chown.'
+extension:
+  title: Go further
+  description: 'Write a script that prints every file under a folder whose mode lets others write to it.
+    Then it fixes them all with 1 chmod.'
+optional_hardware: []

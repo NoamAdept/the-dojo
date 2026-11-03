@@ -1,0 +1,81 @@
+id: gdb-first-breakpoint
+module: debugging-gdb
+title: Stop at Your First Breakpoint
+difficulty: easy
+estimated_time: 25-40 minutes
+prerequisites: []
+objectives:
+- gdb
+- breakpoints
+- program-state
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Build the program with `./run`.
+
+  Open `./target` in GDB (the GNU debugger).
+
+  Set a breakpoint at `checkpoint` and run the program.
+
+  Look at the argument named `sample`.
+
+  Write its decimal value to `answer.txt`. Then run `./check`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-first-breakpoint
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{breakpoints_pause_execution}
+  validation: session
+hints:
+- level: 1
+  text: 'Start with `gdb ./target`.
+
+    '
+- level: 2
+  text: 'At the `(gdb)` prompt, type `break checkpoint`. Then type `run`.
+
+    '
+- level: 3
+  text: 'When the program stops, type `print sample`. To leave GDB, type `quit`.
+
+    '
+solution: 'Run `./run`, then `gdb ./target`. Enter `break checkpoint`, `run`,
+
+  and `print sample`. Copy the printed decimal number alone into `answer.txt` and
+
+  run `./check`.
+
+  '
+explanation: 'A breakpoint (a place where the program pauses) stops the program before a function or a line you choose.
+
+  While the program is paused, GDB can show you its parameters and local variables.
+
+  You see their values at that exact moment.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

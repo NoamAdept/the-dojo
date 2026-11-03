@@ -1,0 +1,57 @@
+id: pyq-packaging
+module: python-qualification
+title: Project Structure and Packaging
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- pyproject_toml
+- import_checks
+- project_layout
+- requirements_parsing
+- subprocess
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you work with Python projects and packages. Everything works offline. You will:
+
+  - read `pyproject.toml` with `tomllib`
+  - check imports safely
+  - scaffold (create the starting files of) a src-layout project
+  - parse requirement specifiers
+  - control a virtual environment with `subprocess`
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- demo_project/pyproject.toml
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_packaging}
+  validation: session
+hints:
+- level: 1
+  text: '`tomllib` (Python 3.11+) needs the file to be open in binary mode. Use `open(path, "rb")`.'
+- level: 2
+  text: 'A package name is at the start of the line. It is made of letters, digits, `.`, `_` and `-`. A regex can
+    find it: `re.match(r"[A-Za-z0-9._-]+", line)`.'
+- level: 3
+  text: Give commands to `subprocess.run` as a list. Never give them as one shell string.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A standard layout (src/, tests/, pyproject.toml) lets you install and test your code. `importlib`
+  can check for modules without crashing. `subprocess` with list arguments is the safe way to run tools
+  like venv and pip.
+extension:
+  title: Go further
+  description: Write 1 more test of your own in check.py. Then make it pass.
+optional_hardware: []

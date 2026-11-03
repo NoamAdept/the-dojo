@@ -1,0 +1,65 @@
+id: cppq-strings-files
+module: cpp-qualification
+title: Strings and Files
+difficulty: easy
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- std_string
+- string_conversion
+- ofstream_ifstream
+- parsing
+- text_statistics
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - format and convert `std::string`s
+  - write and read files with fstreams
+  - parse (split up and read) a CSV record
+  - count text statistics in a file
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_strings_files}
+  validation: session
+hints:
+- level: 1
+  text: '`std::stoi` and `std::stod` change strings into numbers. `std::to_string` changes a number into
+    a string.'
+- level: 2
+  text: '`find('','')` gives the position of the comma. `substr(pos, len)` copies out the text between
+    commas.'
+- level: 3
+  text: Count words with `std::istringstream` and `>>`. The `>>` operator skips any amount of whitespace.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`std::string` owns its memory. It grows when it needs more space. fstreams follow RAII.
+  So the file closes by itself when the stream goes out of scope. Always check `is_open()`. If the folder
+  is missing, no file is made, and you get no error message.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

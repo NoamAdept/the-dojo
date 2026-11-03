@@ -1,0 +1,56 @@
+id: cpf-arguments
+module: cpp-first-programs
+title: Input from the Command Line
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- argc_argv
+- stoi
+- exit_status
+- usage_messages
+- bad_input
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Let users give your program input when they start it. Read the words that are typed after the name of the program with argc and argv. Change them into numbers with std::stoi. Exit with status 1 when the input is missing or wrong.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- add.cpp
+- check
+- check.py
+- greet.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_arguments}
+  validation: session
+hints:
+- level: 1
+  text: 'The name is the word `argv[1]`. So print it like text: `std::cout << "Hello, " << argv[1] <<
+    "!\n";`.'
+- level: 2
+  text: When there is no name, argc is 1. Check `if (argc < 2) { ... return 1; }` before you use argv[1].
+- level: 3
+  text: For add.cpp, use the accumulator pattern with a for loop. Start at `i = 1` (to skip the name of
+    the program). Loop while `i < argc`. Each time, add `std::stoi(argv[i])`. For task 5, put that one
+    line inside `try { ... } catch (...) { print the message; return 1; }`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: The shell gives main the words after the name of the program. argc is the count of words,
+  including the name. argv holds the words. Words are always text. So you must change numbers with std::stoi.
+  When the text is not a number, std::stoi throws an exception. try/catch lets you print a friendly message
+  instead. When main returns a number that is not 0, the shell knows that the program failed.
+extension:
+  title: Go further
+  description: 'Change `./add` so that it prints `usage: ./add NUMBER...` and returns 1 when there are
+    no numbers. It should not print 0.'
+optional_hardware: []

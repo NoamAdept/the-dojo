@@ -1,0 +1,57 @@
+id: pyq-memory-model
+module: python-qualification
+title: References and the Memory Model
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- identity_vs_equality
+- shallow_vs_deep_copy
+- reference_counting
+- garbage_collection
+- weakref
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice these topics:
+
+  - identity and equality
+  - traps with shallow copies
+  - reference counts
+  - collecting cycles with `gc`
+  - writing your own deep copy
+
+  You also show that a reference cycle needs the garbage collector.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_memory_model}
+  validation: session
+hints:
+- level: 1
+  text: '`copy.copy` copies only the outer dict. Both dicts point at the same inner list.'
+- level: 2
+  text: Each new reference (another name, or a place in a list) adds 1 to `sys.getrefcount`.
+- level: 3
+  text: A `weakref.ref` does not keep the object alive. Call it to find out if the object still exists.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Names are labels on objects. CPython frees an object when its reference count reaches 0.
+  The cycle collector (`gc`) handles objects that reference each other. A shallow copy shares the inner
+  objects. A deep copy does not.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

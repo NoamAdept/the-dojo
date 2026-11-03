@@ -1,0 +1,59 @@
+id: zt-first-script
+module: zero-terminal
+title: Your First Scripts
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- bash_script
+- answer_files
+- try_and_check
+- script_working_folder
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Write your first bash scripts. Put commands into answers/taskN.sh with vim. Run them with ./try N. Then let ./check run them for you. All the next shell challenges work this same way.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- check
+- check.py
+- try
+expected_tools:
+- bash
+- coreutils
+- vim
+flags:
+  value: flag{zt_first_script}
+  validation: session
+hints:
+- level: 1
+  text: Open an answer with `vim answers/task1.sh`. Move onto the TODO line and press `dd` to delete
+    it. Press `O` to open a new line, and type your command. Then press `Esc` and type `:wq`. `cat answers/task1.sh`
+    shows what you saved.
+- level: 2
+  text: 'A script is just the commands you would type. Write 1 command per line, without the `$`. Task 2 needs 3
+    `echo` lines. Task 4 needs 2 lines: first make the folder, then write the file into it with `>`.'
+- level: 3
+  text: 'After `./try 3` or `./try 4`, run `ls practice` to see what your script made. Use `cat practice/result.txt`
+    to look inside. If nothing is there, the script did not create it. Check the `>` and the file name.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A bash script is a text file of commands. They run from top to bottom. The `#!/bin/bash` line
+  names the interpreter (the program that runs the file). `#` starts a comment. The checker runs each script
+  in a new, empty folder. So a script must create everything the task asks for by itself.
+extension:
+  title: Go further
+  description: Write a script that prints today's date and then your user name. Each one goes on its own line.
+    Run the script with `bash`.
+optional_hardware: []

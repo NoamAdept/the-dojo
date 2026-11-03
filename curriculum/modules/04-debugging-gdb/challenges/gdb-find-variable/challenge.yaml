@@ -1,0 +1,80 @@
+id: gdb-find-variable
+module: debugging-gdb
+title: Find a Changing Variable
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites:
+- gdb-first-breakpoint
+objectives:
+- gdb
+- next
+- print
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'A loop changes `level` once for each sample.
+
+  Use GDB to stop at `inspect_here`.
+
+  Continue until the 4th call to that function, then look at `level`.
+
+  Write its decimal value in `answer.txt`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: gdb-find-variable
+  notes: Software-only; no external hardware or network required.
+files:
+- README.md
+- target.cpp
+- run
+- check
+- check.py
+expected_tools:
+- bash
+- g++
+- gdb
+flags:
+  value: flag{step_and_watch_state_change}
+  validation: session
+hints:
+- level: 1
+  text: 'Use `break inspect_here`, then `run`, then `continue` 3 times.
+
+    '
+- level: 2
+  text: 'GDB tells you each time it stops at a breakpoint. The first stop is call number 1.
+
+    '
+- level: 3
+  text: 'At the 4th stop, type `print level`.
+
+    '
+solution: 'Build and open the target in GDB. Break on `inspect_here`, run, then
+
+  continue three times. Print `level` and place that integer in `answer.txt`.
+
+  '
+explanation: 'You can stop at the same breakpoint many times.
+
+  This lets you watch a variable change over time.
+
+  You do not need to add temporary print statements to the code.
+
+  `continue` makes the program run again until the next stop you asked for.
+
+  '
+extension:
+  title: Go further
+  description: 'Add 1 more test case of your own.
+
+    Check that the program still works correctly.
+
+    '
+performance_notes: 'Sources and test data are intentionally small and compile quickly
+  on a Raspberry Pi.
+
+  '
+optional_hardware: []

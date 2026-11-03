@@ -1,0 +1,63 @@
+id: llp-terminal-multiplexing
+module: linux-shell-power
+title: Terminal Multiplexing with tmux
+difficulty: medium
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- tmux_sessions
+- list_sessions
+- send_keys
+- windows
+- capture_pane
+- kill_session
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'Keep long jobs running with tmux. Start detached sessions (sessions that run in the
+  background) and list them. Type into them from a script. Add windows. Read their screen.
+  Kill only the session that you mean.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Needs tmux (sudo apt install tmux). Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- check
+- check.py
+expected_tools:
+- bash
+- tmux
+flags:
+  value: flag{llp_terminal_multiplexing}
+  validation: session
+hints:
+- level: 1
+  text: 'Does `./check` say that tmux is missing? Then run `sudo apt install tmux`. First try each
+    command by hand: `tmux new -d -s test`, `tmux ls`, `tmux kill-session -t test`.'
+- level: 2
+  text: 'Read names with `"$(cat name.txt)"`. `tmux ls -F "#S"` prints only the names. `-t NAME`
+    chooses the target session.'
+- level: 3
+  text: '`tmux send-keys -t NAME "some command" Enter` types the text and presses Enter. `tmux
+    capture-pane -p -t NAME` prints the screen to stdout.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'tmux runs a server that owns your shells. So the shells keep running when your SSH
+  connection or your terminal goes away. Sessions hold windows, and windows hold panes. Every
+  keyboard action also has a command (`new-session -d`, `send-keys`, `capture-pane`,
+  `kill-session`). Scripts can use these commands to start long jobs and watch them.'
+extension:
+  title: Go further
+  description: 'Write a script that starts a session that runs `top`. Split it into 2 panes with `tmux
+    split-window`. Run `uptime` in the second pane.'
+optional_hardware: []

@@ -1,0 +1,3 @@
+#!/bin/bash
+printf "%s" "academy{practice_" > "$HOME/the-flag"
+printf "%s\n" "append_ok}xxxxxxx"

@@ -1,0 +1,6 @@
+#!/bin/bash
+data=$(cat)
+case "$data" in
+    *"SUPERSECRET:practice"*) echo "college OK ${TOKEN:-practice}";;
+    *) echo "college: my input did not contain the right SUPERSECRET code. Use tee to see what pwn printed." >&2; exit 2;;
+esac

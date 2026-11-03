@@ -1,0 +1,69 @@
+id: llp-path
+module: linux-shell-power
+title: Pondering PATH
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- path_variable
+- command_lookup
+- extend_path
+- personal_bin
+- command_shadowing
+mastery_evidence:
+- understand
+- implement
+- apply
+description: 'See how the shell finds programs. You read PATH. You find commands with command -v and
+  which. You add folders to PATH, for now and for good. You shadow (replace) a system command
+  with your own.
+
+  Read `README.md` and complete the tasks. Run `./check` until it prints `CHECK_OK`. Then
+  press Done.'
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- check
+- check.py
+expected_tools:
+- bash
+- which
+- command
+- type
+- tr
+flags:
+  value: flag{llp_path}
+  validation: session
+hints:
+- level: 1
+  text: '`echo "$PATH" | tr ":" "\n"` splits PATH into lines. `command -v NAME` prints the full
+    path of the program that the shell would run.'
+- level: 2
+  text: 'Use an absolute folder (a full path from `/`) when you add to PATH: `export
+    PATH="$PWD/tools:$PATH"`. For task 4, add the same kind of line (with `$HOME/bin`) to the
+    end of `$HOME/.bashrc`. Use single quotes, so that `$HOME` is written as it is and not
+    replaced.'
+- level: 3
+  text: 'For task 5, make a folder with an executable `date` that only echoes 1999. Then run
+    `PATH="$PWD/fake:$PATH" ./report.sh`. For task 6, look at `type -ap` or `which -a`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell looks up a plain command name in PATH. It checks each folder from left to right
+  and runs the first executable file it finds. Names that contain a slash skip this search. If
+  you put a folder at the front of PATH, its programs shadow (hide) the system programs. This
+  is useful for testing and for your own tools. It is also a classic risk: a privileged script
+  may trust a PATH that an attacker can write to. Then the attacker can hijack (take over) the
+  script.'
+extension:
+  title: Go further
+  description: 'Write a script that warns about every folder in PATH that does not exist, or that other
+    users can write to.'
+optional_hardware: []

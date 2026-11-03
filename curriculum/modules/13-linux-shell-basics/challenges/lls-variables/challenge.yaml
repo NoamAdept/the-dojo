@@ -1,0 +1,67 @@
+id: lls-variables
+module: linux-shell-basics
+title: Shell Variables
+difficulty: easy
+estimated_time: 30-45 minutes
+prerequisites: []
+objectives:
+- variable_expansion
+- assignment_and_quoting
+- export
+- env
+- command_substitution
+- read
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Print, set and quote shell variables.
+  Export them to child programs.
+  List the environment with env.
+  Save the output of a command with $(...).
+  Fill variables with read, from input or from a file.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- answers/task8.sh
+- check
+- check.py
+- dojo/challenge/read_me
+- dojo/challenge/run
+- dojo/challenge/secret
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+flags:
+  value: flag{lls_variables}
+  validation: session
+hints:
+- level: 1
+  text: 'Do not put spaces in an assignment: write `NAME=value`, not `NAME = value`.'
+- level: 2
+  text: 'Task 4 has 3 lines: export one variable, set the other variable, then run the program.'
+- level: 3
+  text: 'Task 5: `grep "^FLAG="` matches only lines that start with exactly `FLAG=`. Task 8: `read PWN < FILE`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'The shell expands variables with $NAME. Quotes keep spaces inside 1 value. Only exported variables reach child programs, and env lists them. $(...) saves the output of a command. read fills a variable from stdin, and you can redirect stdin from a file.'
+extension:
+  title: Go further
+  description: 'Run `PWN=temporary "$DOJO/challenge/run"`. Then explain why `echo $PWN` prints nothing after that.'
+optional_hardware: []

@@ -1,0 +1,122 @@
+id: orient-system-investigation
+module: orientation
+title: System Investigation
+difficulty: hard
+estimated_time: 3-5 hours
+prerequisites:
+- orient-broken-service
+objectives:
+- correlate_proc_logs_permissions_networking
+- form_and_test_hypotheses
+- repair_multi_fault_local_system
+- extract_flag_from_restored_pipeline
+mastery_evidence:
+- understand
+- observe
+- debug
+- apply
+- integrate
+description: 'EchoRelay is a local TCP service with more than 1 fault. Fix the config,
+
+  the permissions, and the process state. Keep going until
+
+  `./echorelay/verify.sh` prints a flag.
+
+
+  Read `README.md` first. Use `relayctl.sh` to start, stop, and read logs.
+
+  Compare `relay.conf` with the example. Fix the path and the mode of the
+
+  dropbox token. Restart, then verify. The flag is only in the live PING
+
+  answer. It is not in the scripts on disk.
+
+
+  Paste the printed flag in the dojo, or press Done. You do not need root or
+
+  the Internet.
+
+  '
+environment:
+  type: mixed
+  services:
+  - name: echorelay
+    start: ./echorelay/relayctl.sh start
+  notes: Single challenge folder. Multi-fault investigation; software-only.
+files:
+- echorelay/
+- BRIEFING.md
+- README.md
+expected_tools:
+- ps
+- cat
+- chmod
+- ls
+- ss
+- nc
+- grep
+- tail
+- python3
+- bash
+flags:
+  value: flag{multi_signal_systems_triage}
+  validation: session
+  plant_files:
+  - echorelay/data/.relay_secret
+hints:
+- level: 1
+  text: 'Read `BRIEFING.md`, then run `./echorelay/relayctl.sh start` and `./echorelay/verify.sh`.
+
+    '
+- level: 2
+  text: 'Check each part on its own. Is the process running? Is the port listening?
+    Can the dropbox file be read? Are the config paths correct?
+
+    '
+- level: 3
+  text: 'Look in `echorelay/logs/`. Compare `config/relay.conf` with the `.example` file.
+
+    '
+- level: 4
+  text: 'The mode of the dropbox file may stop the worker from reading it. The listen
+    port in the config may be different from the port that verify uses.
+
+    '
+- level: 5
+  text: 'The worker argv (start command) or `/proc/<pid>/environ` may show which config it really loaded.
+
+    '
+solution: 'Typical fault set:
+
+  1. `listen_port` mismatch between config and verify expectation (align to 9471)
+
+  2. `dropbox` path wrong or mode `000` — `chmod u+r`
+
+  3. stale PID / worker not running — restart via `relayctl.sh`
+
+  4. Then `./echorelay/verify.sh` prints the flag
+
+  5. `academy submit ''flag{multi_signal_systems_triage}''`
+
+  '
+explanation: 'Real systems often fail for several reasons at the same time. Expert
+
+  operators separate each part of the system (process, config, permissions,
+
+  network, data). They check each part on its own. Then they put the parts
+
+  back together. You will use the same habit to debug DSP receivers:
+
+  spectrum OK? timing OK? constellation OK? CRC OK?
+
+  '
+extension:
+  title: Write a postmortem
+  description: 'Create `POSTMORTEM.md`. For each problem, list the root cause (the
+    real reason), the evidence, and the fix. Use 1 page or less.
+
+    '
+performance_notes: 'Tiny localhost TCP worker.
+
+  '
+optional_hardware: []

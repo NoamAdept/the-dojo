@@ -1,0 +1,7 @@
+Welcome, operator.
+
+The lab filesystem is bigger than it looks.
+First, list everything here. Include the hidden entries.
+
+Someone made a "labyrinth" (a maze) for new students.
+The real flag is deeper than the first folder.

@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import re, subprocess
+from pathlib import Path
+
+def fail(msg):
+    print("Not yet:", msg)
+    raise SystemExit(1)
+
+r = subprocess.run(["g++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "controller.cpp", "-o", "controller"],
+                   capture_output=True, text=True)
+if r.returncode:
+    fail("controller.cpp does not compile without warnings. Fix the first error below:\n" + r.stderr)
+src = Path("controller.cpp").read_text()
+src = re.sub(r"//[^\n]*|/\*.*?\*/", "", src, flags=re.S)  # ignore comments
+for call, pattern in (("fork", r"fork"), ("execl", r"exec(l|lp|le|v|vp|vpe)"), ("waitpid", r"wait(pid)?"),
+                      ("WEXITSTATUS", r"WEXITSTATUS")):
+    if not re.search(r"\b(%s)\s*\(" % pattern, src):
+        fail("controller.cpp should use %s(...) (see the README)" % call)
+try:
+    r = subprocess.run(["./controller"], capture_output=True, text=True, timeout=5)
+except subprocess.TimeoutExpired:
+    fail("./controller did not finish within 5 s")
+if r.returncode != 0:
+    fail("./controller should exit with 0, got %d" % r.returncode)
+lines = r.stdout.splitlines()
+if "child_ok" not in lines:
+    fail("the child's line child_ok is missing: did the child run execl(\"/bin/echo\", \"echo\", \"child_ok\", ...)?\n"
+         "output was:\n" + r.stdout)
+if "child_status=0" not in lines:
+    fail("the parent should print a line exactly like child_status=0, using WEXITSTATUS(status)\n"
+         "output was:\n" + r.stdout)
+if lines.index("child_ok") > lines.index("child_status=0"):
+    fail("child_status=0 came before child_ok. The parent must call waitpid for the child before it prints")
+print("CHECK_OK")

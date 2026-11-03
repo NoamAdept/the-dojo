@@ -1,0 +1,91 @@
+id: lls-commands
+module: linux-shell-basics
+title: Comprehending Commands
+difficulty: easy
+estimated_time: 45-75 minutes
+prerequisites: []
+objectives:
+- cat
+- grep
+- diff
+- ls
+- touch_rm_mv_cp
+- hidden_files
+- mkdir
+- find
+- symlinks
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn the everyday file commands: cat, grep, diff, ls (and ls -a), touch, rm, mv, cp, mkdir, find and ln -s.
+  There is also a small treasure hunt through the filesystem.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task10.sh
+- answers/task11.sh
+- answers/task12.sh
+- answers/task13.sh
+- answers/task14.sh
+- answers/task15.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- answers/task8.sh
+- answers/task9.sh
+- check
+- check.py
+- dojo/.secret-practice
+- dojo/CLUE
+- dojo/challenge/catflag
+- dojo/challenge/data.txt
+- dojo/challenge/decoys_and_real.txt
+- dojo/challenge/decoys_only.txt
+- dojo/challenge/run-practice
+- dojo/flag
+- dojo/home/hacker/.keep
+- dojo/home/hacker/delete_me
+- dojo/home/hacker/flag
+- dojo/home/hacker/keep_me
+- dojo/opt/quest/.hideout/TREASURE
+- dojo/opt/quest/TREASURE
+- dojo/opt/vault/a1/b2/c3/flag
+- dojo/tmp/.keep
+- dojo/usr/lib/flag
+- dojo/usr/share/doc/quest/HINT
+- dojo/var/cache/quest/old/NEXT
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+- grep
+- diffutils
+- findutils
+flags:
+  value: flag{lls_commands}
+  validation: session
+hints:
+- level: 1
+  text: 'Use the practice copy. Run `. ./env.sh`, then `ls "$DOJO"`, `cat "$DOJO/CLUE"` and so on. `./try N` runs 1 answer.'
+- level: 2
+  text: 'Put quotes around paths and patterns: `grep "academy{" FILE`. For task 14, `find "$DOJO" -name flag` prints absolute paths, because the start folder is an absolute path.'
+- level: 3
+  text: 'Task 15: use `ln -s TARGET LINKNAME`. The target comes first. On the next line, run `"$DOJO/challenge/catflag"`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'These commands do 3 kinds of work. Some read files (cat, grep, diff). Some list files (ls, ls -a, find). Some change the filesystem (touch, rm, mv, cp, mkdir, ln -s). A symbolic link stores a path. When a program opens the link, it is sent to the target file. That is why the link tricked catflag.'
+extension:
+  title: Go further
+  description: 'Use `find "$DOJO" -name flag -newer "$DOJO/CLUE"` or `-size` to make a search smaller. Use `readlink ~/not-the-flag` to see where a link points.'
+optional_hardware: []

@@ -1,0 +1,15 @@
+#!/bin/bash
+# The secret options are stored as hashes, so reading this file will not reveal them. Read the docs!
+win() { echo "$1 OK ${TOKEN:-practice}"; exit 0; }
+case "$1" in
+    --giveflag) win giveflag;;
+    --printfile)
+        [ -n "$2" ] || { echo "challenge: --printfile needs a path as its argument" >&2; exit 2; }
+        cat -- "$2"; exit;;
+esac
+case "$(printf %s "$1" | sha256sum | cut -c1-12)" in
+    8a526a00e533) win manual;;
+    02ce7fbfd0d2) win search;;
+esac
+echo "challenge: unknown or missing option '$1'. Read the documentation!" >&2
+exit 1

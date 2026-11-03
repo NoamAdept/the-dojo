@@ -1,0 +1,59 @@
+id: pyz-loops
+module: py-zero
+title: 'Loops: for, range and while'
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- for_range
+- accumulator
+- while
+- loop_with_if
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn to repeat work. You will:
+
+  - repeat work with for and range
+  - add things up in an accumulator variable
+  - loop with while until a condition changes
+
+  Read `README.md`, complete the tasks, and run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+- vim
+flags:
+  value: flag{pyz_loops}
+  validation: session
+hints:
+- level: 1
+  text: 'Every accumulator has the same shape. First, set it before the loop: `total = 0`, or `result = 1`
+    for products, or `text = ""`. Next, change it inside the loop. Last, `return` it after the loop. Do not
+    indent the return under the for.'
+- level: 2
+  text: '"1 to n" is `range(1, n + 1)`, because the stop is never included. To count down from n to 1, use
+    `range(n, 0, -1)`.'
+- level: 3
+  text: For `count_digits`, start at 1 digit. Then divide by 10 again and again while `n >= 10`. For `first_power_over`,
+    start at 1. Then double the number again and again while `power <= limit`.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: '`for x in range(...)` is Python''s counting loop. The stop value is not included. An accumulator
+  collects a sum, a product, a count or a string during the loop. `while` repeats until a condition changes.
+  This is good for "keep going until" problems, like counting digits. An `if` inside a loop chooses which
+  passes of the loop do work.'
+extension:
+  title: Go further
+  description: Write `fizzbuzz(n)`. It returns a string of the numbers 1 to n, with spaces between them. But
+    use "Fizz" for multiples of 3, "Buzz" for multiples of 5, and "FizzBuzz" for multiples of both.
+optional_hardware: []

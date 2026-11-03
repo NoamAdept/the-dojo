@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+printf 'IQ sample 01\nIQ sample 02\n' > input.txt
+g++ -std=c++17 -Wall -Wextra -Werror copy.cpp -o copy
+./copy input.txt output.txt
+cmp input.txt output.txt && echo "output.txt is an exact copy of input.txt"

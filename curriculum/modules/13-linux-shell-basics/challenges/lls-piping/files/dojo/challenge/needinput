@@ -1,0 +1,5 @@
+#!/bin/bash
+[ -f /dev/stdin ] || { echo "needinput: redirect a FILE into my stdin with <" >&2; exit 1; }
+read -r line
+[ "$line" = COLLEGE ] || { echo "needinput: the file should contain COLLEGE, I read '$line'" >&2; exit 1; }
+echo "needinput OK ${TOKEN:-practice}"

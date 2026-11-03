@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+import os, random, re, subprocess, tempfile
+from pathlib import Path
+
+def fail(msg):
+    print("Not yet:", msg)
+    raise SystemExit(1)
+
+r = subprocess.run(["g++", "-std=c++17", "-Wall", "-Wextra", "-Werror", "copy.cpp", "-o", "copy"],
+                   capture_output=True, text=True)
+if r.returncode:
+    fail("copy.cpp does not compile without warnings. Fix the first error below:\n" + r.stderr)
+src = Path("copy.cpp").read_text()
+src = re.sub(r"//[^\n]*|/\*.*?\*/", "", src, flags=re.S)  # ignore comments
+for call in ("open", "read", "write", "close"):
+    if not re.search(r"\b%s\s*\(" % call, src):
+        fail("copy.cpp should use the POSIX call %s(...) (see the README)" % call)
+if re.search(r"fopen|ifstream|ofstream|fstream|filesystem", src):
+    fail("do the copy with open/read/write/close, not std::ifstream, fopen or std::filesystem")
+
+tmp = Path(tempfile.mkdtemp())
+rng = random.Random(4242)
+data = bytes(rng.randrange(256) for _ in range(100_003))  # bigger than one buffer, has 0 bytes
+a, b = tmp / "a.bin", tmp / "b.bin"
+a.write_bytes(data)
+b.write_bytes(b"old junk " * 30000)  # longer than data: must be cut (O_TRUNC)
+
+def run(*args):
+    try:
+        return subprocess.run(["./copy", *map(str, args)], capture_output=True, timeout=10)
+    except subprocess.TimeoutExpired:
+        fail("./copy did not finish within 10 s. Does your loop stop when read returns 0?")
+
+r = run(a, b)
+if r.returncode != 0:
+    fail("./copy SOURCE DEST should exit with 0 on success, got %d" % r.returncode)
+got = b.read_bytes()
+if got != data:
+    if got[:len(data)] == data:
+        fail("the copy has extra old bytes at the end: open the destination with O_TRUNC")
+    fail("the copy of a %d-byte binary file is not the same as the original (got %d bytes). "
+         "Write exactly the number of bytes that read returned. Keep looping until read returns 0" % (len(data), len(got)))
+c = tmp / "new.bin"
+r = run(a, c)
+if r.returncode or c.read_bytes() != data:
+    fail("copying to a file that does not exist yet must create it (O_CREAT)")
+r = run(tmp / "missing.bin", tmp / "x.bin")
+if r.returncode == 0:
+    fail("when the source file does not exist, print an error with std::perror and return 1")
+r = run(a)
+if r.returncode == 0:
+    fail("with the wrong number of arguments (./copy onlyone), print a usage line (how to run the program) and return 1")
+print("CHECK_OK")

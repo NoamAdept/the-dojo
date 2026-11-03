@@ -1,0 +1,7 @@
+# station,snr
+tower,12
+beacon,4
+
+tower,15
+harbour,9
+beacon,7

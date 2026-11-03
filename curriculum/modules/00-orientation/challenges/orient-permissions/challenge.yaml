@@ -1,0 +1,109 @@
+id: orient-permissions
+module: orientation
+title: Permissions
+difficulty: easy
+estimated_time: 20-45 minutes
+prerequisites:
+- orient-find-flag
+objectives:
+- interpret_ls_permissions
+- understand_owner_group_other
+- use_chmod
+- read_restricted_file
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Start in the challenge folder and read `README.md`.
+
+
+  The flag is in `vault/flag.txt`. Its permissions do not let you read it
+
+  yet. Use `ls -l` to look at the permissions. Then use `chmod` to give
+
+  yourself read permission. You own the file, so you do not need `sudo`.
+
+
+  Read the flag. Copy it to the academy flag file. Then submit with
+
+  `academy submit`.
+
+  '
+environment:
+  type: workspace
+  notes: Single challenge folder. Permissions only; no privilege escalation required.
+files:
+- vault/
+- check_perms.sh
+- README.md
+expected_tools:
+- ls
+- stat
+- chmod
+- cat
+- id
+- namei
+flags:
+  value: flag{chmod_u_plus_r_opens_doors}
+  validation: session
+  plant_files:
+  - vault/flag.txt
+hints:
+- level: 1
+  text: 'Run `ls -l vault`. Then read the mode string, for example `-rw----`.
+
+    '
+- level: 2
+  text: 'The first character is the type (file or directory). The next 9 characters are the rules for user, group and other.
+
+    '
+- level: 3
+  text: 'You own the file, but the user may not read it. Add read permission: `chmod u+r vault/flag.txt`.
+
+    '
+- level: 4
+  text: 'After you fix the mode, run `cat vault/flag.txt`. Write that value
+
+    to the path in `.flagpath`. Then run `academy submit`.
+
+    '
+solution: '```bash
+
+  ls -l vault
+
+  stat vault/flag.txt
+
+  chmod u+r vault/flag.txt
+
+  cat vault/flag.txt
+
+  printf ''%s\n'' ''flag{chmod_u_plus_r_opens_doors}'' > "$(cat .flagpath 2>/dev/null
+  || echo $HOME/flag.txt)"
+
+  academy submit
+
+  ```
+
+  '
+explanation: 'Unix discretionary access control (the normal file rules) has 3
+
+  kinds of people: owner, group, and other. Each kind gets read, write, and execute bits (on/off switches). `chmod`
+
+  changes the mode. `chown`/`chgrp` change the owner or the group. You must
+
+  read `ls -l` output easily before you start systems programming and
+
+  service debugging.
+
+  '
+extension:
+  title: Least privilege
+  description: 'After you read `vault/flag.txt`, set it to mode `0400`. Then use
+
+    `stat` to check that group and other cannot read it.
+
+    '
+performance_notes: 'Trivial.
+
+  '
+optional_hardware: []

@@ -1,0 +1,64 @@
+id: zt-help-keys
+module: zero-terminal
+title: Getting Help and Handy Keys
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- help_option
+- options
+- tab_completion
+- history
+- ctrl_c
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Use --help to find out what a command can do. Use options. Let Tab completion type long names for you. Bring back old commands with the up arrow. Stop a running program with Ctrl-C.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task2.sh
+- answers/task3.sh
+- check
+- check.py
+- dojo/home/hacker/.keep
+- dojo/log.txt
+- dojo/signals/a-really-long-file-name-made-for-tab-completion-q7.txt
+- dojo/tmp/.keep
+- env.sh
+- forever
+- try
+expected_tools:
+- bash
+- coreutils
+- vim
+flags:
+  value: flag{zt_help_keys}
+  validation: session
+hints:
+- level: 1
+  text: Run `wc --help` and `date --help`. Read the lists slowly. For wc, look for the word "lines".
+    For date, look for "year".
+- level: 2
+  text: 'Try commands by hand first: run `. ./env.sh`, then `wc -l "$DOJO/log.txt"`. For the year, the format
+    starts with `+`. The piece starts with `%`. Here, a capital letter gives the full year.'
+- level: 3
+  text: 'Task 3: type `cat "$DOJO/signals/a` and press Tab. Bash completes the name. Add the closing `"`
+    and press Enter. Does it print the practice text? Then copy that whole line into `answers/task3.sh`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Options change what a command does. `--help` lists them. Tab completion finishes names
+  for you. The up arrow brings back earlier commands from the history. Ctrl-C stops the running program.
+  These habits make every later challenge faster.
+extension:
+  title: Go further
+  description: 'Run `history` and find the commands you typed in this challenge. Then type `!!` and press
+    Enter. It runs the last command again. This is the same as the up arrow and Enter.'
+optional_hardware: []

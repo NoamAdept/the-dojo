@@ -1,0 +1,62 @@
+id: cppq-templates
+module: cpp-qualification
+title: Templates and Generic Programming
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- function_templates
+- class_templates
+- multiple_type_parameters
+- generic_containers
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will write templates that work for ints, doubles and strings:
+
+  - function templates: swap, add, max, and a printer for 3 different types
+  - class templates: Holder, MyPair and Stack
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_templates}
+  validation: session
+hints:
+- level: 1
+  text: Write the full template in the header file. The compiler needs the whole body to instantiate it
+    (to make the real code for each type).
+- level: 2
+  text: '`std::ostringstream` can turn any type that has `operator<<` into a string.'
+- level: 3
+  text: 'Be careful: `myMax` returns a reference. So never return a reference to a temporary (a value
+    that is destroyed at the end of the line).'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'With templates, you write 1 definition. The compiler makes code for each type from it. This
+  costs nothing when the program runs. Each operation you use inside the template (`+`, `>`, `<<`) becomes
+  a hidden requirement on T. C++20 concepts let you write these requirements down clearly.'
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

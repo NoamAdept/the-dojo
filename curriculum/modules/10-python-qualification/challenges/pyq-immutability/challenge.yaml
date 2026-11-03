@@ -1,0 +1,58 @@
+id: pyq-immutability
+module: python-qualification
+title: Immutability and State
+difficulty: medium
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- tuples
+- star_unpacking
+- namedtuple
+- frozenset
+- hashability
+- memoization
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice these topics:
+
+  - tuples and star unpacking
+  - NamedTuple
+  - hashability and frozenset
+  - an immutable point with `__slots__`
+  - a memoize decorator that also works with list arguments
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_immutability}
+  validation: session
+hints:
+- level: 1
+  text: '`head, *tail = data` always makes `tail` a list.'
+- level: 2
+  text: For ImmutablePoint, override `__setattr__` so that it raises an error. Inside `__init__`, use
+    `object.__setattr__` to set the values.
+- level: 3
+  text: 'Turn args and kwargs into 1 hashable key. Convert lists to tuples (recursively, also for lists inside
+    lists). Convert kwargs into a sorted tuple of pairs.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Immutable objects are hashable, and you can share them safely. Tuples, frozensets and
+  NamedTuples are the built-in immutable containers. Memoization needs hashable keys. That is why you
+  must first freeze mutable arguments (turn them into immutable ones).'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

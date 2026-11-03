@@ -1,0 +1,66 @@
+id: cppq-pointers-references
+module: cpp-qualification
+title: Pointers and References
+difficulty: easy
+estimated_time: 35-50 minutes
+prerequisites: []
+objectives:
+- pointers
+- references
+- pointer_arithmetic
+- nullptr
+- out_parameters
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you will:
+
+  - take addresses
+  - change values through pointers
+  - walk through C strings
+  - guard against nullptr
+  - use pointer arithmetic to write swap, in-place reverse, and single-pass min/max
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.h
+- tests/check.h
+- tests/task1.cpp
+- tests/task2.cpp
+- tests/task3.cpp
+- tests/task4.cpp
+- tests/task5.cpp
+- tests/task6.cpp
+- tests/task7.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cppq_pointers_references}
+  validation: session
+hints:
+- level: 1
+  text: '`*p` reads or writes the value that a pointer points to. `p++` moves the pointer to the next
+    element.'
+- level: 2
+  text: 'Reversing: start with `int* end = arr + size - 1`. Loop while `start < end`.'
+- level: 3
+  text: 'Out-parameters (parameters that carry results back out): write the results through the pointers
+    (`*minOut = ...`).'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A pointer is an address. You can point it somewhere else, and you can do arithmetic on it.
+  A reference is a permanent alias (another name). A pointer might be null. Always check it before you
+  dereference it. If null is not a valid input, use a reference instead.
+extension:
+  title: Go further
+  description: Add one more test of your own to check.py and make it pass.
+optional_hardware: []

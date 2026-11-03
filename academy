@@ -1,0 +1,24 @@
+#!/bin/sh
+# Run any academy command from this folder without pip, e.g. the classroom server:
+#   ./academy serve --host 192.168.1.50            (learners open http://192.168.1.50:8080/)
+#   ./academy user add alice                       (admin-made account; see --no-signup)
+# Same environment as ./run.sh (which stays the single-user local launcher).
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
+
+export PYTHONNOUSERSITE=1
+export PYTHONPATH="$ROOT/vendor:$ROOT/platform"
+if [ ! -d "$ROOT/platform/academy" ] && [ -d "$ROOT/academy" ]; then
+  export PYTHONPATH="$ROOT/vendor:$ROOT"
+fi
+
+export ACADEMY_CURRICULUM="${ACADEMY_CURRICULUM:-$ROOT/curriculum}"
+export ACADEMY_DATA="${ACADEMY_DATA:-$ROOT/.academy-data}"
+export ACADEMY_WORKSPACE="${ACADEMY_WORKSPACE:-$HOME/signal-dojo/challenge}"
+export ACADEMY_FLAG_PATH="${ACADEMY_FLAG_PATH:-$ROOT/.academy-data/flag.txt}"
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Signal Dojo needs python3 on PATH (no pip needed)." >&2
+  exit 1
+fi
+exec python3 -m academy.cli "$@"

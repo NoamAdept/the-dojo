@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "(this program reports how you ran it; ./check reads the RAN lines)" >&2
+printf 'RAN argv0=%s\n' "$0"
+printf 'RAN cwd=%s\n' "$(pwd -P)"
+for a in "$@"; do printf 'RAN arg=%s\n' "$a"; done
+printf 'RAN token=%s\n' "${TOKEN:-practice}"

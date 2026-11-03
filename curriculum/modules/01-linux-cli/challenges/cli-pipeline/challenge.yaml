@@ -1,0 +1,82 @@
+id: cli-pipeline
+module: linux-cli
+title: Build Your First Pipeline
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- pipes
+- grep
+- sort
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'A receiver survey is stored in `readings.csv`. Create `answer.txt`.
+
+  It must contain the callsigns of the 3 strongest northern stations. Put the
+
+  strongest first. Use a command pipeline: each command does 1 small job.
+
+  When the 3 lines are ready, run `./check`.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: cli-pipeline
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- readings.csv
+- check
+- check.py
+expected_tools:
+- bash
+- grep
+- sort
+- head
+flags:
+  value: flag{pipes_make_data_flow}
+  validation: session
+hints:
+- level: 1
+  text: 'Use `grep '',north,'' readings.csv` to keep only the northern rows.
+
+    '
+- level: 2
+  text: 'A comma separates the fields. `sort -t, -k3,3nr` sorts by field 3, as numbers,
+    biggest first.
+
+    '
+- level: 3
+  text: 'After you sort, use `head -n 3`. Then use `cut -d, -f1`.
+
+    '
+solution: 'Run:
+
+  `grep '',north,'' readings.csv | sort -t, -k3,3nr | head -n 3 | cut -d, -f1 > answer.txt`
+
+  Then run `./check`.
+
+  '
+explanation: 'A pipe (`|`) sends the output of one command into the next command.
+
+  Filter first, then sort. This keeps the later steps simple. A reverse
+
+  numeric sort puts the largest signal first. `cut` keeps only the callsign
+
+  column.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Then make your solution work with the new data.
+
+    The output format must stay the same.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

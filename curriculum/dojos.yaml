@@ -1,0 +1,44 @@
+intro: >
+  Offline hands-on lab. 110 challenges. Four belts. Starts from zero: Linux, then C++, then Python.
+  No cloud. No accounts. You only need a terminal.
+rules: >
+  Read the lesson first. Use a hint only when you are stuck. Belts unlock in order.
+core:
+- id: intro-lab
+  title: Terminal from Zero
+  belt: white
+  belt_label: White Belt
+  tagline: Your first commands, files, and the shell basics.
+  modules:
+  - zero-terminal
+  - linux-shell-basics
+- id: linux-power
+  title: Linux in Practice
+  belt: yellow
+  belt_label: Yellow Belt
+  tagline: Processes, permissions, scripts and services. Then you solve real problems on a Linux system.
+  modules:
+  - linux-shell-power
+  - orientation
+  - linux-cli
+- id: software-craft
+  title: C++
+  belt: orange
+  belt_label: Orange Belt
+  tagline: C++ from your first program to pointers and bytes. Then gdb (the debugger), Linux system calls and the C++ qualification.
+  modules:
+  - cpp-first-programs
+  - cpp-zero
+  - cpp-under-the-hood
+  - debugging-gdb
+  - systems-programming
+  - cpp-qualification
+- id: python-craft
+  title: Python
+  belt: blue
+  belt_label: Blue Belt
+  tagline: Python from zero to the qualification.
+  modules:
+  - py-zero
+  - python
+  - python-qualification

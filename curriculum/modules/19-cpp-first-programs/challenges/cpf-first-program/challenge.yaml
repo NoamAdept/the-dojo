@@ -1,0 +1,54 @@
+id: cpf-first-program
+module: cpp-first-programs
+title: Your First C++ Program
+difficulty: easy
+estimated_time: 20-30 minutes
+prerequisites: []
+objectives:
+- source_file
+- compiler
+- gxx_o
+- run_program
+- std_cout
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Learn what a program, a source file and a compiler are. Use g++ to change hello.cpp into a real program. Run it. Then change its message and build it again.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- hello.cpp
+expected_tools:
+- g++
+- python3
+flags:
+  value: flag{cpf_first_program}
+  validation: session
+hints:
+- level: 1
+  text: 'Run the 2 commands from the README. Run them one at a time: `g++ -std=c++17 -Wall -Wextra hello.cpp
+    -o hello`, then `./hello`. If g++ prints nothing, it worked.'
+- level: 2
+  text: Change only the words between the quote marks. Keep the `\n` and the `;`. Then run the g++ line
+    again. After that, run `./hello`.
+- level: 3
+  text: 'A second line is only a copy of the std::cout line with different words: `std::cout << "I can
+    compile C++.\n";`. Put it after the first line and before `return 0;`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: A C++ program starts as text (the source file). The compiler (g++) changes it into a program
+  file. You run this file with `./name`. The program file does not change by itself. When you edit the
+  source, nothing changes until you compile again.
+extension:
+  title: Go further
+  description: Add a third line that prints your name. What happens if you remove the `\n` from one of
+    the lines? Try it and see.
+optional_hardware: []

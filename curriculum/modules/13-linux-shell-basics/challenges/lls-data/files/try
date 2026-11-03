@@ -1,0 +1,7 @@
+#!/bin/bash
+# Usage: ./try N   runs answers/taskN.sh like ./check does, inside the practice copy in dojo/.
+here="$(cd "$(dirname "$0")" && pwd)"
+[ -n "$1" ] || { echo "usage: ./try N" >&2; exit 2; }
+export DOJO="$here/dojo" HOME="$here/dojo/home/hacker" PATH="$here/dojo/bin:$PATH" TOKEN=practice
+mkdir -p "$HOME" "$DOJO/tmp"
+cd "$HOME" && exec bash "$here/answers/task$1.sh"

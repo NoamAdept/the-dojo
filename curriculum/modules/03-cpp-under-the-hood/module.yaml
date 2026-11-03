@@ -1,0 +1,17 @@
+id: cpp-under-the-hood
+slug: cpp-under-the-hood
+title: C++ Under the Hood
+order: 7
+description: 'Learn what C++ does underneath, one small idea at a time. Topics: strict compiler warnings,
+  raw pointers and addresses, hex, fixed-size integers and structs, how bytes are stored in memory, byte
+  order, function pointers and callbacks, and safe parsing of binary data. This module comes after the
+  C++ Toolbox. The next module is debugging with gdb.'
+prerequisites:
+- cpp-zero
+challenges:
+- cpp-compile-it
+- cpp-pointer-basics
+- cpp-structs-hex
+- cpp-memory-layout
+- cpp-function-pointers
+- cpp-binary-parser

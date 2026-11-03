@@ -1,0 +1,4 @@
+#!/bin/bash
+[ /dev/stdout -ef "$DOJO/tmp/flag_fifo" ] && [ -p "$DOJO/tmp/flag_fifo" ] || {
+    echo "fifo: my stdout must be redirected into the named pipe $DOJO/tmp/flag_fifo" >&2; exit 1; }
+echo "academy{practice_pipe}"

@@ -1,0 +1,58 @@
+id: pyq-modules-scope
+module: python-qualification
+title: Modules, Packages and Namespaces
+difficulty: easy
+estimated_time: 40-60 minutes
+prerequisites: []
+objectives:
+- imports
+- packages
+- legb_scope
+- closures
+- decorator_registry
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Practice these topics:
+
+  - imports and aliases
+  - exports from a package `__init__.py`
+  - the LEGB scope rule and `global`
+  - closures
+  - a function registry built with a decorator
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_modules_scope}
+  validation: session
+hints:
+- level: 1
+  text: 'Every stub raises NotImplementedError. Replace the `raise` line with your code. `./check` names
+    each task that still fails.'
+- level: 2
+  text: Without `global score`, the assignment in `score += 1` makes `score` a local variable. That
+    is why it raises UnboundLocalError.
+- level: 3
+  text: A package is a folder with an `__init__.py`. Put `from .settings import DEFAULT_CONFIG` in
+    that file. This re-exports the name.
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Python looks for a name in this order: local, enclosing, global, built-in (LEGB). A module
+  is an object. Python keeps loaded modules in `sys.modules`. A package is a folder with `__init__.py`.
+  A decorator runs at the moment Python defines the function. That is why a registry works.'
+extension:
+  title: Go further
+  description: Add 1 more test of your own to check.py. Then make it pass.
+optional_hardware: []

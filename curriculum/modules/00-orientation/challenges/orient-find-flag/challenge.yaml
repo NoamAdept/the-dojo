@@ -1,0 +1,120 @@
+id: orient-find-flag
+module: orientation
+title: Find the Flag
+difficulty: easy
+estimated_time: 15-30 minutes
+prerequisites: []
+objectives:
+- use_pwd_ls_cd
+- navigate_filesystem
+- use_find_and_cat
+- locate_hidden_files
+mastery_evidence:
+- observe
+- apply
+description: 'Start in the challenge folder and read `README.md`.
+
+
+  A flag is hidden somewhere inside the `labyrinth/` folder. Explore the
+
+  maze with simple commands, such as `ls`, `cd`, `find`, and `cat`. Then
+
+  read the real flag.
+
+
+  When you find it, you have 2 choices. You can put it in the academy flag
+
+  file and submit:
+
+  ```
+
+  printf ''%s\n'' ''flag{...}'' > "$(cat .flagpath 2>/dev/null || echo $HOME/flag.txt)"
+
+  academy submit
+
+  ```
+
+  Or you can submit it directly (keep the quotes in zsh):
+
+  ```
+
+  academy submit ''flag{...}''
+
+  ```
+
+  '
+environment:
+  type: workspace
+  notes: Single challenge folder. Pure filesystem navigation. Offline.
+files:
+- labyrinth/
+- NOTES.txt
+- README.md
+expected_tools:
+- pwd
+- ls
+- cd
+- find
+- cat
+- less
+- tree
+flags:
+  value: flag{pwd_ls_find_cat_navigator}
+  validation: session
+  plant_files:
+  - labyrinth/east/tunnel/.cache/secret.flag
+hints:
+- level: 1
+  text: 'Start with `pwd` and `ls -la`. The names of hidden entries start with a dot.
+
+    '
+- level: 2
+  text: 'Read `NOTES.txt`. It tells you to look in a directory (folder) with a maze name.
+
+    '
+- level: 3
+  text: '`find . -type f` lists every file in the current directory and in all folders inside it.
+
+    '
+- level: 4
+  text: 'Look for a file with `flag` or `secret` in its name. Then `cat` it.
+
+    '
+solution: '```bash
+
+  cat NOTES.txt
+
+  find . -type f
+
+  cat ./labyrinth/east/tunnel/.cache/secret.flag
+
+  printf ''%s\n'' ''flag{pwd_ls_find_cat_navigator}'' > "$(cat .flagpath 2>/dev/null
+  || echo $HOME/flag.txt)"
+
+  academy submit
+
+  ```
+
+  '
+explanation: 'The shell always has a current working directory (`pwd` prints it).
+
+  `ls` lists what is in a directory. `ls -la` also shows hidden files.
+
+  `find` searches a directory and every directory inside it. `cat` prints
+
+  what is in a file. You will use these 4 tools in every later investigation
+
+  on this Pi.
+
+  '
+extension:
+  title: Count the decoys
+  description: 'How many files under `labyrinth/` contain the word `decoy`?
+
+    Write the number into `answer.txt`. You do not need a flag for this.
+
+    '
+performance_notes: 'Tiny file tree; negligible I/O.
+
+  '
+optional_hardware: []

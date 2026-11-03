@@ -1,0 +1,88 @@
+id: cli-shell-automation
+module: linux-cli
+title: Automate a Capture Inventory
+difficulty: medium
+estimated_time: 35-55 minutes
+prerequisites:
+- cli-log-detective
+objectives:
+- bash-scripting
+- loops
+- sha256
+mastery_evidence:
+- understand
+- observe
+- apply
+description: 'Write `inventory.sh`. An operator uses it to make a list of the capture
+
+  files in any directory. The script gets 1 directory as its argument. It
+
+  creates `manifest.txt` in the current directory. Include only `.iq` files.
+
+  Each line is `filename,size,sha256`. Sort the lines by filename. The
+
+  checker uses new files. So do not write the example names or values into
+
+  your script.
+
+  '
+environment:
+  type: workspace
+  workspace_subdir: cli-shell-automation
+  notes: Software-only; any networking stays on localhost.
+files:
+- README.md
+- inventory.sh
+- check
+- check.py
+expected_tools:
+- bash
+- sha256sum
+flags:
+  value: flag{scripts_repeat_work_safely}
+  validation: session
+hints:
+- level: 1
+  text: 'Start with `#!/bin/bash`. Read the directory from `$1`.
+
+    '
+- level: 2
+  text: 'On Linux, `stat -c %s "$file"` prints the size in bytes. `sha256sum` prints
+    the hash first.
+
+    '
+- level: 3
+  text: 'Use `find ... -print0` or a glob. Sort the finished lines. Remember:
+    filenames can contain spaces.
+
+    '
+solution: 'A robust script loops over `"$dir"/*.iq`, gets the basename, byte
+
+  count, and first field from `sha256sum`, prints CSV lines into a temporary file,
+
+  then sorts it into `manifest.txt`. Enable `nullglob` so an empty directory is
+
+  handled cleanly.
+
+  '
+explanation: 'A script saves a procedure, so you can repeat it. Quote your variables.
+
+  Then a space in a filename does not split 1 path into several arguments.
+
+  The script builds the manifest from the directory it is given. So you can
+
+  use the same script again on other directories.
+
+  '
+extension:
+  title: Go further
+  description: 'Change the input data. Then make your solution work with the new data.
+
+    The output format must stay the same.
+
+    '
+performance_notes: 'Inputs are intentionally tiny and run comfortably on a Raspberry
+  Pi.
+
+  '
+optional_hardware: []

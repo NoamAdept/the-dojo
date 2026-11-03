@@ -1,0 +1,57 @@
+id: pyq-bits-structs
+module: python-qualification
+title: Bit Manipulation and Structs
+difficulty: medium
+estimated_time: 45-60 minutes
+prerequisites: []
+objectives:
+- bitwise_ops
+- masks
+- struct_pack
+- endianness
+- binary_headers
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  In this challenge you work with bits and bytes. You will:
+
+  - check and clear bits
+  - pack values of different types with `struct`
+  - swap endianness (byte order)
+  - count the bits that are 1 (set bits)
+  - parse a binary packet that starts with a sync header
+  - read the header of a BMP image file
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- check
+- check.py
+- make_bmp.py
+- tasks.py
+expected_tools:
+- python3
+flags:
+  value: flag{pyq_bits_structs}
+  validation: session
+hints:
+- level: 1
+  text: '`(value >> n) & 1` reads bit n. `value & ~0xF` clears the low 4 bits (sets them to 0).'
+- level: 2
+  text: 'In a struct format, `<` means little-endian with no padding. `>` means big-endian.'
+- level: 3
+  text: '`struct.unpack_from("<ii", data, 18)` reads 2 int32s. It starts at byte 18.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: Hardware and file formats store bytes in a fixed layout. Masks and shifts read single flags
+  (single bits). `struct` changes bytes into numbers and numbers into bytes. Always give the endianness
+  clearly. SDR file headers and packet formats need exactly these skills.
+extension:
+  title: Go further
+  description: Write 1 more test of your own in check.py. Then make it pass.
+optional_hardware: []

@@ -1,0 +1,16 @@
+id: debugging-gdb
+slug: debugging-gdb
+title: Debugging / GDB
+order: 8
+description: 'Breakpoints, stack frames, memory views, and sanitizers on C++ programs.
+
+  '
+prerequisites:
+- cpp-under-the-hood
+challenges:
+- gdb-first-breakpoint
+- gdb-find-variable
+- gdb-follow-stack
+- gdb-inspect-memory
+- gdb-segfault
+- gdb-logic-bug

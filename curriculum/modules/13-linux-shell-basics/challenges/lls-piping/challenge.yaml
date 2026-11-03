@@ -1,0 +1,92 @@
+id: lls-piping
+module: linux-shell-basics
+title: Practicing Piping
+difficulty: medium
+estimated_time: 60-90 minutes
+prerequisites: []
+objectives:
+- output_redirection
+- append_mode
+- stderr
+- input_redirection
+- pipes
+- grep_v_and_sed
+- tee
+- process_substitution
+- named_pipes
+mastery_evidence:
+- understand
+- implement
+- apply
+description: |
+  Redirect stdout, stderr and stdin with >, >>, 2> and <.
+  Connect programs with pipes.
+  Filter lines with grep -v and sed.
+  Split streams with tee and process substitution.
+  Use a named pipe.
+
+  Read `README.md` and do the tasks. Run `./check` until it prints `CHECK_OK`. Then press Done.
+environment:
+  type: workspace
+  notes: Software-only and offline. Runs on a Raspberry Pi.
+files:
+- README.md
+- answers/task1.sh
+- answers/task10.sh
+- answers/task11.sh
+- answers/task12.sh
+- answers/task13.sh
+- answers/task14.sh
+- answers/task15.sh
+- answers/task2.sh
+- answers/task3.sh
+- answers/task4.sh
+- answers/task5.sh
+- answers/task6.sh
+- answers/task7.sh
+- answers/task8.sh
+- answers/task9.sh
+- check
+- check.py
+- dojo/challenge/append
+- dojo/challenge/college
+- dojo/challenge/decoys
+- dojo/challenge/fakeflag
+- dojo/challenge/fifo
+- dojo/challenge/hack
+- dojo/challenge/needinput
+- dojo/challenge/noisy
+- dojo/challenge/noisyerr
+- dojo/challenge/planet
+- dojo/challenge/print_decoys
+- dojo/challenge/print_decoys_and_flag
+- dojo/challenge/pwn
+- dojo/challenge/run
+- dojo/challenge/the
+- dojo/home/hacker/.keep
+- dojo/tmp/.keep
+- env.sh
+- try
+expected_tools:
+- bash
+- coreutils
+- grep
+- sed
+- diffutils
+flags:
+  value: flag{lls_piping}
+  validation: session
+hints:
+- level: 1
+  text: 'Write each program with its full path, inside double quotes, like `"$DOJO/challenge/run"`. Use `./try N` to see what happens.'
+- level: 2
+  text: 'The order is important for 2>&1: `cmd 2>&1 | grep x` adds stderr to the pipe. Task 14 needs process substitution for stderr: `2> >(command)`.'
+- level: 3
+  text: 'Task 15: `"$DOJO/challenge/fifo" > "$DOJO/tmp/flag_fifo" &` starts the writer in the background. Then run `cat` on the FIFO in the foreground. At the end, run `wait`.'
+solution: A complete reference implementation is in this challenge's `solution/` folder (instructor copy,
+  not staged into the workspace).
+explanation: 'Redirections connect the stdin, stdout and stderr of a program to files. Pipes connect the stdout of one program to the stdin of the next program. With tee and process substitution, 1 stream can go to many programs. FIFOs are pipes with a name, so any process can open them.'
+extension:
+  title: Go further
+  description: 'Write task 13 again without any `|`. Use only `>(...)`. Explain why this is harder to read.'
+optional_hardware: []
