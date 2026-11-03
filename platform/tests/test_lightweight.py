@@ -110,3 +110,29 @@ def test_five_learners_at_once(tmp_path):
         saved = data / "users" / name / ".academy" / "progress.json"
         assert "lls-hello" in json.loads(saved.read_text())["challenges"], name
         assert (data / "users" / name / "challenge").is_dir()
+
+
+def test_a_second_copy_on_a_taken_port_says_so(tmp_path):
+    """An older Signal Dojo still on the port: run.sh stops with a plain message instead of a
+    traceback, before it opens the browser on the old copy."""
+    import subprocess
+
+    import pytest
+
+    from academy.api import check_port
+
+    with socket.socket() as old:
+        old.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        old.bind(("127.0.0.1", 0))
+        old.listen()
+        port = old.getsockname()[1]
+        with pytest.raises(SystemExit) as e:
+            check_port("127.0.0.1", port)
+        assert "already in use" in str(e.value) and f"PORT={port + 1}" in str(e.value)
+
+        env = {**os.environ, "HOME": str(tmp_path), "HOST": "127.0.0.1", "PORT": str(port),
+               "OPEN_BROWSER": "0", "ACADEMY_DATA": str(tmp_path / "data")}
+        r = subprocess.run([str(ROOT / "run.sh")], env=env, capture_output=True, text=True, timeout=60)
+        assert r.returncode == 1
+        assert "already in use" in r.stderr and "Traceback" not in r.stderr
+    check_port("127.0.0.1", port)  # free again: no exit

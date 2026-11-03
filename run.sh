@@ -74,6 +74,10 @@ else
 fi
 PORT="${PORT:-8080}"
 
+# Another Signal Dojo (often an older copy) already on this port: say so and stop, rather than
+# opening the browser on that one and then failing with a traceback.
+python3 -c 'import sys; from academy.api import check_port; check_port(sys.argv[1], int(sys.argv[2]))' "$HOST" "$PORT"
+
 LAN_IP=""
 if [ "$HOST" = "0.0.0.0" ]; then
   LAN_IP=$(hostname -I 2>/dev/null | awk '{print $1}') || LAN_IP=""

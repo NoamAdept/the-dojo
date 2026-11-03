@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import errno
 import gzip
 import hashlib
 import io
 import ipaddress
 import json
 import os
+import socket
 import subprocess
 import sys
 import threading
@@ -133,6 +135,26 @@ def _run_workspace_check(engine: AcademyEngine, challenge_id: str) -> dict:
         ch = engine.get_challenge(challenge_id)
         payload["explanation"] = ch.explanation
     return payload
+
+
+def port_in_use_message(port: int) -> str:
+    return (f"Port {port} is already in use: another Signal Dojo (often an older copy) is still running there,\n"
+            f"and the browser would show that one. Stop it first (Ctrl-C in its window), or start this one\n"
+            f"on another port: PORT={port + 1} ./run.sh")
+
+
+def check_port(host: str, port: int) -> None:
+    """Exit with a plain message when something already listens on host:port."""
+    s = socket.socket()
+    try:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # as the server does
+        s.bind((host, port))
+    except OSError as e:
+        if e.errno == errno.EADDRINUSE:
+            raise SystemExit(port_in_use_message(port)) from None
+        # Any other problem (bad host, no permission) is the server's to report.
+    finally:
+        s.close()
 
 
 def serve_api(
@@ -659,6 +681,11 @@ def serve_api(
         def log_message(self, fmt: str, *args) -> None:
             pass
 
-    httpd = ThreadingHTTPServer((host, port), Handler)
+    try:
+        httpd = ThreadingHTTPServer((host, port), Handler)
+    except OSError as e:
+        if e.errno == errno.EADDRINUSE:
+            raise SystemExit(port_in_use_message(port)) from None
+        raise
     httpd.daemon_threads = True
     httpd.serve_forever()
