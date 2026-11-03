@@ -17,7 +17,7 @@ One machine serves the whole lab; learners only need a browser.
 - `--no-signup` turns off self-registration; then only `academy user add` creates accounts.
 - `./run.sh` starts this classroom server on all network interfaces (`HOST=0.0.0.0`, port 8080) and prints the
   address to give learners. `HOST=127.0.0.1 ./run.sh` keeps it to this machine. `SINGLE_USER=1 ./run.sh` is the old
-  no-login console with one local `~/signal-dojo/challenge` folder (`academy serve --local`).
+  no-login console with one local `~/dojo/challenge` folder (`academy serve --local`).
 - Folders are private to the server's OS account (`chmod 700` on the data folder, `users/` and each `users/<name>/`).
   Logins are kept as sha256 hashes in `sessions.json` (0600), so restarting the server does not log anyone out.
 
@@ -25,7 +25,7 @@ One machine serves the whole lab; learners only need a browser.
 password of 8+ characters, typed twice); after that they **Log in**. Logging in to a name that has no account is
 refused, so a typo never starts an empty account. Progress saves by itself to `users/<name>/.academy/progress.json`
 on every start, hint and solve. Then they press Start. The page shows the path of their own challenge folder on the server
-(`users/<name>/challenge`, linked as `~/signal-dojo/<name>` for the server's OS account); they open a terminal there (sitting at the server, a terminal window
+(`users/<name>/challenge`, linked as `~/dojo/<name>` for the server's OS account); they open a terminal there (sitting at the server, a terminal window
 pops up by itself; from another machine, over SSH). Start → solve → Done. Logins last 12 hours and survive a server restart.
 
 **Shared progress repo** (optional). Make a GitHub repo, clone it on the server and make sure

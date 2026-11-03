@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Signal Dojo: one-page guide</title>
+<title>The Dojo: one-page guide</title>
 <style>
   @font-face { font-family: "Geist"; font-weight: 400; src: url("../../platform/academy/static/fonts/Geist-400.woff2") format("woff2"); }
   @font-face { font-family: "Geist"; font-weight: 500; src: url("../../platform/academy/static/fonts/Geist-500.woff2") format("woff2"); }
@@ -64,14 +64,14 @@
 <body>
 
 <header>
-  <h1>Signal <span>Dojo</span></h1>
+  <h1>The <span>Dojo</span></h1>
   <p>Everything you need to learn with it and run it, on one page.<br>Offline. Needs only <code>python3</code>. Runs on a Raspberry Pi, Linux, macOS, or Windows (WSL).</p>
 </header>
 
 <div class="band">
   <section class="box hot">
     <h3>Start it</h3>
-<pre>tar -xzf pi-sdr-academy.tar.gz &amp;&amp; cd pi-sdr-academy
+<pre>tar -xzf the-dojo.tar.gz &amp;&amp; cd the-dojo
 ./run.sh                 <span class="c"># learner</span>
 ACADEMY_ADMIN=1 ./run.sh <span class="c"># admin (password)</span></pre>
     <p>Open <code>http://127.0.0.1:8080/</code>. Change it with <code>HOST=</code> / <code>PORT=</code>. No pip, no internet. Stop with <b>Ctrl-C</b>.</p>
@@ -96,7 +96,7 @@ ACADEMY_ADMIN=1 ./run.sh <span class="c"># admin (password)</span></pre>
       <ol>
         <li><b>Enter the lab</b>, pick the next unlocked challenge on your belt.</li>
         <li><b>Read lesson</b> first: the idea, new words, further reading.</li>
-        <li><b>Start</b>: files are copied to your folder, <code>~/signal-dojo/&lt;username&gt;</code>, and a terminal opens there.</li>
+        <li><b>Start</b>: files are copied to your folder, <code>~/dojo/&lt;username&gt;</code>, and a terminal opens there.</li>
         <li>Read <code>README.md</code> (the tasks), edit the files in <b>vim</b>.</li>
         <li>Run <code>./check</code> until it prints <code>CHECK_OK</code>.</li>
         <li>Press <b>Mark as done</b>, then <b>Next challenge</b>.</li>
@@ -139,9 +139,9 @@ ACADEMY_ADMIN=1 ./run.sh <span class="c"># admin (password)</span></pre>
         <tr><td><code>./academy submit</code></td><td>run <code>./check</code> and score it</td></tr>
         <tr><td><code>./academy status</code></td><td>your scoreboard</td></tr>
         <tr><td><code>./academy save</code></td><td>progress + your scripts in one .zip (<code>restore FILE</code> brings it back)</td></tr>
-        <tr><td><code>cd ~/signal-dojo/&lt;username&gt;</code></td><td>jump to your challenge folder</td></tr>
+        <tr><td><code>cd ~/dojo/&lt;username&gt;</code></td><td>jump to your challenge folder</td></tr>
       </table>
-      <p>In <code>~/pi-sdr-academy</code>, with <code>ACADEMY_USER=&lt;username&gt;</code> in front.</p>
+      <p>In <code>~/the-dojo</code>, with <code>ACADEMY_USER=&lt;username&gt;</code> in front.</p>
     </section>
 
     <section>

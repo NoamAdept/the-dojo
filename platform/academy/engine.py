@@ -23,7 +23,7 @@ from .validation import validate_challenge_flag
 
 
 class AcademyEngine:
-    workspace_link: str | None = None  # classroom: short ~/signal-dojo/<name> link to workspace_root
+    workspace_link: str | None = None  # classroom: short ~/dojo/<name> link to workspace_root
 
     def __init__(
         self,

@@ -4,7 +4,7 @@ Starting a challenge wipes the challenge folder, so before that happens the file
 learner wrote or changed are kept in data_dir/work/<challenge-id>/ and put back the next
 time that challenge starts. A save file is a plain zip anyone can open:
 
-    signal-dojo-save.json   what this is, when it was made, whose it is
+    the-dojo-save.json   what this is, when it was made, whose it is
     progress.json           solved challenges, hints, attempts
     work/<challenge-id>/…   the learner's own files for each challenge
 
@@ -26,9 +26,10 @@ from typing import BinaryIO
 
 from .progress import ChallengeProgress, ProgressRepository, ProgressStore
 
-FORMAT = "signal-dojo-save"
+FORMAT = "the-dojo-save"
 VERSION = 1
-MANIFEST = "signal-dojo-save.json"
+MANIFEST = "the-dojo-save.json"
+EARLIER_SAVES = {"signal-dojo-save.json": "signal-dojo-save"}  # manifest -> format, from before the rename
 WORK = "work"
 STAGED = "staged.json"  # hashes of the challenge folder right after Start: anything else is the learner's
 
@@ -41,7 +42,7 @@ _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 
 
 class SaveFileError(ValueError):
-    """The file is not a Signal Dojo save, or is damaged."""
+    """The file is not a save from The Dojo, or is damaged."""
 
 
 def _sha(path: Path) -> str:
@@ -234,16 +235,18 @@ def import_zip(data_dir: Path, src: BinaryIO | bytes, repo: ProgressRepository) 
     try:
         zf = zipfile.ZipFile(src)
     except (zipfile.BadZipFile, OSError) as exc:
-        raise SaveFileError("That is not a Signal Dojo save file (expected a .zip made by Save).") from exc
+        raise SaveFileError("That is not a save file from The Dojo (expected a .zip made by Save).") from exc
     with zf:
+        names = set(zf.namelist())
+        name, fmt = next(((m, f) for m, f in [(MANIFEST, FORMAT), *EARLIER_SAVES.items()] if m in names), (MANIFEST, FORMAT))
         try:
-            manifest = json.loads(zf.read(MANIFEST).decode("utf-8"))
+            manifest = json.loads(zf.read(name).decode("utf-8"))
         except (KeyError, ValueError) as exc:
-            raise SaveFileError("That is not a Signal Dojo save file (expected a .zip made by Save).") from exc
-        if not isinstance(manifest, dict) or manifest.get("format") != FORMAT:
-            raise SaveFileError("That is not a Signal Dojo save file (expected a .zip made by Save).")
+            raise SaveFileError("That is not a save file from The Dojo (expected a .zip made by Save).") from exc
+        if not isinstance(manifest, dict) or manifest.get("format") != fmt:
+            raise SaveFileError("That is not a save file from The Dojo (expected a .zip made by Save).")
         if int(manifest.get("version", 0)) > VERSION:
-            raise SaveFileError("This save file comes from a newer Signal Dojo. Update this copy first.")
+            raise SaveFileError("This save file comes from a newer version of The Dojo. Update this copy first.")
 
         files: list[tuple[zipfile.ZipInfo, str, str]] = []
         total = 0
@@ -290,4 +293,4 @@ def import_zip(data_dir: Path, src: BinaryIO | bytes, repo: ProgressRepository) 
 
 
 def default_filename(when: float | None = None) -> str:
-    return time.strftime("signal-dojo-save-%Y-%m-%d.zip", time.localtime(when))
+    return time.strftime("the-dojo-save-%Y-%m-%d.zip", time.localtime(when))

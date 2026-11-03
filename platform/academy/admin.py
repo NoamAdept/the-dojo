@@ -19,7 +19,7 @@ CHALLENGE_ID_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)+$")
 MODULE_SLUG_RE = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 DIFFICULTIES = {"easy", "medium", "hard"}
 VALIDATIONS = {"exact", "regex", "case_insensitive", "script", "session"}
-ENV_TYPES = {"workspace", "service", "iq", "flowgraph", "mixed"}
+ENV_TYPES = {"workspace", "service", "mixed"}
 
 
 def admin_requested() -> bool:

@@ -115,7 +115,7 @@ def _wrap_html(title: str, content: str) -> str:
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>{html.escape(title)} — Signal Dojo Docs</title>
+  <title>{html.escape(title)} — The Dojo Docs</title>
   <style>
     :root {{
       --bg: #0f1419;
@@ -169,7 +169,7 @@ def _wrap_html(title: str, content: str) -> str:
 </head>
 <body>
   <header>
-    <a href="/docs/">Signal Dojo</a>
+    <a href="/docs/">The Dojo</a>
     <span class="muted"> — offline documentation</span>
   </header>
   <main>

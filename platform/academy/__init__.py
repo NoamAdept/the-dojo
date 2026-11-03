@@ -1,4 +1,4 @@
-"""Signal Dojo — offline challenge platform."""
+"""The Dojo — offline challenge platform."""
 
 __version__ = "0.1.0"
 APP_NAME = "academy"

@@ -138,7 +138,7 @@ def _run_workspace_check(engine: AcademyEngine, challenge_id: str) -> dict:
 
 
 def port_in_use_message(port: int) -> str:
-    return (f"Port {port} is already in use: another Signal Dojo (often an older copy) is still running there,\n"
+    return (f"Port {port} is already in use: another copy of The Dojo (often an older one) is still running there,\n"
             f"and the browser would show that one. Stop it first (Ctrl-C in its window), or start this one\n"
             f"on another port: PORT={port + 1} ./run.sh")
 
@@ -668,7 +668,7 @@ def serve_api(
                     "workspace": str(dest),
                     "challenge_id": cid,
                     "terminal": None,
-                    # Logged-in learners: ~/signal-dojo/<name>, a short link to the folder above.
+                    # Logged-in learners: ~/dojo/<name>, a short link to the folder above.
                     "shortcut": getattr(engine, "workspace_link", None),
                 }
                 # Classroom: only when the browser runs on the server itself; remote learners get the path.

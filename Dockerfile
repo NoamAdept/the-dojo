@@ -1,6 +1,6 @@
 # Light image — four belts (White to Blue) / 110 challenges. python3 only (YAML vendored).
-# Build: docker build -t pi-sdr-academy .
-# Run:   docker run --rm -p 8080:8080 pi-sdr-academy
+# Build: docker build -t the-dojo .
+# Run:   docker run --rm -p 8080:8080 the-dojo
 
 FROM python:3.12-alpine
 

@@ -10,5 +10,5 @@ for p in (ROOT / "vendor", ROOT / "platform"):
 
 import os
 
-# Classroom logins add ~/signal-dojo/<name> links; tests must not touch the real home folder.
+# Classroom logins add ~/dojo/<name> links; tests must not touch the real home folder.
 os.environ.setdefault("ACADEMY_WORKSPACE_LINKS", "0")

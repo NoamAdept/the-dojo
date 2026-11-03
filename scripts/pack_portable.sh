@@ -2,7 +2,7 @@
 # Build ONE closed-network tarball: python3 + this folder. No pip. No internet on target.
 set -euo pipefail
 ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
-NAME="pi-sdr-academy"
+NAME="the-dojo"
 OUT="${1:-$ROOT/dist/$NAME}"
 rm -rf "$OUT"
 mkdir -p "$OUT/vendor" "$OUT/platform" "$OUT/curriculum"
@@ -41,7 +41,7 @@ cp "$ROOT/academy" "$OUT/academy"
 chmod +x "$OUT/run.sh" "$OUT/academy"
 cp "$ROOT/LICENSE" "$OUT/LICENSE" 2>/dev/null || true
 cp "$ROOT/README.md" "$OUT/README.md"
-mkdir -p "$OUT/docs" && cp "$ROOT/docs/CLASSROOM.md" "$ROOT/docs/WSL.md" "$ROOT/docs/signal-dojo-guide.pdf" "$OUT/docs/"
+mkdir -p "$OUT/docs" && cp "$ROOT/docs/CLASSROOM.md" "$ROOT/docs/WSL.md" "$ROOT/docs/the-dojo-guide.pdf" "$OUT/docs/"
 # Windows laptops: WSL setup, image build and offline installer (docs/WSL.md).
 cp -a "$ROOT/wsl" "$OUT/wsl" && chmod +x "$OUT/wsl/"*.sh
 # Ship the instructor's admin password (salted hash only) so learner copies stay locked.
@@ -60,13 +60,13 @@ CLOSED NETWORK — START HERE
 Needs on the target machine: python3 only.
 Does NOT need: pip, internet, venv, sudo, Docker.
 
-1) tar -xzf pi-sdr-academy.tar.gz
-2) cd pi-sdr-academy
+1) tar -xzf the-dojo.tar.gz
+2) cd the-dojo
 3) ./run.sh
 4) Open the URL it prints (usually http://127.0.0.1:8080/)
 
 Then: Create account, Log in, Start → solve → Done.
-Your files are in ~/signal-dojo/<username> (a terminal opens there on this machine).
+Your files are in ~/dojo/<username> (a terminal opens there on this machine).
 
 That's the whole install.
 
@@ -74,7 +74,7 @@ WINDOWS LAPTOPS / DESKTOPS
   Run it inside WSL (Ubuntu 24.04). Unpack it with tar inside Ubuntu, in your Linux
   home folder (cd ~), never in C:\ or with Windows Explorer. Read docs/WSL.md: the
   admin builds one image (wsl/build-image.sh) and each laptop installs it offline
-  with wsl/install-signal-dojo.ps1. The page is then http://localhost:8080/.
+  with wsl/install-the-dojo.ps1. The page is then http://localhost:8080/.
 
 CLASSROOM (one server, many browsers)
   ./academy serve --host <this machine's LAN IP>

@@ -192,7 +192,7 @@ def test_save_and_list_proposals(sandbox_curriculum):
         kind="curriculum_note",
         title="Move module later",
         body={"module_slug": "test-admin"},
-        notes="Consider radio-path dojo",
+        notes="Consider a side-path dojo",
     )
     assert result["ok"] is True
     rows = list_proposals(sandbox_curriculum)
