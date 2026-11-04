@@ -1,91 +1,59 @@
-## Shell Variables
+# Shell Variables
 
-*lls-variables · easy*
+`lls-variables` · White Belt
 
-**Goal.** Write eight scripts that print, set, quote and export variables, filter `env`, store a command's output in a variable, and fill a variable with `read` from stdin and from a file.
+**Goal:** Write eight scripts that print, set, quote and export variables, filter `env`, store a command's output in a variable, and fill a variable with `read` from stdin and from a file.
 
-**You need to know.**
+Put each answer in `answers/taskN.sh`, in place of the `TODO` line.
 
-- `NAME=value` with no spaces sets a variable; `$NAME` expands it (README lesson).
-- Quotes keep a value with spaces in one piece.
-- Only `export`ed variables reach programs you start; `env` lists those.
-- `$(command)` captures a command's output; `read NAME` reads one line from stdin, and `< FILE` feeds a file to it.
-- For tasks 2, 3, 4, 6, 7 and 8 the check runs your script and then looks at the variable values your shell ended with.
+**Task 1**
 
-**Walkthrough.**
+```bash
+echo "$FLAG"
+```
 
-Every answer file starts with `#!/bin/bash`.
+**Task 2**
 
-1. Task 1: print a variable the check sets.
+```bash
+PWN=COLLEGE
+```
 
-   ```bash
-   echo "$FLAG"
-   ```
+**Task 3**
 
-2. Task 2: set a variable.
+```bash
+PWN="COLLEGE YEAH"
+```
 
-   ```bash
-   PWN=COLLEGE
-   ```
+**Task 4**
 
-   No spaces around `=`, otherwise bash tries to run a command called `PWN`.
+```bash
+export PWN=COLLEGE
+COLLEGE=PWN
+"$DOJO/challenge/run"
+```
 
-3. Task 3: a value with a space.
+**Task 5**
 
-   ```bash
-   PWN="COLLEGE YEAH"
-   ```
+```bash
+env | grep "^FLAG="
+```
 
-   Without quotes, bash would set `PWN=COLLEGE` just for one command and try to run `YEAH`.
+**Task 6**
 
-4. Task 4: one exported, one not.
+```bash
+PWN=$("$DOJO/challenge/secret")
+```
 
-   ```bash
-   export PWN=COLLEGE
-   COLLEGE=PWN
-   "$DOJO/challenge/run"
-   ```
+**Task 7**
 
-   `run` prints what it can see: `PWN=COLLEGE` (exported) and `COLLEGE=<unset>` (only a shell variable).
+```bash
+read PWN
+```
 
-5. Task 5: only the `FLAG` line of `env`.
+**Task 8**
 
-   ```bash
-   env | grep "^FLAG="
-   ```
+```bash
+read PWN < "$DOJO/challenge/read_me"
+```
 
-   `^` anchors the match to the start of the line and the `=` ends the name, so `FLAGPOLE=` and `MYFLAG=` are skipped.
-
-6. Task 6: store a command's output.
-
-   ```bash
-   PWN=$("$DOJO/challenge/secret")
-   ```
-
-   `$( )` runs the program and replaces itself with what the program printed.
-
-7. Task 7: read from stdin.
-
-   ```bash
-   read PWN
-   ```
-
-   `read` takes one line from the input (the check sends `COLLEGE`) and stores it in `PWN`.
-
-8. Task 8: read the first line of a file.
-
-   ```bash
-   read PWN < "$DOJO/challenge/read_me"
-   ```
-
-   `<` connects the file to `read`'s stdin, so it gets the file's first line.
-
-9. Test with `./try N`, then `./check`.
-
-**Check.** `./check` prints `8/8 tasks pass` and `CHECK_OK`.
-
-**Common mistakes.**
-
-- `PWN = COLLEGE` with spaces. The result is `PWN: command not found`.
-- Exporting both variables in task 4, or running `run` before the `export` line. `run` must see `PWN` but not `COLLEGE`.
-- `env | grep FLAG` in task 5. It also prints the look-alike decoys.
+Run `./check`. It must print `CHECK_OK`. Then press **Mark as done**.

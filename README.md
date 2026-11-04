@@ -5,13 +5,26 @@ You only need `python3`.
 
 ## Start
 
+From the tarball:
+
 ```bash
 tar -xzf the-dojo.tar.gz
 cd the-dojo
 ./run.sh
 ```
 
+Or from GitHub (you need access to the repo):
+
+```bash
+git clone https://github.com/NoamAdept/the-dojo.git
+cd the-dojo
+./run.sh
+```
+
 Open the address it prints. Press **Create account**, then **Log in**.
+
+**The clone has the answers.** Give learners the tarball. To make it from the clone: `./scripts/pack_portable.sh`
+(it writes `dist/the-dojo.tar.gz`, with no answers in it).
 
 **Windows:** use WSL. See [docs/WSL.md](docs/WSL.md).
 
@@ -40,8 +53,10 @@ Stuck? Press **Hint**. Your progress saves by itself.
 | Reset a learner's password | `./academy user passwd NAME` |
 | Open any challenge | `ACADEMY_ADMIN=1 ./run.sh` |
 | Test every answer | `python3 scripts/verify_answers.py` |
+| Make the answers PDF | `python3 scripts/build_answers_guide.py --pdf` |
 
-- The answers are in each challenge's `solution/` folder. They are not in the tarball.
+- The answers are in [docs/answers](docs/answers) and each challenge's `solution/` folder. They are not in the tarball.
+- Changed a `solution/`? Run `python3 scripts/build_answers_guide.py --md` to update docs/answers.
 - One server for a whole class: [docs/CLASSROOM.md](docs/CLASSROOM.md).
 - Tools for a Linux lab machine:
 

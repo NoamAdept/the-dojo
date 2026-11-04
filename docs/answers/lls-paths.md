@@ -1,100 +1,70 @@
-## Pondering Paths
+# Pondering Paths
 
-*lls-paths · easy*
+`lls-paths` · White Belt
 
-**Goal.** Write eight scripts that run small programs under `$DOJO` by absolute paths, by relative paths (with and without `.`), from specific working directories, and finally with a `~/` argument.
+**Goal:** Write eight scripts that run small programs under `$DOJO` by absolute paths, by relative paths (with and without `.`), from specific working directories, and finally with a `~/` argument.
 
-**You need to know.**
+Put each answer in `answers/taskN.sh`, in place of the `TODO` line.
 
-- Absolute paths start with `/` and work from anywhere; relative paths start at the working directory (README, paths).
-- `cd` in a script changes the directory for every line after it.
-- `.` is the current folder; `./prog` runs a program from here because `PATH` does not include `.`.
-- A leading `~` expands to `$HOME`.
-- The test programs print `RAN argv0=...` and `RAN cwd=...` lines, so the check sees exactly how you ran them.
+**Task 1**
 
-**Walkthrough.**
+```bash
+"$DOJO/pwn"
+```
 
-Run `. ./env.sh` once to try commands by hand. Every answer file starts with `#!/bin/bash`.
+**Task 2**
 
-1. Task 1: the root, by absolute path.
+```bash
+"$DOJO/challenge/run"
+```
 
-   ```bash
-   "$DOJO/pwn"
-   ```
+**Task 3**
 
-   `$DOJO` expands to an absolute path, so the program name starts with `/`. Quotes guard against spaces.
+```bash
+cd "$DOJO/var/lib/academy"
+"$DOJO/challenge/position"
+```
 
-2. Task 2: same idea, deeper.
+**Task 4**
 
-   ```bash
-   "$DOJO/challenge/run"
-   ```
+```bash
+cd "$DOJO/etc"
+"$DOJO/challenge/tour"
+cd "$DOJO/usr/share"
+"$DOJO/challenge/tour"
+cd "$DOJO/var/log"
+"$DOJO/challenge/tour"
+cd "$DOJO/home"
+"$DOJO/challenge/tour"
+cd "$DOJO/tmp"
+"$DOJO/challenge/tour"
+```
 
-3. Task 3: run from a given working directory.
+**Task 5**
 
-   ```bash
-   cd "$DOJO/var/lib/academy"
-   "$DOJO/challenge/position"
-   ```
+```bash
+cd "$DOJO"
+challenge/run
+```
 
-   `cd` sets the working directory first; the absolute path still finds the program.
+**Task 6**
 
-4. Task 4: five places, in order.
+```bash
+cd "$DOJO"
+./challenge/run
+```
 
-   ```bash
-   cd "$DOJO/etc"
-   "$DOJO/challenge/tour"
-   cd "$DOJO/usr/share"
-   "$DOJO/challenge/tour"
-   cd "$DOJO/var/log"
-   "$DOJO/challenge/tour"
-   cd "$DOJO/home"
-   "$DOJO/challenge/tour"
-   cd "$DOJO/tmp"
-   "$DOJO/challenge/tour"
-   ```
+**Task 7**
 
-   Each `cd` changes where the next `tour` runs. The order must match the task.
+```bash
+cd "$DOJO/challenge"
+./run
+```
 
-5. Task 5: implicit relative path.
+**Task 8**
 
-   ```bash
-   cd "$DOJO"
-   challenge/run
-   ```
+```bash
+"$DOJO/challenge/copyflag" ~/f
+```
 
-   A name containing a `/` is treated as a path, so bash runs `challenge/run` relative to `$DOJO` without searching `PATH`.
-
-6. Task 6: explicit relative path with `.`.
-
-   ```bash
-   cd "$DOJO"
-   ./challenge/run
-   ```
-
-7. Task 7: a program in the current folder.
-
-   ```bash
-   cd "$DOJO/challenge"
-   ./run
-   ```
-
-   A bare `run` would be searched in `PATH` and not found; `./run` points at this folder.
-
-8. Task 8: home sweet home.
-
-   ```bash
-   "$DOJO/challenge/copyflag" ~/f
-   ```
-
-   You type three characters, `~/f`. Bash expands it to `$HOME/f`, an absolute path inside the home folder, which is what `copyflag` demands. It writes the secret there.
-
-9. Test each with `./try N`, then `./check`.
-
-**Check.** `./check` prints `8/8 tasks pass` and `CHECK_OK`.
-
-**Common mistakes.**
-
-- Writing `"~/f"` in quotes. Quotes stop `~` expansion, so `copyflag` gets a relative path and refuses.
-- Typing the full expanded path in tasks 5 to 7. The check looks at exactly how the program was called (`challenge/run`, a path with `.`, `./run`).
-- Forgetting the `cd` line, so the program runs in the home folder and the check reports the wrong `cwd`.
+Run `./check`. It must print `CHECK_OK`. Then press **Mark as done**.

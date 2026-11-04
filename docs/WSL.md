@@ -11,10 +11,27 @@ In PowerShell:
 wsl --install -d Ubuntu-24.04
 ```
 
-Make the user `learner`. Then in Ubuntu (change `YOU` to your Windows user name):
+Make the user `learner`. Then, in Ubuntu, put The Dojo in `~`. Pick one:
+
+- **You have the tarball** (change `YOU` to your Windows user name):
+
+  ```bash
+  tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz -C ~
+  ```
+
+- **From GitHub.** This makes the tarball from a clone, unpacks it, then deletes the clone,
+  so the answers do not end up in the image:
+
+  ```bash
+  git clone https://github.com/NoamAdept/the-dojo.git /tmp/the-dojo-src
+  /tmp/the-dojo-src/scripts/pack_portable.sh
+  tar -xzf /tmp/the-dojo-src/dist/the-dojo.tar.gz -C ~
+  rm -rf /tmp/the-dojo-src
+  ```
+
+Then:
 
 ```bash
-tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz -C ~
 sh ~/the-dojo/wsl/build-image.sh
 ```
 
@@ -50,7 +67,8 @@ Restart Windows.
 
 ## Rules
 
-- Unpack with `tar` inside Ubuntu, in `~`. Never in `C:\`, never with Windows Explorer or 7-Zip.
+- Unpack with `tar` (or `git clone`) inside Ubuntu, in `~`. Never in `C:\`, never with Windows Explorer,
+  7-Zip or Git for Windows.
 - Edit files with vim inside Ubuntu.
 - Your files are in `~/dojo/<your name>`.
 - `wsl --unregister TheDojo` deletes everything, including all the learners' work.
@@ -61,10 +79,11 @@ Restart Windows.
 |---------|---------|
 | `The Dojo is in a Windows folder` | Unpack again inside Ubuntu, in `~`. |
 | `/bin/sh^M: bad interpreter` | Unpack again inside Ubuntu, in `~`. |
+| `This folder has the answers` | You ran it in a clone. Use the "From GitHub" steps in part 1. |
 | The page does not open | Is the black window still open? Try `http://127.0.0.1:8080/`. |
 | `Port 8080 is already in use` | An old copy is running. Close it, then start again. |
 | No terminal opens after Start | `wsl -d TheDojo`, then `cd ~/dojo/<your name>`. |
 | `systemd is not running` | `wsl --shutdown` in PowerShell, then start again. |
 
-**Other way, for laptops with internet:** install Ubuntu, unpack the tarball in `~`, run
+**Other way, for laptops with internet:** install Ubuntu, unpack the tarball (not a clone: it has the answers) in `~`, run
 `sh ~/the-dojo/wsl/setup-ubuntu.sh`, then `wsl --shutdown`. Open Ubuntu again and type `dojo`.

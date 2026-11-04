@@ -13,7 +13,7 @@ ROOT=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
 
 case "$ROOT" in
   /mnt/[a-zA-Z]/*)
-    echo "Unpack The Dojo in your Linux home first (cd ~ && tar -xzf .../the-dojo.tar.gz)." >&2
+    echo "Put The Dojo in your Linux home first (cd ~ && tar -xzf .../the-dojo.tar.gz). See docs/WSL.md." >&2
     exit 1 ;;
 esac
 if [ "$(id -u)" = 0 ]; then

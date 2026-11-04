@@ -14,8 +14,9 @@ if [ "$WSL" = 1 ]; then
       if [ "${ACADEMY_ALLOW_WINDOWS_DRIVE:-0}" != 1 ]; then
         echo "The Dojo is in a Windows folder ($ROOT)." >&2
         echo "Windows folders lose Linux permissions, so many challenges break there." >&2
-        echo "Unpack it in your Linux home folder instead, then run it from there:" >&2
+        echo "Put it in your Linux home folder instead, then run it from there:" >&2
         echo "  cd ~ && tar -xzf /mnt/c/Users/YOU/Downloads/the-dojo.tar.gz" >&2
+        echo "  (or: cd ~ && git clone https://github.com/NoamAdept/the-dojo.git)" >&2
         echo "  cd ~/the-dojo && ./run.sh" >&2
         echo "(ACADEMY_ALLOW_WINDOWS_DRIVE=1 ./run.sh starts it here anyway.)" >&2
         exit 1
