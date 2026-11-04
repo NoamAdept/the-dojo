@@ -5,13 +5,26 @@ You only need `python3`.
 
 ## Start
 
+From the tarball:
+
 ```bash
 tar -xzf the-dojo.tar.gz
 cd the-dojo
 ./run.sh
 ```
 
+Or from GitHub (you need access to the repo):
+
+```bash
+git clone https://github.com/NoamAdept/the-dojo.git
+cd the-dojo
+./run.sh
+```
+
 Open the address it prints. Press **Create account**, then **Log in**.
+
+**The clone has the answers.** Give learners the tarball. To make it from the clone: `./scripts/pack_portable.sh`
+(it writes `dist/the-dojo.tar.gz`, with no answers in it).
 
 **Windows:** use WSL. See [docs/WSL.md](docs/WSL.md).
 
