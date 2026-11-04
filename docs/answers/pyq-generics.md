@@ -1,131 +1,101 @@
-## Generics and Type Hinting
+# Generics and Type Hinting
 
-*pyq-generics · medium*
+`pyq-generics` · Blue Belt
 
-**Goal.** Use the `typing` module in `tasks.py`: a `TypeVar`, a runtime-checkable `Protocol`, a `Literal`, a `TypedDict`, two `Generic[T]` classes and a small plugin system built on a protocol.
+**Goal:** Use the `typing` module in `tasks.py`: a `TypeVar`, a runtime-checkable `Protocol`, a `Literal`, a `TypedDict`, two `Generic[T]` classes and a small plugin system built on a protocol.
 
-**You need to know.**
+**File `tasks.py`**
 
-- `TypeVar("T")` and `Generic[T]` (so `Stack[int]()` is legal).
-- `Protocol` checks shape, not inheritance; `@runtime_checkable` allows `isinstance`.
-- `Literal[...]` and `typing.get_args`.
-- `TypedDict` and `Callable[[T], None]`.
+```python
+"""Python Qualification 14: generics and type hinting."""
+from typing import Callable, Generic, Literal, Protocol, TypedDict, TypeVar, get_args, runtime_checkable
 
-**Walkthrough.**
+T = TypeVar("T")
 
-1. Run `./check` to see the failures. All the needed names are already imported at the top.
+def swap(a: T, b: T) -> tuple[T, T]:
+    return b, a
 
-   ```bash
-   ./check
-   ```
+@runtime_checkable
+class Clickable(Protocol):
+    def click(self) -> str: ...
 
-2. Task 1. Annotate with `T`; the check reads the hints and expects `tuple[T, T]` as the return type.
+def process_click(obj: Clickable) -> str:
+    if not isinstance(obj, Clickable):
+        raise TypeError(f"{obj!r} is not Clickable")
+    return obj.click()
 
-   ```python
-   def swap(a: T, b: T) -> tuple[T, T]:
-       return b, a
-   ```
+Status = Literal["IDLE", "RUNNING", "ERROR"]
 
-3. Task 2. Any object with a `click` method now counts as `Clickable`.
+def set_status(status: Status) -> Status:
+    if status not in get_args(Status):
+        raise ValueError(f"invalid status {status!r}")
+    return status
 
-   ```python
-   @runtime_checkable
-   class Clickable(Protocol):
-       def click(self) -> str: ...
+class Car(TypedDict):
+    make: str
+    model: str
+    year: int
 
-   def process_click(obj: Clickable) -> str:
-       if not isinstance(obj, Clickable):
-           raise TypeError(f"{obj!r} is not Clickable")
-       return obj.click()
-   ```
+class Stack(Generic[T]):
+    def __init__(self) -> None:
+        self._items: list[T] = []
 
-4. Task 3. Type hints are not enforced at runtime, so check the value yourself against `get_args(Status)`.
+    def push(self, item: T) -> None:
+        self._items.append(item)
 
-   ```python
-   Status = Literal["IDLE", "RUNNING", "ERROR"]
+    def pop(self) -> T:
+        if not self._items:
+            raise IndexError("pop from empty stack")
+        return self._items.pop()
 
-   def set_status(status: Status) -> Status:
-       if status not in get_args(Status):
-           raise ValueError(f"invalid status {status!r}")
-       return status
-   ```
+    def peek(self) -> T:
+        if not self._items:
+            raise IndexError("peek at empty stack")
+        return self._items[-1]
 
-5. Task 4. A `TypedDict` is a plain dict at runtime with known keys for type checkers.
+    def __len__(self) -> int:
+        return len(self._items)
 
-   ```python
-   class Car(TypedDict):
-       make: str
-       model: str
-       year: int
-   ```
+class Observable(Generic[T]):
+    def __init__(self) -> None:
+        self._subscribers: list[Callable[[T], None]] = []
 
-6. Task 5. Subclass `Generic[T]`; raise `IndexError` yourself in `peek` (a list's `[-1]` would raise it too, but with a less clear message).
+    def subscribe(self, callback: Callable[[T], None]) -> None:
+        self._subscribers.append(callback)
 
-   ```python
-   class Stack(Generic[T]):
-       def __init__(self) -> None:
-           self._items: list[T] = []
-       def push(self, item: T) -> None:
-           self._items.append(item)
-       def pop(self) -> T:
-           if not self._items:
-               raise IndexError("pop from empty stack")
-           return self._items.pop()
-       def peek(self) -> T:
-           if not self._items:
-               raise IndexError("peek at empty stack")
-           return self._items[-1]
-       def __len__(self) -> int:
-           return len(self._items)
-   ```
+    def notify(self, data: T) -> None:
+        for callback in self._subscribers:
+            callback(data)
 
-7. Task 6. Keep a list of callbacks and call each one with the data, in order.
+class Plugin(Protocol):
+    def name(self) -> str: ...
+    def execute(self, data: dict) -> dict: ...
 
-   ```python
-   class Observable(Generic[T]):
-       def __init__(self) -> None:
-           self._subscribers: list[Callable[[T], None]] = []
-       def subscribe(self, callback: Callable[[T], None]) -> None:
-           self._subscribers.append(callback)
-       def notify(self, data: T) -> None:
-           for callback in self._subscribers:
-               callback(data)
-   ```
+class PluginManager:
+    def __init__(self) -> None:
+        self._plugins: list[Plugin] = []
 
-8. Task 7. The manager feeds each plugin's output into the next. The plugins do not inherit from `Plugin`; they only match its shape.
+    def register(self, plugin: Plugin) -> None:
+        self._plugins.append(plugin)
 
-   ```python
-   class Plugin(Protocol):
-       def name(self) -> str: ...
-       def execute(self, data: dict) -> dict: ...
+    def run_all(self, data: dict) -> dict:
+        for plugin in self._plugins:
+            data = plugin.execute(data)
+        return data
 
-   class PluginManager:
-       def __init__(self) -> None:
-           self._plugins: list[Plugin] = []
-       def register(self, plugin: Plugin) -> None:
-           self._plugins.append(plugin)
-       def run_all(self, data: dict) -> dict:
-           for plugin in self._plugins:
-               data = plugin.execute(data)
-           return data
+class AuthPlugin:
+    def name(self) -> str:
+        return "auth"
 
-   class AuthPlugin:
-       def name(self) -> str:
-           return "auth"
-       def execute(self, data: dict) -> dict:
-           return {**data, "auth": True}
+    def execute(self, data: dict) -> dict:
+        return {**data, "auth": True}
 
-   class LogPlugin:
-       def name(self) -> str:
-           return "log"
-       def execute(self, data: dict) -> dict:
-           return {**data, "log": [*data.get("log", []), self.name()]}
-   ```
+class LogPlugin:
+    def name(self) -> str:
+        return "log"
 
-**Check.** `./check` prints `7/7 tasks pass` and `CHECK_OK`. Press Done for the flag.
+    def execute(self, data: dict) -> dict:
+        return {**data, "log": [*data.get("log", []), self.name()]}
+```
 
-**Common mistakes.**
-
-- Forgetting `@runtime_checkable`; then `isinstance(obj, Clickable)` raises `TypeError` for every object, including good ones.
-- Writing `class Stack:` without `Generic[T]`, so `Stack[int]()` fails with "type 'Stack' is not subscriptable".
-- In `run_all`, calling `plugin.execute(data)` without assigning the result back to `data`, so the plugins do not chain.
+Run `./check`. It must print `CHECK_OK`. Then press **Mark as done**.

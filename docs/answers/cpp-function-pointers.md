@@ -1,97 +1,98 @@
-## Type Aliases, Function Pointers and Bounds Checks
+# Type Aliases, Function Pointers and Bounds Checks
 
-*cpp-function-pointers · easy*
+`cpp-function-pointers` · Orange Belt
 
-**Goal.** Add a `byte` type alias to `funcs.hpp` and fill in six functions in `funcs.cpp`: calling and returning function pointers, a callback with a `void*` context, and an overflow-safe bounds check before reading.
+**Goal:** Add a `byte` type alias to `funcs.hpp` and fill in six functions in `funcs.cpp`: calling and returning function pointers, a callback with a `void*` context, and an overflow-safe bounds check before reading.
 
-**You need to know.**
+**File `funcs.cpp`**
 
-- `using NAME = TYPE;` (or `typedef`) for type aliases (README lesson).
-- The function pointer types `int_op` and `int_visitor` in `funcs.hpp`, and calling a pointer like a function.
-- `static_cast<stats*>(context)` to turn a `void*` back into its real type.
-- Unsigned `std::size_t` wraps around, so compare before subtracting and never add to an untrusted offset.
+```cpp
+#include "funcs.hpp"
 
-**Walkthrough.**
+int add(int a, int b)
+{
+    return a + b;
+}
 
-Delete each `// TODO task N` comment as you do the task. Run `./check` after each one.
+int mul(int a, int b)
+{
+    return a * b;
+}
 
-1. Task 1, in `funcs.hpp` (replace the TODO line):
+int apply(int_op op, int a, int b)
+{
+    return op(a, b);
+}
 
-   ```cpp
-   using byte = uint8_t;
-   ```
+int_op pick_op(char symbol)
+{
+    if (symbol == '+') {
+        return add;
+    }
+    if (symbol == '*') {
+        return mul;
+    }
+    return nullptr;
+}
 
-   `byte` is now another name for `uint8_t`, so 255 plus 1 wraps to 0 and `sizeof(byte)` is 1.
+void visit_all(const int* values, std::size_t count, int_visitor visit, void* context)
+{
+    for (std::size_t i = 0; i < count; i++) {
+        visit(values[i], context);
+    }
+}
 
-2. Task 2, `apply` in `funcs.cpp`:
+void update_stats(int value, void* context)
+{
+    stats* s = static_cast<stats*>(context);
+    s->count += 1;
+    s->sum += value;
+}
 
-   ```cpp
-   return op(a, b);
-   ```
+std::size_t bytes_left(std::size_t size, std::size_t offset)
+{
+    if (offset >= size) {
+        return 0;
+    }
+    return size - offset;
+}
 
-   A function pointer is called exactly like a function name.
+bool read_be16_at(const uint8_t* buf, std::size_t size, std::size_t offset, uint16_t* out)
+{
+    if (buf == nullptr || out == nullptr || bytes_left(size, offset) < 2) {
+        return false;
+    }
+    *out = static_cast<uint16_t>((buf[offset] << 8) | buf[offset + 1]);
+    return true;
+}
+```
 
-3. Task 3, `pick_op`:
+**File `funcs.hpp`**
 
-   ```cpp
-   if (symbol == '+') {
-       return add;
-   }
-   if (symbol == '*') {
-       return mul;
-   }
-   return nullptr;
-   ```
+```cpp
+#pragma once
+#include <cstddef>
+#include <cstdint>
 
-   A function name without brackets is its address, which is what `int_op` holds.
+using byte = uint8_t;
 
-4. Task 4, `visit_all`:
+using int_op = int (*)(int, int);
+int add(int a, int b);                       // already written
+int mul(int a, int b);                       // already written
+int apply(int_op op, int a, int b);          // task 2
+int_op pick_op(char symbol);                 // task 3
 
-   ```cpp
-   for (std::size_t i = 0; i < count; i++) {
-       visit(values[i], context);
-   }
-   ```
+using int_visitor = void (*)(int value, void* context);
+void visit_all(const int* values, std::size_t count, int_visitor visit, void* context);  // task 4
 
-   `context` is passed along untouched; only the visitor knows what it really points at.
+struct stats {
+    std::size_t count;
+    long sum;
+};
+void update_stats(int value, void* context);  // task 5
 
-5. Task 5, `update_stats`:
+std::size_t bytes_left(std::size_t size, std::size_t offset);                                // task 6
+bool read_be16_at(const uint8_t* buf, std::size_t size, std::size_t offset, uint16_t* out);  // task 7
+```
 
-   ```cpp
-   stats* s = static_cast<stats*>(context);
-   s->count += 1;
-   s->sum += value;
-   ```
-
-   C++ will not turn a `void*` into a `stats*` by itself, so the cast is required.
-
-6. Task 6, `bytes_left`:
-
-   ```cpp
-   if (offset >= size) {
-       return 0;
-   }
-   return size - offset;
-   ```
-
-   Checking first means `size - offset` never goes below 0 and wraps to a huge number.
-
-7. Task 7, `read_be16_at`:
-
-   ```cpp
-   if (buf == nullptr || out == nullptr || bytes_left(size, offset) < 2) {
-       return false;
-   }
-   *out = static_cast<uint16_t>((buf[offset] << 8) | buf[offset + 1]);
-   return true;
-   ```
-
-   Using `bytes_left` avoids `offset + 2 > size`, which wraps to 0 when `offset` is `SIZE_MAX - 1` and would let the read through.
-
-**Check.** `./check` prints `7/7 tasks pass` and `CHECK_OK`.
-
-**Common mistakes.**
-
-- Writing the bounds test as `offset + 2 > size`: the `SIZE_MAX-1` case fails, because the addition wraps around.
-- Returning `add()` or `&add()` in `pick_op` instead of plain `add`.
-- Forgetting task 1 is in the header, not the `.cpp` file.
+Run `./check`. It must print `CHECK_OK`. Then press **Mark as done**.

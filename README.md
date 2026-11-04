@@ -40,8 +40,10 @@ Stuck? Press **Hint**. Your progress saves by itself.
 | Reset a learner's password | `./academy user passwd NAME` |
 | Open any challenge | `ACADEMY_ADMIN=1 ./run.sh` |
 | Test every answer | `python3 scripts/verify_answers.py` |
+| Make the answers PDF | `python3 scripts/build_answers_guide.py --pdf` |
 
-- The answers are in each challenge's `solution/` folder. They are not in the tarball.
+- The answers are in [docs/answers](docs/answers) and each challenge's `solution/` folder. They are not in the tarball.
+- Changed a `solution/`? Run `python3 scripts/build_answers_guide.py --md` to update docs/answers.
 - One server for a whole class: [docs/CLASSROOM.md](docs/CLASSROOM.md).
 - Tools for a Linux lab machine:
 

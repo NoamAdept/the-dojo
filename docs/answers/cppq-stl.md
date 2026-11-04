@@ -1,109 +1,74 @@
-## STL Containers, Algorithms and Iterators
+# STL Containers, Algorithms and Iterators
 
-*cppq-stl · medium*
+`cppq-stl` · Orange Belt
 
-**Goal.** Use `vector`, `map`, `set`, `std::sort`, `std::max_element` and a lambda comparator to finish seven functions in `tasks.h`.
+**Goal:** Use `vector`, `map`, `set`, `std::sort`, `std::max_element` and a lambda comparator to finish seven functions in `tasks.h`.
 
-**You need to know.**
+**File `tasks.h`**
 
-- Containers: `std::vector`, `std::map` (sorted keys), `std::set` (unique values).
-- `map::find` returns `end()` when a key is missing, and does not insert (unlike `operator[]`).
-- Algorithms from `<algorithm>` / `<numeric>`: `sort`, `max_element`, `accumulate`.
-- A lambda can be passed to `std::sort` as the comparison.
+```cpp
+#pragma once
+#include <algorithm>
+#include <functional>
+#include <map>
+#include <numeric>
+#include <set>
+#include <sstream>
+#include <string>
+#include <vector>
 
-**Walkthrough.**
+inline float middleElement(const std::vector<float>& v) { return v[v.size() / 2]; }
 
-1. Run `./check`, then add the includes.
+inline std::string lookup(const std::map<std::string, std::string>& book, const std::string& name) {
+    auto it = book.find(name);
+    return it == book.end() ? "not found" : it->second;
+}
 
-   ```cpp
-   #include <algorithm>
-   #include <functional>
-   #include <map>
-   #include <numeric>
-   #include <set>
-   #include <sstream>
-   #include <string>
-   #include <vector>
-   ```
+inline std::size_t uniqueCount(const std::vector<std::string>& words) {
+    return std::set<std::string>(words.begin(), words.end()).size();
+}
 
-2. Task 1, middle element. For 5 items, index `5 / 2 == 2` is the middle.
+inline std::vector<int> sortedDescending(std::vector<int> v) {
+    std::sort(v.begin(), v.end(), std::greater<int>());
+    return v;
+}
 
-   ```cpp
-   inline float middleElement(const std::vector<float>& v) { return v[v.size() / 2]; }
-   ```
+struct GradeReport {
+    double average;
+    int max;
+    int count;
+};
 
-3. Task 2, phonebook. The map is `const`, so `book[name]` will not even compile; use `find`.
+inline GradeReport analyzeGrades(const std::vector<int>& input) {
+    std::vector<int> grades;
+    for (int g : input) {
+        if (g == -1) break;
+        grades.push_back(g);
+    }
+    if (grades.empty()) return {0.0, 0, 0};
+    double avg = std::accumulate(grades.begin(), grades.end(), 0.0) / grades.size();
+    return {avg, *std::max_element(grades.begin(), grades.end()), static_cast<int>(grades.size())};
+}
 
-   ```cpp
-   inline std::string lookup(const std::map<std::string, std::string>& book, const std::string& name) {
-       auto it = book.find(name);
-       return it == book.end() ? "not found" : it->second;
-   }
-   ```
+inline std::map<std::string, int> wordFrequency(const std::string& text) {
+    std::map<std::string, int> counts;
+    std::istringstream in(text);
+    std::string word;
+    while (in >> word) ++counts[word];
+    return counts;
+}
 
-4. Task 3, unique words. Building a set drops duplicates automatically.
+struct Player {
+    std::string name;
+    int score;
+};
 
-   ```cpp
-   inline std::size_t uniqueCount(const std::vector<std::string>& words) {
-       return std::set<std::string>(words.begin(), words.end()).size();
-   }
-   ```
+inline void rankPlayers(std::vector<Player>& players) {
+    std::sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
+        if (a.score != b.score) return a.score > b.score;
+        return a.name < b.name;
+    });
+}
+```
 
-5. Task 4, sort descending. The vector is taken by value, so we can sort our own copy and return it.
-
-   ```cpp
-   inline std::vector<int> sortedDescending(std::vector<int> v) {
-       std::sort(v.begin(), v.end(), std::greater<int>());
-       return v;
-   }
-   ```
-
-6. Task 5, grade analyzer. Stop at the sentinel `-1` (the `100` after it must be ignored). Start `accumulate` at `0.0` so the sum is a double.
-
-   ```cpp
-   struct GradeReport { double average; int max; int count; };
-
-   inline GradeReport analyzeGrades(const std::vector<int>& input) {
-       std::vector<int> grades;
-       for (int g : input) {
-           if (g == -1) break;
-           grades.push_back(g);
-       }
-       if (grades.empty()) return {0.0, 0, 0};
-       double avg = std::accumulate(grades.begin(), grades.end(), 0.0) / grades.size();
-       return {avg, *std::max_element(grades.begin(), grades.end()), static_cast<int>(grades.size())};
-   }
-   ```
-
-7. Task 6, word frequency. `>>` on a stringstream gives one word at a time; `counts[word]` starts at 0 for a new word.
-
-   ```cpp
-   inline std::map<std::string, int> wordFrequency(const std::string& text) {
-       std::map<std::string, int> counts;
-       std::istringstream in(text);
-       std::string word;
-       while (in >> word) ++counts[word];
-       return counts;
-   }
-   ```
-
-8. Task 7, custom sort. Higher score first; on a tie, alphabetical name.
-
-   ```cpp
-   struct Player { std::string name; int score; };
-
-   inline void rankPlayers(std::vector<Player>& players) {
-       std::sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
-           if (a.score != b.score) return a.score > b.score;
-           return a.name < b.name;
-       });
-   }
-   ```
-
-**Check.** `./check` prints `7/7 tasks pass` and `CHECK_OK`.
-
-**Common mistakes.**
-
-- Using `book[name]` in `lookup`: it does not compile on a const map, and on a non-const map it would insert an empty entry.
-- Averaging with an `int` start value (`accumulate(..., 0)`) gives 81 instead of 81.67.
-- Forgetting the tie-break in Task 7, so `bo` and `cy` (both 50) come out in the wrong order.
+Run `./check`. It must print `CHECK_OK`. Then press **Mark as done**.
